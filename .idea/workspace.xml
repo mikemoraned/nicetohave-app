@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="79085aa7-73db-41a7-83bc-33ed398879ec" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/d3.v2.js" afterPath="" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dictionaries/mxm.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/d3cards.html" afterPath="$PROJECT_DIR$/d3cards.html" />
     </list>
@@ -56,7 +56,7 @@
       <file leaf-file-name="d3cards.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/d3cards.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="30" column="0" selection-start="557" selection-end="557" vertical-scroll-proportion="0.45741326">
+            <state line="43" column="25" selection-start="794" selection-end="794" vertical-scroll-proportion="0.41848907">
               <folding />
             </state>
           </provider>
@@ -377,7 +377,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/d3cards.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="0" selection-start="557" selection-end="557" vertical-scroll-proportion="0.45741326">
+        <state line="43" column="25" selection-start="794" selection-end="794" vertical-scroll-proportion="0.41848907">
           <folding />
         </state>
       </provider>
