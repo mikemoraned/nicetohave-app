@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+    svg {
+        border: 1px solid;
+    }
+
+    .card {
+        stroke: #fff;
+        stroke-width: 1.5px;
+    }
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="js/underscore-min.js"></script>
+<script src="Kickstrap/js/jquery-1.8.3.min.js"></script>
+<script src="https://api.trello.com/1/client.js?key=afaec27e30009b0b1cfb14d85f384ee1"></script>
+
+<div id="loggedout">
+    <a id="connectLink" href="#">Connect To Trello</a>
+</div>
+
+<div id="loggedin">
+    <div id="header">
+        Logged in
+        <a id="disconnect" href="#">Log Out</a>
+    </div>
+</div>
+
+<script type="application/javascript">
+
+    var cards = [];
+
+    var width = 960,
+        height = 500;
+
+    var force = d3.layout.force()
+            .charge(-2)
+            .gravity(0)
+            .size([width, height]);
+
+    force
+            .nodes(cards)
+            .links([])
+            .start();
+
+    var svg = d3.select("body").append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+    var updateCards = function() {
+        cards = [];
+        update(cards);
+        Trello.get("lists/50d4b39f3d7039c91b001238/cards", function(trelloCards) {
+            $.each(trelloCards, function(ix, card) {
+                card.x = width / 2;
+                card.y = height / 2;
+
+                console.log("Adding:");
+                console.dir(card);
+                cards.push(card);
+
+                update(cards);
+            });
+        });
+    };
+
+    var onAuthorize = function() {
+        updateLoggedIn();
+        updateCards();
+    };
+
+    var updateLoggedIn = function() {
+        var isLoggedIn = Trello.authorized();
+        $("#loggedout").toggle(!isLoggedIn);
+        $("#loggedin").toggle(isLoggedIn);
+    };
+
+    var logout = function() {
+        Trello.deauthorize();
+        updateLoggedIn();
+    };
+
+    Trello.authorize({
+        interactive:false,
+        success: onAuthorize
+    });
+
+    $("#connectLink")
+            .click(function(){
+                Trello.authorize({
+                    type: "popup",
+                    success: onAuthorize
+                })
+            });
+
+    $("#disconnect").click(logout);
+
+    function update(cards) {
+        force
+            .nodes(cards)
+            .links([])
+            .start();
+
+        var existingCards = svg.selectAll("circle.card")
+            .data(cards, function(d) { return d.name; });
+
+        var newCards = existingCards.enter();
+
+        newCards
+          .append("circle")
+            .attr("class", "card")
+            .attr("r", 7)
+            .call(force.drag)
+          .append("title")
+            .text(function(d) { return d.name; });
+
+        force.on("tick", function() {
+            existingCards
+                .attr("cx", function(d) { return d.x; })
+                .attr("cy", function(d) { return d.y; });
+        });
+    }
+</script>
+</body>
