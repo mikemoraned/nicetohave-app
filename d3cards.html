@@ -68,12 +68,10 @@
     }
 
     setInterval(function() {
-        if (cards.length < 10) {
-            var card = {
-                "name": "foop: " + new Date(),
-                "x": width / 2,
-                "y": height / 2
-            };
+        if (pendingCards.length > 0) {
+            var card = pendingCards.shift();
+            card.x = width / 2;
+            card.y = height / 2;
 
             console.log("Adding:");
             console.dir(card);
