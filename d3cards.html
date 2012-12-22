@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+    svg {
+        border: 1px solid;
+    }
+
+    .node {
+        stroke: #fff;
+        stroke-width: 1.5px;
+    }
+
+    .link {
+        stroke: #999;
+        stroke-opacity: .6;
+    }
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+
+    var data = {
+        "nodes":[
+            {"name":"Myriel","group":1},
+            {"name":"Napoleon","group":1},
+            {"name":"Mlle.Baptistine","group":1}
+        ]
+    }
+
+    var width = 960,
+        height = 500;
+
+    var svg = d3.select("body").append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+    var force = d3.layout.force()
+        .charge(-120)
+        .linkDistance(30)
+        .size([width, height]);
+
+    force
+        .nodes(data.nodes)
+        .links([])
+        .start();
+
+    var node = svg.selectAll("circle.node")
+        .data(data.nodes)
+            .enter()
+          .append("circle")
+            .attr("class", "node")
+            .attr("r", 5)
+            .call(force.drag);
+
+    force.on("tick", function() {
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+    });
+
+</script>
+</body>
