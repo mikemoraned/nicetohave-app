@@ -17,7 +17,14 @@
 
 <h2>Lists</h2>
 
-<select data-bind="options: board.lists, value: list.name, optionsText: 'name', enable: board.lists().length > 0"></select>
+<select data-bind="options: board.lists, value: selectedList, optionsText: 'name', enable: board.lists().length > 0"></select>
+
+<div data-bind="visible: selectedList, with: selectedList">
+    <h3>Cards</h3>
+    <div data-bind="foreach: cards">
+        <div class="card" data-bind="text: name"></div>
+    </div>
+</div>
 
 <script type="application/javascript">
 
@@ -32,9 +39,11 @@
             // Operations
             self.refresh = function() {
                 Trello.boards.get(self.id(), function(results) {
+                    console.log("Fetched board info");
                     console.dir(results);
                     self.name(results.name);
                     Trello.boards.get(self.id() + "/lists", function(results) {
+                        console.log("Fetched board lists");
                         self.lists([]);
                         console.dir(results);
                         results.forEach(function(d) {
@@ -46,12 +55,26 @@
         }
 
         function List(data) {
-            this.id = ko.observable(data.id);
-            this.name = ko.observable(data.name);
+            var self = this;
+            self.id = ko.observable(data.id);
+            self.name = ko.observable(data.name);
+            self.cards = ko.observableArray([]);
+
+            self.refresh = function() {
+                Trello.lists.get(self.id() + "/cards", function(results) {
+                    console.log("Fetched cards");
+                    console.dir(results);
+                    results.forEach(function(d) {
+                        self.cards.push(new Card(d));
+                    })
+                });
+            }
         }
 
         function Card(data) {
-            this.name = ko.observable(data.name);
+            var self = this;
+            self.id = ko.observable(data.id);
+            self.name = ko.observable(data.name);
         }
 
         function NiceToHaveAppViewModel() {
@@ -60,50 +83,19 @@
             self.cards = ko.observableArray([]);
             self.board = new Board();
             self.list = new List({id: "4eea755f1576578f2713ec56"});
+            self.selectedList = ko.observable();
             self.loggedIn = ko.observable(Trello.authorized());
 
+            self.selectedList.subscribe(function(list){
+                console.log("Selected list changed");
+                list.refresh();
+            });
+
             // Operations
-            self.logIn = function() {
-                console.log("Logging in");
-                Trello.authorize({
-                    type: "popup",
-                    success: self.updateLoggedIn
-                })
-            }
-
-            self.logOut = function() {
-                console.log("Logging out");
-                Trello.deauthorize();
-                self.updateLoggedIn();
-                self.clearCards();
-            }
-
-            self.updateLoggedIn = function() {
-                self.loggedIn(Trello.authorized());
-            };
-
             self.useBoard = function() {
                 console.log("Update board: " + self.board.id());
                 self.board.refresh();
             }
-
-            self.clearCards = function(data) {
-                self.cards([]);
-            };
-
-            self.addCard = function(data) {
-                self.cards.push(new Card(data));
-            };
-
-            self.updateCards = function() {
-                console.log("updating");
-                Trello.get("lists/" + self.list.id() + "/cards", function(result) {
-                    self.cards([]);
-                    $.each(result, function(ix, card) {
-                        self.addCard(card);
-                    });
-                });
-            };
         }
 
         var model = new NiceToHaveAppViewModel();
