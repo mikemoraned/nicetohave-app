@@ -72,7 +72,7 @@
       <file leaf-file-name="d3axes.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/d3axes.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="38" column="6" selection-start="590" selection-end="799" vertical-scroll-proportion="-23.75">
+            <state line="175" column="14" selection-start="4008" selection-end="4314" vertical-scroll-proportion="-31.291666">
               <folding />
             </state>
           </provider>
@@ -81,7 +81,7 @@
       <file leaf-file-name="d3table.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/d3table.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="203" column="18" selection-start="5260" selection-end="5260" vertical-scroll-proportion="0.73161036">
+            <state line="204" column="29" selection-start="5235" selection-end="5235" vertical-scroll-proportion="2.058648">
               <folding />
             </state>
           </provider>
@@ -507,14 +507,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/d3axes.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="38" column="6" selection-start="590" selection-end="799" vertical-scroll-proportion="-23.75">
+        <state line="175" column="14" selection-start="4008" selection-end="4314" vertical-scroll-proportion="-31.291666">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/d3table.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="203" column="18" selection-start="5260" selection-end="5260" vertical-scroll-proportion="0.73161036">
+        <state line="204" column="29" selection-start="5235" selection-end="5235" vertical-scroll-proportion="2.058648">
           <folding />
         </state>
       </provider>
