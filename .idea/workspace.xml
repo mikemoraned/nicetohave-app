@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="79085aa7-73db-41a7-83bc-33ed398879ec" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/d3axes.html" afterPath="$PROJECT_DIR$/d3axes.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/d3cards.html" afterPath="$PROJECT_DIR$/d3cards.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/d3trellocards.html" afterPath="$PROJECT_DIR$/d3trellocards.html" />
     </list>
     <ignored path="nicetohave.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -53,10 +52,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="d3cards.html" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="d3cards.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/d3cards.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="14" column="39" selection-start="216" selection-end="216" vertical-scroll-proportion="0.20874752">
+            <state line="58" column="29" selection-start="1169" selection-end="1169" vertical-scroll-proportion="-27.5">
               <folding />
             </state>
           </provider>
@@ -71,10 +70,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="d3axes.html" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="d3axes.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/d3axes.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="24" column="0" selection-start="351" selection-end="390" vertical-scroll-proportion="-15.0">
+            <state line="87" column="21" selection-start="2033" selection-end="2033" vertical-scroll-proportion="0.03081511">
               <folding />
             </state>
           </provider>
@@ -115,9 +114,9 @@
         <option value="$PROJECT_DIR$/trello.html" />
         <option value="$PROJECT_DIR$/stocks.csv" />
         <option value="$PROJECT_DIR$/area-chart.html" />
-        <option value="$PROJECT_DIR$/d3axes.html" />
         <option value="$PROJECT_DIR$/d3trellocards.html" />
         <option value="$PROJECT_DIR$/d3cards.html" />
+        <option value="$PROJECT_DIR$/d3axes.html" />
       </list>
     </option>
   </component>
@@ -483,13 +482,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/d3axes.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="0" selection-start="351" selection-end="390" vertical-scroll-proportion="-15.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/d3trellocards.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="14" column="39" selection-start="216" selection-end="216" vertical-scroll-proportion="-8.75">
@@ -499,7 +491,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/d3cards.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="39" selection-start="216" selection-end="216" vertical-scroll-proportion="0.20874752">
+        <state line="58" column="29" selection-start="1169" selection-end="1169" vertical-scroll-proportion="-27.5">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/d3axes.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="87" column="21" selection-start="2033" selection-end="2033" vertical-scroll-proportion="0.03081511">
           <folding />
         </state>
       </provider>

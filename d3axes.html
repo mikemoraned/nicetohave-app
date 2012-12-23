@@ -63,20 +63,20 @@
       .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    var x = d3.scale.ordinal()
+    var valueScale = d3.scale.ordinal()
         .domain(["Nice to have", "Significant Business Value", "Critical"])
         .rangePoints([0, width - margin.left - margin.right]);
 
     var xAxis = d3.svg.axis()
-        .scale(x)
+        .scale(valueScale)
         .orient("top");
 
-    var y = d3.scale.ordinal()
+    var riskScale = d3.scale.ordinal()
         .domain(["Low", "Medium", "High"])
         .rangePoints([0, height - margin.top - margin.bottom]);
 
     var yAxis = d3.svg.axis()
-        .scale(y)
+        .scale(riskScale)
         .orient("left");
 
     svg.append("g")
@@ -161,6 +161,14 @@
             .attr("class", "card")
             .attr("r", maxRadius)
             .call(force.drag)
+            .on("click", function(c) {
+                console.log("Clicked on ");
+                console.dir(c);
+                var value = valueScale(c.x);
+                var risk = riskScale(c.y);
+                console.log("Value: " + value);
+                console.log("Risk: " + risk);
+            })
           .append("title")
             .text(function(d) { return d.name; });
 
