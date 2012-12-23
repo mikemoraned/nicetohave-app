@@ -75,6 +75,11 @@
         .domain(["Low", "Medium", "High"])
         .rangePoints([0, height - margin.top - margin.bottom]);
 
+    var riskScaleInverse = d3.scale.linear()
+            .domain([0, height - margin.top - margin.bottom])
+            .range([1,3])
+            .clamp(true);
+
     var yAxis = d3.svg.axis()
         .scale(riskScale)
         .orient("left");
@@ -165,7 +170,7 @@
                 console.log("Clicked on ");
                 console.dir(c);
                 var value = valueScale(c.x);
-                var risk = riskScale(c.y);
+                var risk = riskScaleInverse(c.y);
                 console.log("Value: " + value);
                 console.log("Risk: " + risk);
             })
