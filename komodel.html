@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+</style>
+<body>
+<script src="js/d3.v3.min.js"></script>
+<script src="Kickstrap/js/jquery-1.8.3.min.js"></script>
+<script src="js/knockout-2.2.0.js"></script>
+<script src="https://api.trello.com/1/client.js?key=afaec27e30009b0b1cfb14d85f384ee1"></script>
+
+<ul data-bind="foreach: cards, visible: cards().length > 0">
+    <li>
+        <input data-bind="value: name" />
+    </li>
+</ul>
+
+<script type="application/javascript">
+
+    $(function() {
+        function Card(data) {
+            this.name = ko.observable(data.name);
+        }
+
+        function CardListViewModel() {
+            // Data
+            var self = this;
+            self.cards = ko.observableArray([]);
+
+            // Operations
+            self.addCard = function(data) {
+                self.cards.push(new Card(data));
+            };
+        }
+
+        var model = new CardListViewModel();
+
+        ko.applyBindings(model);
+
+        var updateCards = function() {
+            Trello.get("lists/4eea755f1576578f2713ec56/cards", function(trelloCards) {
+                $.each(trelloCards, function(ix, card) {
+                    model.addCard(card);
+                });
+            });
+        };
+
+        var onAuthorize = function() {
+            updateLoggedIn();
+            updateCards();
+        };
+
+        var updateLoggedIn = function() {
+            var isLoggedIn = Trello.authorized();
+            $("#loggedout").toggle(!isLoggedIn);
+            $("#loggedin").toggle(isLoggedIn);
+        };
+
+        var logout = function() {
+            Trello.deauthorize();
+            updateLoggedIn();
+        };
+
+        Trello.authorize({
+            interactive:false,
+            success: onAuthorize
+        });
+    });
+
+</script>
+</body>
