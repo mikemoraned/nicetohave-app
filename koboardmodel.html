@@ -17,9 +17,7 @@
 
 <h2>Lists</h2>
 
-<div data-bind="foreach: board.lists, visible: board.lists().length > 0">
-    <div class="list" data-bind="text: name"></div>
-</div>
+<select data-bind="options: board.lists, value: list.name, optionsText: 'name', enable: board.lists().length > 0"></select>
 
 <script type="application/javascript">
 
