@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+    svg {
+        border: 1px solid;
+    }
+
+    .card {
+        stroke: #fff;
+        stroke-width: 1.5px;
+    }
+
+    .card.selected {
+        stroke: #f00;
+    }
+
+    .axis text {
+        font: 10px sans-serif;
+    }
+
+    .axis path, .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+    }
+
+    .brush .extent {
+        stroke: #fff;
+        fill-opacity: .125;
+        shape-rendering: crispEdges;
+    }
+
+    table#board {
+        font-family: "Trebuchet MS", sans-serif;
+        font-size: 16px;
+        font-weight: bold;
+        line-height: 1.4em;
+        font-style: normal;
+        border-collapse:separate;
+        height: 500px;
+    }
+
+    table#board thead th {
+        padding:15px;
+    }
+
+    table#board tbody th {
+        padding:15px;
+    }
+
+    table#board tbody .area.odd {
+        background-color: rgb(243, 253, 255);
+    }
+</style>
+<body>
+<script src="js/d3.v3.min.js"></script>
+<script src="js/underscore-min.js"></script>
+<script src="Kickstrap/js/jquery-1.8.3.min.js"></script>
+<script src="https://api.trello.com/1/client.js?key=afaec27e30009b0b1cfb14d85f384ee1"></script>
+
+<table id="board" cellspacing="0" cellpadding="0">
+    <col width="10%"/>
+    <col width="30%"/>
+    <col width="30%"/>
+    <col width="30%"/>
+    <thead>
+        <tr>
+            <th></th>
+            <th scope="col">Nice to Have</th>
+            <th scope="col">Significant Business Value</th>
+            <th scope="col">Critical</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th scope="row">Low</th>
+            <td class="area even origin"></td>
+            <td class="area odd"></td>
+            <td class="area even"></td>
+        </tr>
+        <tr>
+            <th scope="row">Medium</th>
+            <td class="area odd"></td>
+            <td class="area even"></td>
+            <td class="area odd"></td>
+        </tr>
+        <tr>
+            <th scope="row">High</th>
+            <td class="area even"></td>
+            <td class="area odd"></td>
+            <td class="area even"></td>
+        </tr>
+    </tbody>
+</table>
+
+<div id="loggedout">
+    <a id="connectLink" href="#">Connect To Trello</a>
+</div>
+
+<div id="loggedin">
+    <div id="header">
+        Logged in
+        <a id="disconnect" href="#">Log Out</a>
+    </div>
+</div>
+
+<script type="application/javascript">
+
+    $(function() {
+        var cards = [];
+
+        var $board = $("#board");
+        var boardOffset = $board.offset();
+        var boardDimension = {
+            width: $board.width(),
+            height: $board.height()
+        };
+        var originOffset = $("#board .origin").offset();
+
+        var width = boardDimension.width - (originOffset.left - boardOffset.left);
+        var height = boardDimension.height - (originOffset.top - boardOffset.top);
+
+        var svg = d3.select("body")
+          .append("svg")
+            .attr("style", "position: absolute; top: " + originOffset.top + "; left: " + originOffset.left + ";")
+            .attr("width", width)
+            .attr("height", height);
+
+        var force = d3.layout.force()
+                .charge(-2)
+                .gravity(0)
+                .size([width, height]);
+
+        force
+                .nodes(cards)
+                .links([])
+                .start();
+
+        var updateCards = function() {
+            cards = [];
+            update(cards);
+            Trello.get("lists/4eea755f1576578f2713ec56/cards", function(trelloCards) {
+                $.each(trelloCards, function(ix, card) {
+                    card.x = width / 2;
+                    card.y = height / 2;
+
+                    console.log("Adding:");
+                    console.dir(card);
+                    cards.push(card);
+
+                    update(cards);
+                });
+            });
+        };
+
+        var onAuthorize = function() {
+            updateLoggedIn();
+            updateCards();
+        };
+
+        var updateLoggedIn = function() {
+            var isLoggedIn = Trello.authorized();
+            $("#loggedout").toggle(!isLoggedIn);
+            $("#loggedin").toggle(isLoggedIn);
+        };
+
+        var logout = function() {
+            Trello.deauthorize();
+            updateLoggedIn();
+        };
+
+        Trello.authorize({
+            interactive:false,
+            success: onAuthorize
+        });
+
+        $("#connectLink")
+                .click(function(){
+                    Trello.authorize({
+                        type: "popup",
+                        success: onAuthorize
+                    })
+                });
+
+        $("#disconnect").click(logout);
+
+        var maxRadius = 7;
+
+        function clampX(x) {
+            return Math.max(maxRadius, Math.min(x, width - maxRadius))
+        }
+
+        function clampY(y) {
+            return Math.max(maxRadius, Math.min(y, height - maxRadius))
+        }
+
+        var valueScale = d3.scale.linear()
+                .domain([0, 3])
+                .range([0, width])
+                .clamp(true);
+
+        var riskScale = d3.scale.linear()
+                .domain([0, 3])
+                .range([0, height])
+                .clamp(true);
+
+        var values = ['N','S','C'];
+        var risks = ['L','M','H'];
+
+        var brush = d3.svg.brush()
+                .x(valueScale)
+                .y(riskScale)
+                .on("brush", brush);
+
+        function brush() {
+            console.log("Brush");
+            var e = d3.event.target.extent();
+            svg.selectAll("circle.card").classed("selected", function(c) {
+                var value = valueScale.invert(c.x);
+                var risk = riskScale.invert(c.y);
+                var inSelection = e[0][0] <= value && value <= e[1][0]
+                        && e[0][1] <= risk && risk <= e[1][1];
+                return inSelection;
+            });
+        }
+
+        svg.append("g")
+                .attr("class", "brush")
+                .call(brush);
+
+        function update(cards) {
+            force
+                    .nodes(cards)
+                    .links([])
+                    .start();
+
+            var existingCards = svg.selectAll("circle.card")
+                    .data(cards, function(d) { return d.name; });
+
+            var newCards = existingCards.enter();
+
+            newCards
+                  .append("circle")
+                    .attr("class", "card")
+                    .attr("r", maxRadius)
+                    .call(force.drag)
+                    .on("click", function(c) {
+                        console.log("Clicked on ");
+                        console.dir(c);
+                        var value = Math.floor(valueScale.invert(c.x));
+                        var risk = Math.floor(riskScale.invert(c.y));
+                        console.log("Value: " + values[value]);
+                        console.log("Risk: " + risks[risk]);
+                    })
+                  .append("title")
+                    .text(function(d) { return d.name; });
+
+            force.on("tick", function() {
+                existingCards
+                        .attr("cx", function(d) { return clampX(d.x); })
+                        .attr("cy", function(d) { return clampY(d.y); });
+            });
+        }
+    });
+
+</script>
+</body>
