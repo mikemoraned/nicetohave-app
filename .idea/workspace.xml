@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="79085aa7-73db-41a7-83bc-33ed398879ec" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/d3axes.html" afterPath="$PROJECT_DIR$/d3axes.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/d3table.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="nicetohave.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -69,10 +70,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="d3axes.html" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="d3axes.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/d3axes.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="81" column="0" selection-start="1960" selection-end="1960" vertical-scroll-proportion="0.4333996">
+            <state line="81" column="0" selection-start="1960" selection-end="1960" vertical-scroll-proportion="-31.916666">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="d3table.html" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/d3table.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="30" column="22" selection-start="567" selection-end="567" vertical-scroll-proportion="0.37276343">
               <folding />
             </state>
           </provider>
@@ -116,6 +126,7 @@
         <option value="$PROJECT_DIR$/d3trellocards.html" />
         <option value="$PROJECT_DIR$/d3cards.html" />
         <option value="$PROJECT_DIR$/d3axes.html" />
+        <option value="$PROJECT_DIR$/d3table.html" />
       </list>
     </option>
   </component>
@@ -497,7 +508,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/d3axes.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="81" column="0" selection-start="1960" selection-end="1960" vertical-scroll-proportion="0.4333996">
+        <state line="81" column="0" selection-start="1960" selection-end="1960" vertical-scroll-proportion="-31.916666">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/d3table.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="30" column="22" selection-start="567" selection-end="567" vertical-scroll-proportion="0.37276343">
           <folding />
         </state>
       </provider>
