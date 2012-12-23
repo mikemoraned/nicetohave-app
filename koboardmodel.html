@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+</style>
+<body>
+<script src="js/d3.v3.min.js"></script>
+<script src="Kickstrap/js/jquery-1.8.3.min.js"></script>
+<script src="js/knockout-2.2.0.js"></script>
+<script src="https://api.trello.com/1/client.js?key=afaec27e30009b0b1cfb14d85f384ee1"></script>
+
+<input data-bind="value: board.id" />
+
+<button data-bind="click: useBoard">Get Board Details</button>
+
+<div data-bind="text: board.name" />
+
+<h2>Cards</h2>
+
+<input data-bind="value: list.id" />
+
+<button data-bind="click: updateCards">Refresh</button>
+
+<div data-bind="foreach: cards, visible: cards().length > 0">
+    <div class="card" data-bind="text: name" />
+</div>
+
+<script type="application/javascript">
+
+    $(function() {
+        function Board() {
+            // Data
+            var self = this;
+            self.id = ko.observable("4ed7e27fe6abb2517a21383d");
+            self.lists = ko.observableArray([]);
+            self.name = ko.observable("");
+            
+            // Operations
+            self.refresh = function() {
+                Trello.boards.get(self.id(), function(results) {
+                    console.dir(results);
+                    self.name(results.name);
+                });
+            }
+        }
+
+        function List(data) {
+            this.id = ko.observable(data.id);
+        }
+
+        function Card(data) {
+            this.name = ko.observable(data.name);
+        }
+
+        function NiceToHaveAppViewModel() {
+            // Data
+            var self = this;
+            self.cards = ko.observableArray([]);
+            self.board = new Board();
+            self.list = new List({id: "4eea755f1576578f2713ec56"});
+            self.loggedIn = ko.observable(Trello.authorized());
+
+            // Operations
+            self.logIn = function() {
+                console.log("Logging in");
+                Trello.authorize({
+                    type: "popup",
+                    success: self.updateLoggedIn
+                })
+            }
+
+            self.logOut = function() {
+                console.log("Logging out");
+                Trello.deauthorize();
+                self.updateLoggedIn();
+                self.clearCards();
+            }
+
+            self.updateLoggedIn = function() {
+                self.loggedIn(Trello.authorized());
+            };
+
+            self.useBoard = function() {
+                console.log("Update board: " + self.board.id());
+                self.board.refresh();
+            }
+
+            self.clearCards = function(data) {
+                self.cards([]);
+            };
+
+            self.addCard = function(data) {
+                self.cards.push(new Card(data));
+            };
+
+            self.updateCards = function() {
+                console.log("updating");
+                Trello.get("lists/" + self.list.id() + "/cards", function(result) {
+                    self.cards([]);
+                    $.each(result, function(ix, card) {
+                        self.addCard(card);
+                    });
+                });
+            };
+        }
+
+        var model = new NiceToHaveAppViewModel();
+
+        ko.applyBindings(model);
+
+        Trello.authorize({
+            interactive:false,
+            success: model.updateLoggedIn
+        });
+    });
+
+</script>
+</body>
