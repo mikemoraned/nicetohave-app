@@ -9,13 +9,15 @@
 <script src="js/knockout-2.2.0.js"></script>
 <script src="https://api.trello.com/1/client.js?key=afaec27e30009b0b1cfb14d85f384ee1"></script>
 
-<h2 data-bind="text: list.id"></h2>
+<h2>Cards</h2>
 
-<ul data-bind="foreach: cards, visible: cards().length > 0">
-    <li>
-        <div class="card" data-bind="text: name" />
-    </li>
-</ul>
+<input data-bind="value: list.id" />
+
+<button data-bind="click: updateCards">Refresh</button>
+
+<div data-bind="foreach: cards, visible: cards().length > 0">
+    <div class="card" data-bind="text: name" />
+</div>
 
 <script type="application/javascript">
 
@@ -33,7 +35,7 @@
             var self = this;
             self.cards = ko.observableArray([]);
             self.list = new List({id: "4eea755f1576578f2713ec56"});
-
+            
             // Operations
             self.addCard = function(data) {
                 self.cards.push(new Card(data));
@@ -41,7 +43,9 @@
 
             // Operations
             self.updateCards = function() {
+                console.log("updating");
                 Trello.get("lists/" + self.list.id() + "/cards", function(result) {
+                    self.cards([]);
                     $.each(result, function(ix, card) {
                         self.addCard(card);
                     });
