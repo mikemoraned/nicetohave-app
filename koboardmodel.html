@@ -20,7 +20,7 @@
 <select data-bind="options: board.lists, value: selectedList, optionsText: 'name', enable: board.lists().length > 0"></select>
 
 <div data-bind="visible: selectedList, with: selectedList">
-    <h3>Cards</h3>
+    <h3>Cards: <span data-bind="text: cards().length"></span></h3>
     <div data-bind="foreach: cards">
         <div class="card" data-bind="text: name"></div>
     </div>
@@ -64,6 +64,7 @@
                 Trello.lists.get(self.id() + "/cards", function(results) {
                     console.log("Fetched cards");
                     console.dir(results);
+                    self.cards([]);
                     results.forEach(function(d) {
                         self.cards.push(new Card(d));
                     })
