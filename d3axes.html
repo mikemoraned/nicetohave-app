@@ -64,7 +64,7 @@
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     var x = d3.scale.ordinal()
-        .domain(["Nice to have", "Should", "Essential"])
+        .domain(["Nice to have", "Significant Business Value", "Critical"])
         .rangePoints([0, width - margin.left - margin.right]);
 
     var xAxis = d3.svg.axis()
@@ -72,7 +72,7 @@
         .orient("top");
 
     var y = d3.scale.ordinal()
-        .domain(["hours", "days", "weeks"])
+        .domain(["Low", "Medium", "High"])
         .rangePoints([0, height - margin.top - margin.bottom]);
 
     var yAxis = d3.svg.axis()

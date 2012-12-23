@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="79085aa7-73db-41a7-83bc-33ed398879ec" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/d3axes.html" afterPath="$PROJECT_DIR$/d3axes.html" />
     </list>
     <ignored path="nicetohave.iws" />
@@ -73,7 +72,7 @@
       <file leaf-file-name="d3axes.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/d3axes.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="24" column="52" selection-start="403" selection-end="403" vertical-scroll-proportion="0.35785288">
+            <state line="74" column="19" selection-start="1699" selection-end="1699" vertical-scroll-proportion="0.70079523">
               <folding />
             </state>
           </provider>
@@ -498,7 +497,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/d3axes.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="52" selection-start="403" selection-end="403" vertical-scroll-proportion="0.35785288">
+        <state line="74" column="19" selection-start="1699" selection-end="1699" vertical-scroll-proportion="0.70079523">
           <folding />
         </state>
       </provider>
