@@ -9,45 +9,53 @@
 <script src="js/knockout-2.2.0.js"></script>
 <script src="https://api.trello.com/1/client.js?key=afaec27e30009b0b1cfb14d85f384ee1"></script>
 
+<h2 data-bind="text: list.id"></h2>
+
 <ul data-bind="foreach: cards, visible: cards().length > 0">
     <li>
-        <input data-bind="value: name" />
+        <div class="card" data-bind="text: name" />
     </li>
 </ul>
 
 <script type="application/javascript">
 
     $(function() {
+        function List(data) {
+            this.id = ko.observable(data.id);
+        }
+
         function Card(data) {
             this.name = ko.observable(data.name);
         }
 
-        function CardListViewModel() {
+        function NiceToHaveAppViewModel() {
             // Data
             var self = this;
             self.cards = ko.observableArray([]);
+            self.list = new List({id: "4eea755f1576578f2713ec56"});
 
             // Operations
             self.addCard = function(data) {
                 self.cards.push(new Card(data));
             };
+
+            // Operations
+            self.updateCards = function() {
+                Trello.get("lists/" + self.list.id() + "/cards", function(result) {
+                    $.each(result, function(ix, card) {
+                        self.addCard(card);
+                    });
+                });
+            };
         }
 
-        var model = new CardListViewModel();
+        var model = new NiceToHaveAppViewModel();
 
         ko.applyBindings(model);
 
-        var updateCards = function() {
-            Trello.get("lists/4eea755f1576578f2713ec56/cards", function(trelloCards) {
-                $.each(trelloCards, function(ix, card) {
-                    model.addCard(card);
-                });
-            });
-        };
-
         var onAuthorize = function() {
             updateLoggedIn();
-            updateCards();
+            model.updateCards();
         };
 
         var updateLoggedIn = function() {
