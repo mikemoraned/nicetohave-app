@@ -3,7 +3,7 @@
 <style>
 
     svg {
-        /*border: 1px solid;*/
+        border: 1px solid;
     }
 
     .card {
@@ -65,7 +65,7 @@
     <tbody>
         <tr>
             <th scope="row">Low</th>
-            <td class="area even"></td>
+            <td class="area even origin"></td>
             <td class="area odd"></td>
             <td class="area even"></td>
         </tr>
@@ -87,20 +87,26 @@
 
 <script type="application/javascript">
 
-    var cards = [];
+    $(function() {
+        var cards = [];
 
-    var margin = {top: 40, right: 40, bottom: 40, left: 50},
-            width = 960,
-            height = 500;
+        var $board = $("#board");
+        var boardOffset = $board.offset();
+        var boardDimension = {
+            width: $board.width(),
+            height: $board.height()
+        };
+        var originOffset = $("#board .origin").offset();
 
-    var force = d3.layout.force()
-            .charge(-2)
-            .gravity(0)
-            .size([width, height]);
+        var width = boardDimension.width - (originOffset.left - boardOffset.left);
+        var height = boardDimension.height - (originOffset.top - boardOffset.top);
 
-    force
-            .nodes(cards)
-            .links([])
-            .start();
+        var svg = d3.select("body")
+          .append("svg")
+            .attr("style", "position: absolute; top: " + originOffset.top + "; left: " + originOffset.left + ";")
+            .attr("width", width)
+            .attr("height", height);
+    });
+
 </script>
 </body>
