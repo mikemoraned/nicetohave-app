@@ -13,16 +13,12 @@
 
 <button data-bind="click: useBoard">Get Board Details</button>
 
-<div data-bind="text: board.name" />
+<div data-bind="text: board.name"></div>
 
-<h2>Cards</h2>
+<h2>Lists</h2>
 
-<input data-bind="value: list.id" />
-
-<button data-bind="click: updateCards">Refresh</button>
-
-<div data-bind="foreach: cards, visible: cards().length > 0">
-    <div class="card" data-bind="text: name" />
+<div data-bind="foreach: board.lists, visible: board.lists().length > 0">
+    <div class="list" data-bind="text: name"></div>
 </div>
 
 <script type="application/javascript">
@@ -34,18 +30,26 @@
             self.id = ko.observable("4ed7e27fe6abb2517a21383d");
             self.lists = ko.observableArray([]);
             self.name = ko.observable("");
-            
+
             // Operations
             self.refresh = function() {
                 Trello.boards.get(self.id(), function(results) {
                     console.dir(results);
                     self.name(results.name);
+                    Trello.boards.get(self.id() + "/lists", function(results) {
+                        self.lists([]);
+                        console.dir(results);
+                        results.forEach(function(d) {
+                            self.lists.push(new List(d));
+                        })
+                    });
                 });
             }
         }
 
         function List(data) {
             this.id = ko.observable(data.id);
+            this.name = ko.observable(data.name);
         }
 
         function Card(data) {
