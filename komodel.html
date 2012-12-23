@@ -9,6 +9,14 @@
 <script src="js/knockout-2.2.0.js"></script>
 <script src="https://api.trello.com/1/client.js?key=afaec27e30009b0b1cfb14d85f384ee1"></script>
 
+<div data-bind="visible: !loggedIn()">
+    <button data-bind="click: logIn">Log in</button>
+</div>
+
+<div data-bind="visible: loggedIn">
+    <button data-bind="click: logOut">Log out</button>
+</div>
+
 <h2>Cards</h2>
 
 <input data-bind="value: list.id" />
@@ -35,13 +43,36 @@
             var self = this;
             self.cards = ko.observableArray([]);
             self.list = new List({id: "4eea755f1576578f2713ec56"});
-            
+            self.loggedIn = ko.observable(Trello.authorized());
+
             // Operations
+            self.logIn = function() {
+                console.log("Logging in");
+                Trello.authorize({
+                    type: "popup",
+                    success: self.updateLoggedIn
+                })
+            }
+
+            self.logOut = function() {
+                console.log("Logging out");
+                Trello.deauthorize();
+                self.updateLoggedIn();
+                self.clearCards();
+            }
+
+            self.updateLoggedIn = function() {
+                self.loggedIn(Trello.authorized());
+            };
+
+            self.clearCards = function(data) {
+                self.cards([]);
+            };
+
             self.addCard = function(data) {
                 self.cards.push(new Card(data));
             };
 
-            // Operations
             self.updateCards = function() {
                 console.log("updating");
                 Trello.get("lists/" + self.list.id() + "/cards", function(result) {
@@ -57,25 +88,9 @@
 
         ko.applyBindings(model);
 
-        var onAuthorize = function() {
-            updateLoggedIn();
-            model.updateCards();
-        };
-
-        var updateLoggedIn = function() {
-            var isLoggedIn = Trello.authorized();
-            $("#loggedout").toggle(!isLoggedIn);
-            $("#loggedin").toggle(isLoggedIn);
-        };
-
-        var logout = function() {
-            Trello.deauthorize();
-            updateLoggedIn();
-        };
-
         Trello.authorize({
             interactive:false,
-            success: onAuthorize
+            success: model.updateLoggedIn
         });
     });
 
