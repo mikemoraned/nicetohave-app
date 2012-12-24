@@ -312,6 +312,8 @@
                     .append("title")
                     .text(function(d) { return d.name(); });
 
+            existingCards.exit().remove();
+
             force.on("tick", function() {
                 existingCards
                         .attr("cx", function(d) { return d.x = clampX(d.x); })
