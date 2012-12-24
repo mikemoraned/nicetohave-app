@@ -27,16 +27,20 @@
           stroke-width: 1.5px;
       }
 
-      div.card.selected {
-          border: 1px solid #f00;
-      }
-
       .selecting circle.card {
           fill-opacity: .2;
       }
 
       .selecting circle.card.selected {
           stroke: #f00;
+      }
+
+      .selecting div.card {
+          opacity:.2;
+      }
+
+      .selecting div.card.selected {
+          opacity: 1.0;
       }
 
       .brush .extent {
@@ -63,7 +67,7 @@
           padding:15px;
       }
 
-      table#board tbody .area.odd {
+      table#board tbody .area.even {
           background-color: rgb(243, 253, 255);
       }
   </style>
@@ -122,19 +126,19 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <th scope="row">Low</th>
+                            <th scope="row">Low risk</th>
                             <td class="area even origin"></td>
                             <td class="area odd"></td>
                             <td class="area even"></td>
                         </tr>
                         <tr>
-                            <th scope="row">Medium</th>
+                            <th scope="row">Medium risk</th>
                             <td class="area odd"></td>
                             <td class="area even"></td>
                             <td class="area odd"></td>
                         </tr>
                         <tr>
-                            <th scope="row">High</th>
+                            <th scope="row">High risk</th>
                             <td class="area even"></td>
                             <td class="area odd"></td>
                             <td class="area even"></td>
@@ -301,7 +305,7 @@ $(function() {
     function brushstart() {
         console.log("Brush Start");
         selecting = true;
-        svg.classed("selecting", selecting);
+        d3.select("body").classed("selecting", selecting);
         svg.selectAll("circle.card")
                 .on('mousedown.drag', null)
                 .each(function(c) {
@@ -325,7 +329,7 @@ $(function() {
     function brushend() {
         selecting = !d3.event.target.empty();
         console.log("Brush End, Selecting: " + selecting);
-        svg.classed("selecting", selecting);
+        d3.select("body").classed("selecting", selecting);
         if (!selecting) {
             svg.selectAll("circle.card")
                     .call(force.drag)
