@@ -158,7 +158,7 @@
                         <h3>Cards: <span data-bind="text: cards().length"></span></h3>
                         <div data-bind="foreach: cards">
                             <div class="card row" data-bind="css: { selected: selected }">
-                                <button class="span1 btn btn-mini btn-primary" type="button"><i class="icon-arrow-left"></i> </button>
+                                <button class="span1 btn btn-mini btn-primary" type="button" data-bind="click: addToArea"><i class="icon-arrow-left"></i> </button>
                                 <div class="span4" data-bind="text: name"></div>
                             </div>
                         </div>
@@ -202,6 +202,11 @@ $(function() {
         self.id = ko.observable(data.id);
         self.name = ko.observable(data.name);
         self.cards = ko.observableArray([]);
+        self.cardsInArea = ko.computed(function() {
+            return self.cards().filter(function(c) {
+                return c.inArea();
+            });
+        });
 
         self.refresh = function() {
             Trello.lists.get(self.id() + "/cards", function(results) {
@@ -220,6 +225,15 @@ $(function() {
         self.id = ko.observable(data.id);
         self.name = ko.observable(data.name);
         self.selected = ko.observable(false);
+        self.inArea = ko.observable(false);
+
+        self.addToArea = function() {
+            self.inArea(true);
+        };
+
+        self.removeFromArea = function() {
+            self.inArea(false);
+        };
     }
 
     function NiceToHaveAppViewModel() {
@@ -232,7 +246,7 @@ $(function() {
 
         self.selectedList.subscribe(function(list){
             console.log("Selected list changed");
-            list.cards.subscribe(function(cards) {
+            list.cardsInArea.subscribe(function(cards) {
                 update(cards);
             });
             list.refresh();
