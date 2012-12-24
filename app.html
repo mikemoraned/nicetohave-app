@@ -74,6 +74,9 @@
       table#board tbody .area.even {
           background-color: rgb(243, 253, 255);
       }
+      table#board tbody .area.uncategorized {
+          background-color: rgb(197, 228, 230);
+      }
   </style>
 </head>
 <body>
@@ -121,32 +124,38 @@
                         <col width="30%"/>
                         <col width="30%"/>
                         <thead>
-                        <tr>
-                            <th></th>
-                            <th scope="col">Nice to Have</th>
-                            <th scope="col">Significant Business Value</th>
-                            <th scope="col">Critical</th>
-                        </tr>
+                            <tr>
+                                <th></th>
+                                <th scope="col">Nice to Have</th>
+                                <th scope="col">Significant Business Value</th>
+                                <th scope="col">Critical</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <th scope="row">Low risk</th>
-                            <td class="area even origin"></td>
-                            <td class="area odd"></td>
-                            <td class="area even"></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Medium risk</th>
-                            <td class="area odd"></td>
-                            <td class="area even"></td>
-                            <td class="area odd"></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">High risk</th>
-                            <td class="area even"></td>
-                            <td class="area odd"></td>
-                            <td class="area even"></td>
-                        </tr>
+                            <tr>
+                                <th scope="row">Low risk</th>
+                                <td class="area even origin"></td>
+                                <td class="area odd"></td>
+                                <td class="area even"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Medium risk</th>
+                                <td class="area odd"></td>
+                                <td class="area even"></td>
+                                <td class="area odd"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">High risk</th>
+                                <td class="area even"></td>
+                                <td class="area odd"></td>
+                                <td class="area even"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Uncategorized</th>
+                                <td class="area uncategorized"></td>
+                                <td class="area uncategorized"></td>
+                                <td class="area uncategorized"></td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -306,12 +315,12 @@ $(function() {
             .clamp(true);
 
     var riskScale = d3.scale.linear()
-            .domain([0, 3])
+            .domain([0, 4])
             .range([0, height])
             .clamp(true);
 
     var values = ['N','S','C'];
-    var risks = ['L','M','H'];
+    var risks = ['L','M','H','U'];
 
     var brush = d3.svg.brush()
             .x(valueScale)
@@ -378,6 +387,9 @@ $(function() {
                 .append("circle")
                 .attr("class", "card")
                 .attr("r", maxRadius)
+                .each(function(c) {
+                    c.y = riskScale(3 + Math.round(1.0));
+                })
                 .call(force.drag)
                 .on("click", function(c) {
                     console.log("Clicked on ");
