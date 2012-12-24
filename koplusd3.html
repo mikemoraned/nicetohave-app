@@ -5,9 +5,13 @@
         border: 1px solid;
     }
 
-    .card {
+    circle.card {
         stroke: #fff;
         stroke-width: 1.5px;
+    }
+
+    div.card.selected {
+        border: 1px solid #f00;
     }
 
     .selecting circle.card {
@@ -103,7 +107,7 @@
 <div data-bind="visible: selectedList, with: selectedList">
     <h3>Cards: <span data-bind="text: cards().length"></span></h3>
     <div data-bind="foreach: cards">
-        <div class="card" data-bind="text: name"></div>
+        <div class="card" data-bind="text: name, css: { selected: selected }"></div>
     </div>
 </div>
 
@@ -157,6 +161,7 @@
             var self = this;
             self.id = ko.observable(data.id);
             self.name = ko.observable(data.name);
+            self.selected = ko.observable(false);
         }
 
         function NiceToHaveAppViewModel() {
@@ -264,6 +269,7 @@
                 var risk = riskScale.invert(c.y);
                 var inSelection = e[0][0] <= value && value <= e[1][0]
                         && e[0][1] <= risk && risk <= e[1][1];
+                c.selected(inSelection);
                 return inSelection;
             });
         }
