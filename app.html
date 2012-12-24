@@ -35,6 +35,10 @@
           stroke: #f00;
       }
 
+      div.card {
+          margin-bottom: 5px;
+      }
+
       .selecting div.card {
           opacity:.2;
       }
@@ -104,13 +108,13 @@
             <div class="span12">
                 <input data-bind="value: board.id" />
 
-                <button data-bind="click: useBoard">Get Board Details</button>
+                <button class="btn" data-bind="click: useBoard">Get Board Details</button>
 
                 <span data-bind="text: board.name"></span>
             </div>
 
-            <section class="row-fluid">
-                <div class="span8">
+            <section class="row">
+                <div class="span7">
                     <table id="board" cellspacing="0" cellpadding="0">
                         <col width="10%"/>
                         <col width="30%"/>
@@ -147,16 +151,18 @@
                     </table>
                 </div>
 
-                <div class="span4">
+                <div class="span5">
                     <select data-bind="options: board.lists, value: selectedList, optionsText: 'name', enable: board.lists().length > 0"></select>
 
                     <div data-bind="visible: selectedList, with: selectedList">
                         <h3>Cards: <span data-bind="text: cards().length"></span></h3>
                         <div data-bind="foreach: cards">
-                            <div class="card" data-bind="text: name, css: { selected: selected }"></div>
+                            <div class="card row" data-bind="css: { selected: selected }">
+                                <button class="span1 btn btn-mini btn-primary" type="button">add</button>
+                                <div class="span4" data-bind="text: name"></div>
+                            </div>
                         </div>
                     </div>
-
                 </div>
             </section>
 
