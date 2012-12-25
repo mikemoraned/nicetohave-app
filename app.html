@@ -53,28 +53,35 @@
           shape-rendering: crispEdges;
       }
 
-      table#board {
-          font-family: "Trebuchet MS", sans-serif;
-          font-size: 16px;
-          font-weight: bold;
-          line-height: 1.4em;
-          font-style: normal;
-          border-collapse:separate;
+      table#area, div.cards {
           height: 500px;
       }
 
-      table#board thead th {
+      div.cards {
+          overflow: auto;
+      }
+
+      table#area {
+          /*font-family: "Trebuchet MS", sans-serif;*/
+          /*font-size: 16px;*/
+          /*font-weight: bold;*/
+          /*line-height: 1.4em;*/
+          /*font-style: normal;*/
+          /*border-collapse:separate;*/
+      }
+
+      table#area thead th {
           padding:15px;
       }
 
-      table#board tbody th {
+      table#area tbody th {
           padding:15px;
       }
 
-      table#board tbody .area.even {
+      table#area tbody .area.even {
           background-color: rgb(243, 253, 255);
       }
-      table#board tbody .area.uncategorized {
+      table#area tbody .area.uncategorized {
           background-color: rgb(197, 228, 230);
       }
   </style>
@@ -108,17 +115,24 @@
 
     <div class="container">
         <div class="row">
-            <div class="span12">
+            <div class="span12 load">
                 <input data-bind="value: board.id" />
 
                 <button class="btn" data-bind="click: useBoard"><i class="icon-refresh"></i> Use this</button>
-
-                <span data-bind="text: board.name"></span>
             </div>
 
             <section class="row">
+                <div class="span7 board">
+                    <span data-bind="text: board.name"></span>
+                </div>
+                <div class="span5 lists">
+                    <select data-bind="options: board.lists, value: selectedList, optionsText: 'name', enable: board.lists().length > 0"></select>
+                </div>
+            </section>
+
+            <section class="row">
                 <div class="span7">
-                    <table id="board" cellspacing="0" cellpadding="0">
+                    <table id="area" cellspacing="0" cellpadding="0">
                         <col width="10%"/>
                         <col width="30%"/>
                         <col width="30%"/>
@@ -160,9 +174,7 @@
                     </table>
                 </div>
 
-                <div class="span5">
-                    <select data-bind="options: board.lists, value: selectedList, optionsText: 'name', enable: board.lists().length > 0"></select>
-
+                <div class="span5 cards">
                     <div data-bind="visible: selectedList, with: selectedList">
                         <h3>Cards: <span data-bind="text: cards().length"></span></h3>
                         <div data-bind="foreach: cards">
@@ -272,13 +284,13 @@ $(function() {
 
     ko.applyBindings(model);
 
-    var $board = $("#board");
+    var $board = $("#area");
     var boardOffset = $board.offset();
     var boardDimension = {
         width: $board.width(),
         height: $board.height()
     };
-    var originOffset = $("#board .origin").offset();
+    var originOffset = $("#area .origin").offset();
 
     var width = boardDimension.width - (originOffset.left - boardOffset.left);
     var height = boardDimension.height - (originOffset.top - boardOffset.top);
