@@ -285,7 +285,9 @@ $(function() {
 
     var svg = d3.select("body")
             .append("svg")
-            .attr("style", "position: absolute; top: " + originOffset.top + "; left: " + originOffset.left + ";")
+            .style("position", "absolute")
+            .style("top", originOffset.top + "px")
+            .style("left", originOffset.left + "px")
             .attr("width", width)
             .attr("height", height);
 
