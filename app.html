@@ -393,7 +393,7 @@ $(function() {
                 .start();
 
         var existingCards = svg.selectAll("circle.card")
-                .data(cards, function(d) { return d.name(); });
+                .data(cards, function(d) { return d.id(); });
 
         var newCards = existingCards.enter();
 
