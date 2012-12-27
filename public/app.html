@@ -176,6 +176,9 @@
                 <div class="span5 cards">
                     <div data-bind="visible: selectedList, with: selectedList">
                         <h3>Cards: <span data-bind="text: cards().length"></span></h3>
+
+                        <button class="span5 btn btn-mini btn-primary" type="button" data-bind="click: moveSelectedToTop, enable: hasSelected"><i class="icon-arrow-up"></i> </button>
+
                         <div class="list" data-bind="foreach: cards">
                             <div class="card row" data-bind="scrollToWhen: highlighted, css: { selected: selected, highlighted: highlighted }">
                                 <button class="span1 btn btn-mini btn-primary" type="button" data-bind="click: addToArea"><i class="icon-arrow-left"></i> </button>
@@ -195,8 +198,8 @@ $(function() {
     function Board() {
         // Data
         var self = this;
-//        self.id = ko.observable("4ed7e27fe6abb2517a21383d");
-        self.id = ko.observable("506b4237ead39f966c0d2f34");
+        self.id = ko.observable("4ed7e27fe6abb2517a21383d");
+//        self.id = ko.observable("506b4237ead39f966c0d2f34");
         self.lists = ko.observableArray([]);
         self.name = ko.observable("");
 
@@ -248,6 +251,29 @@ $(function() {
                 return c.inArea();
             });
         });
+
+        self.hasSelected = ko.computed(function() {
+            return self.cards().filter(function(c) {
+                return c.selected();
+            }).length > 0;
+        });
+
+        self.moveSelectedToTop = function() {
+            if (self.hasSelected()) {
+                var selected = self.cards().filter(function(c) {
+                    return c.selected();
+                });
+                var remaining = self.cards().filter(function(c) {
+                    return !c.selected();
+                });
+                console.log("Selected:");
+                console.dir(selected);
+                console.log("Remaining:");
+                console.dir(remaining);
+
+                self.cards(selected.concat(remaining));
+            }
+        }
 
         self.refresh = function() {
             Trello.lists.get(self.id() + "/cards", function(results) {
