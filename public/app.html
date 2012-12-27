@@ -27,6 +27,10 @@
           stroke-width: 1.5px;
       }
 
+      circle.card.highlighted {
+          stroke: red;
+      }
+
       .selecting circle.card {
           fill-opacity: .2;
       }
@@ -37,6 +41,10 @@
 
       div.card {
           margin-bottom: 5px;
+      }
+
+      div.card.highlighted {
+          border: 1px solid red;
       }
 
       .selecting div.card {
@@ -178,7 +186,7 @@
                     <div data-bind="visible: selectedList, with: selectedList">
                         <h3>Cards: <span data-bind="text: cards().length"></span></h3>
                         <div data-bind="foreach: cards">
-                            <div class="card row" data-bind="css: { selected: selected }">
+                            <div class="card row" data-bind="css: { selected: selected, highlighted: highlighted }">
                                 <button class="span1 btn btn-mini btn-primary" type="button" data-bind="click: addToArea"><i class="icon-arrow-left"></i> </button>
                                 <div class="span4" data-bind="text: name"></div>
                             </div>
@@ -267,6 +275,7 @@ $(function() {
         self.id = ko.observable(data.id);
         self.name = ko.observable(data.name);
         self.selected = ko.observable(false);
+        self.highlighted = ko.observable(false);
         self.inArea = ko.observable(false);
 
         self.addToArea = function() {
@@ -433,6 +442,18 @@ $(function() {
                     var risk = Math.floor(riskScale.invert(c.y));
                     console.log("Value: " + values[value]);
                     console.log("Risk: " + risks[risk]);
+                })
+                .on("mouseover", function(c) {
+                    console.log("Moused over ");
+                    console.dir(c);
+                    c.highlighted(true);
+                    d3.select(this).classed("highlighted", true);
+                })
+                .on("mouseout", function(c) {
+                    console.log("Moused out ");
+                    console.dir(c);
+                    c.highlighted(false);
+                    d3.select(this).classed("highlighted", false);
                 })
                 .append("title")
                 .text(function(d) { return d.name(); });
