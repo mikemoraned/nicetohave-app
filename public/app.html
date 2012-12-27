@@ -44,7 +44,7 @@
       }
 
       div.card.highlighted {
-          border: 1px solid red;
+          background-color: red;
       }
 
       .selecting div.card {
@@ -67,15 +67,6 @@
 
       div.cards {
           overflow: auto;
-      }
-
-      table#area {
-          /*font-family: "Trebuchet MS", sans-serif;*/
-          /*font-size: 16px;*/
-          /*font-weight: bold;*/
-          /*line-height: 1.4em;*/
-          /*font-style: normal;*/
-          /*border-collapse:separate;*/
       }
 
       table#area thead th {
@@ -185,8 +176,8 @@
                 <div class="span5 cards">
                     <div data-bind="visible: selectedList, with: selectedList">
                         <h3>Cards: <span data-bind="text: cards().length"></span></h3>
-                        <div data-bind="foreach: cards">
-                            <div class="card row" data-bind="css: { selected: selected, highlighted: highlighted }">
+                        <div class="list" data-bind="foreach: cards">
+                            <div class="card row" data-bind="scrollToWhen: highlighted, css: { selected: selected, highlighted: highlighted }">
                                 <button class="span1 btn btn-mini btn-primary" type="button" data-bind="click: addToArea"><i class="icon-arrow-left"></i> </button>
                                 <div class="span4" data-bind="text: name"></div>
                             </div>
@@ -309,6 +300,27 @@ $(function() {
             self.board.refresh();
         }
     }
+
+    ko.bindingHandlers.scrollToWhen = {
+        update: function(element, valueAccessor, allBindingsAccessor) {
+            var value = valueAccessor();
+            var valueUnwrapped = ko.utils.unwrapObservable(value);
+
+            console.log("Parp");
+            console.dir(element);
+            console.dir(valueUnwrapped);
+
+            // Now manipulate the DOM element
+            if (valueUnwrapped == true)
+            {
+                var top = $(element).offset().top;
+                console.log("Top: " + top);
+                $(".cards").animate({
+                    scrollTop: top
+                }, 500);
+            }
+        }
+    };
 
     var model = new NiceToHaveAppViewModel();
 
