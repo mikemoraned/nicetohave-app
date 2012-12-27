@@ -196,25 +196,46 @@ $(function() {
     function Board() {
         // Data
         var self = this;
-        self.id = ko.observable("4ed7e27fe6abb2517a21383d");
+//        self.id = ko.observable("4ed7e27fe6abb2517a21383d");
+        self.id = ko.observable("506b4237ead39f966c0d2f34");
         self.lists = ko.observableArray([]);
         self.name = ko.observable("");
 
+        function handleResults(results) {
+            console.log("Fetched board info");
+            console.dir(results);
+            self.name(results.name);
+            Trello.boards.get(self.id() + "/lists", function(results) {
+                console.log("Fetched board lists");
+                self.lists([]);
+                console.dir(results);
+                results.forEach(function(d) {
+                    self.lists.push(new List(d));
+                })
+            });
+        };
+
+        function onError(error) {
+            console.dir(error);
+            if (error.status === 401) {
+                Trello.authorize({
+                    type: "popup",
+                    name: "Nice to have",
+                    success: function(foop){
+                        console.log("Authorize succeeded");
+                        console.dir(foop);
+                    },
+                    error: function(error) {
+                        console.log("Authorize failed");
+                        console.dir(error);
+                    }
+                });
+            }
+        }
+
         // Operations
         self.refresh = function() {
-            Trello.boards.get(self.id(), function(results) {
-                console.log("Fetched board info");
-                console.dir(results);
-                self.name(results.name);
-                Trello.boards.get(self.id() + "/lists", function(results) {
-                    console.log("Fetched board lists");
-                    self.lists([]);
-                    console.dir(results);
-                    results.forEach(function(d) {
-                        self.lists.push(new List(d));
-                    })
-                });
-            });
+            Trello.boards.get(self.id(), handleResults, onError);
         }
     }
 
