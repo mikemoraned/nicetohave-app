@@ -183,8 +183,12 @@
             </div>
 
             <div class="span5" data-bind="visible: selectedList, with: selectedList">
-                <button class="btn btn-large btn-primary" type="button" data-bind="click: moveSelectedToTop, enable: hasSelected">
+                <button class="btn btn-primary" type="button" data-bind="click: moveSelectedToTop, enable: hasSelected">
                     <i class="icon-arrow-up"></i> move selected to top
+                </button>
+
+                <button class="btn btn-primary" type="button" data-bind="click: doPendingActions, enable: hasPendingActions">
+                    <i class="icon-arrow-right"></i> save to trello
                 </button>
 
                 <div id="cards" data-bind="foreach: cards">
@@ -203,7 +207,7 @@ $(function() {
         // Data
         var self = this;
 //        self.board = new Board("506b4237ead39f966c0d2f34");
-        self.board = new Board("4ed7e27fe6abb2517a21383d");
+        self.board = new Board("");
         self.selectedList = ko.observable();
 
         self.cardsInArea = ko.computed(function() {
@@ -248,7 +252,6 @@ $(function() {
                 self.board.goToBoardId(this.params.boardId);
             });
         }).run();
-
     }
 
     var $board = $("#area");
