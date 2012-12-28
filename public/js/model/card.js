@@ -7,6 +7,14 @@
         self.highlighted = ko.observable(false);
         self.inArea = ko.observable(false);
 
+        self.highlight = function() {
+            self.highlighted(true);
+        }
+
+        self.unHighlight = function() {
+            self.highlighted(false);
+        }
+
         self.addToArea = function() {
             self.inArea(true);
         };

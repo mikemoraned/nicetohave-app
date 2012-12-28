@@ -118,6 +118,13 @@
         var existingCards = this.svg.selectAll("circle.card")
             .data(cards, function(d) { return d.id(); });
 
+        function updateCardClasses(d) {
+            d3.select(this).classed("selected", d.selected());
+            d3.select(this).classed("highlighted", d.highlighted());
+        }
+
+        existingCards.each(updateCardClasses);
+
         var newCards = existingCards.enter();
 
         newCards

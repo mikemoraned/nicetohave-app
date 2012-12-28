@@ -186,7 +186,8 @@
                 </button>
 
                 <div id="cards" data-bind="foreach: cards">
-                    <button class="btn card" type="button" data-bind="click: addToArea, text: name, scrollToWhen: highlighted, scrollable:'#cards', css: { selected: selected, highlighted: highlighted }">
+                    <button class="btn card" type="button"
+                            data-bind="click: addToArea, text: name, event: { mouseover: highlight, mouseout: unHighlight }, css: { selected: selected, highlighted: highlighted }">
                     </button>
                 </div>
             </div>
@@ -213,8 +214,22 @@ $(function() {
             }
         });
 
+        self.cardsHighlightedInArea = ko.computed(function() {
+            if (self.selectedList()) {
+                return self.cardsInArea().filter(function(c) {
+                    return c.highlighted();
+                });
+            } else {
+                return [];
+            }
+        });
+
         self.cardsInArea.subscribe(function(cards) {
             categoriseView.update(cards);
+        });
+
+        self.cardsHighlightedInArea.subscribe(function() {
+            categoriseView.update(self.cardsInArea());
         });
 
         self.selectedList.subscribe(function(list){

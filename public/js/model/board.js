@@ -10,11 +10,10 @@
             console.log("Fetched board info");
             console.dir(results);
             self.name(results.name);
-            Trello.boards.get(self.id() + "/lists", function(results) {
+            Trello.boards.get(self.id() + "/lists", function(lists) {
                 console.log("Fetched board lists");
                 self.lists([]);
-                console.dir(results);
-                results.forEach(function(d) {
+                lists.forEach(function(d) {
                     self.lists.push(new List(d));
                 })
             });
@@ -26,9 +25,9 @@
                 Trello.authorize({
                     type: "popup",
                     name: "Nice to have",
-                    success: function(foop){
+                    success: function(){
                         console.log("Authorize succeeded");
-                        console.dir(foop);
+                        self.refresh();
                     },
                     error: function(error) {
                         console.log("Authorize failed");
