@@ -4,11 +4,7 @@
         self.id = ko.observable(data.id);
         self.name = ko.observable(data.name);
         self.cards = ko.observableArray([]);
-        self.cardsInArea = ko.computed(function() {
-            return self.cards().filter(function(c) {
-                return c.inArea();
-            });
-        });
+
 
         self.hasSelected = ko.computed(function() {
             return self.cards().filter(function(c) {

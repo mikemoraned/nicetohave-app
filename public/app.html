@@ -46,7 +46,8 @@
       }
 
       div.card {
-          margin-bottom: 5px;
+          margin-top: 2px;
+          margin-bottom: 2px;
       }
 
       div.card.highlighted {
@@ -67,12 +68,12 @@
           shape-rendering: crispEdges;
       }
 
-      table#area, div.cards {
+      table#area, div#cards {
           height: 500px;
       }
 
-      div.cards {
-          overflow: auto;
+      div#cards {
+          overflow-y: auto;
       }
 
       table#area thead th {
@@ -120,83 +121,78 @@
 
     <div class="container">
         <div class="row">
-            <div class="span12 load">
-                <input data-bind="value: board.id" />
-
-                <button class="btn" data-bind="click: useBoard"><i class="icon-refresh"></i> Use this</button>
-            </div>
-
-            <section class="row">
-                <div class="span7 board">
-                    <span data-bind="text: board.name"></span>
+            <div class="row">
+                <div class="span7">
+                    <input data-bind="value: board.id" />
+                    <button class="btn" type="submit" data-bind="click: board.refresh()"><i class="icon-refresh"></i> Use this</button>
                 </div>
-                <div class="span5 lists">
+                <div class="span5">
                     <select data-bind="options: board.lists, value: selectedList, optionsText: 'name', enable: board.lists().length > 0"></select>
                 </div>
-            </section>
+            </div>
+        </div>
 
-            <section class="row">
-                <div class="span7">
-                    <table id="area" cellspacing="0" cellpadding="0">
-                        <col width="10%"/>
-                        <col width="30%"/>
-                        <col width="30%"/>
-                        <col width="30%"/>
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th scope="col">Nice to Have</th>
-                                <th scope="col">Significant Business Value</th>
-                                <th scope="col">Critical</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th scope="row">Low risk</th>
-                                <td class="area even origin"></td>
-                                <td class="area odd"></td>
-                                <td class="area even"></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Medium risk</th>
-                                <td class="area odd"></td>
-                                <td class="area even"></td>
-                                <td class="area odd"></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">High risk</th>
-                                <td class="area even"></td>
-                                <td class="area odd"></td>
-                                <td class="area even"></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Uncategorized</th>
-                                <td class="area uncategorized"></td>
-                                <td class="area uncategorized"></td>
-                                <td class="area uncategorized"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+        <div class="row">
+            <div class="span7">
+                <table id="area" cellspacing="0" cellpadding="0">
+                    <col width="10%"/>
+                    <col width="30%"/>
+                    <col width="30%"/>
+                    <col width="30%"/>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th scope="col">Nice to Have</th>
+                            <th scope="col">Significant Business Value</th>
+                            <th scope="col">Critical</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">Low risk</th>
+                            <td class="area even origin"></td>
+                            <td class="area odd"></td>
+                            <td class="area even"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Medium risk</th>
+                            <td class="area odd"></td>
+                            <td class="area even"></td>
+                            <td class="area odd"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">High risk</th>
+                            <td class="area even"></td>
+                            <td class="area odd"></td>
+                            <td class="area even"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Uncategorized</th>
+                            <td class="area uncategorized"></td>
+                            <td class="area uncategorized"></td>
+                            <td class="area uncategorized"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
-                <div class="span5 cards">
-                    <div data-bind="visible: selectedList, with: selectedList">
-                        <h3>Cards: <span data-bind="text: cards().length"></span></h3>
+            <div class="span5">
+                <div data-bind="visible: selectedList, with: selectedList">
+                    <button class="btn btn-large btn-primary" type="button" data-bind="click: moveSelectedToTop, enable: hasSelected">
+                        <i class="icon-arrow-up"></i> move selected to top
+                    </button>
 
-                        <button class="span5 btn btn-mini btn-primary" type="button" data-bind="click: moveSelectedToTop, enable: hasSelected"><i class="icon-arrow-up"></i> </button>
-
-                        <div class="list" data-bind="foreach: cards">
-                            <div class="card row" data-bind="scrollToWhen: highlighted, scrollable:'.cards', css: { selected: selected, highlighted: highlighted }">
-                                <button class="span1 btn btn-mini btn-primary" type="button" data-bind="click: addToArea"><i class="icon-arrow-left"></i> </button>
-                                <div class="span4" data-bind="text: name"></div>
-                            </div>
+                    <div id="cards" data-bind="foreach: cards">
+                        <div class="card" data-bind="scrollToWhen: highlighted, scrollable:'#cards', css: { selected: selected, highlighted: highlighted }">
+                            <button class="btn" type="button" data-bind="click: addToArea">
+                                <span data-bind="text: name"></span>
+                            </button>
                         </div>
                     </div>
                 </div>
-            </section>
-
+            </div>
         </div>
-    </div>
+  </div>
 
 <script type="application/javascript">
 
@@ -204,25 +200,29 @@ $(function() {
     function NiceToHaveAppViewModel(categoriseView) {
         // Data
         var self = this;
-        self.board = new Board("506b4237ead39f966c0d2f34");
-//        self.board = new Board("4ed7e27fe6abb2517a21383d");
+//        self.board = new Board("506b4237ead39f966c0d2f34");
+        self.board = new Board("4ed7e27fe6abb2517a21383d");
         self.list = new List({id: "4eea755f1576578f2713ec56"});
         self.selectedList = ko.observable();
-        self.loggedIn = ko.observable(Trello.authorized());
+
+        self.cardsInArea = ko.computed(function() {
+            if (self.selectedList()) {
+                return self.selectedList().cards().filter(function(c) {
+                    return c.inArea();
+                });
+            } else {
+                return [];
+            }
+        });
+
+        self.cardsInArea.subscribe(function(cards) {
+            categoriseView.update(cards);
+        });
 
         self.selectedList.subscribe(function(list){
             console.log("Selected list changed");
-            list.cardsInArea.subscribe(function(cards) {
-                categoriseView.update(cards);
-            });
             list.refresh();
         });
-
-        // Operations
-        self.useBoard = function() {
-            console.log("Update board: " + self.board.id());
-            self.board.refresh();
-        }
     }
 
     var $board = $("#area");
