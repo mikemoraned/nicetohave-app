@@ -1,10 +1,7 @@
 var express = require("express");
 var app = express();
 
-// Reference
-// http://expressjs.com/guide.html
-// https://github.com/spadin/simple-express-static-server
-// http://devcenter.heroku.com/articles/node-js
+var lessMiddleware = require('less-middleware');
 
 // Configuration
 app.configure(function(){
@@ -14,9 +11,11 @@ app.configure(function(){
     app.use(express.methodOverride());
 
     // LESS Support
-    //app.use(express.compiler({ src: __dirname + '/public', enable: ['less'] }));
-    // Template-enabled html view (by jade)
-    // http://stackoverflow.com/questions/4529586/render-basic-html-view-in-node-js-express
+    app.use(lessMiddleware({
+        src: __dirname + '/public',
+        compress: true
+    }));
+
     app.set('views', __dirname + '/views');
     app.set("view options", {layout: false});
     app.set('view engine', 'ejs');
@@ -29,7 +28,6 @@ app.configure(function(){
         showStack: true
     }));
 
-    //Setup the Route, you are almost done
     app.use(app.router);
 });
 
