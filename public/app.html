@@ -20,6 +20,8 @@
   <script src="js/model/card.js"></script>
   <script src="js/model/list.js"></script>
   <script src="js/model/board.js"></script>
+
+  <script src="js/ko.binding-handlers.js"></script>
   <script src="js/d3.categorise.view.js"></script>
   <style>
       svg {
@@ -222,27 +224,6 @@ $(function() {
             self.board.refresh();
         }
     }
-
-    ko.bindingHandlers.scrollToWhen = {
-        update: function(element, valueAccessor, allBindingsAccessor) {
-            var value = valueAccessor();
-            var valueUnwrapped = ko.utils.unwrapObservable(value);
-
-            console.log("Parp");
-            console.dir(element);
-            console.dir(valueUnwrapped);
-
-            // Now manipulate the DOM element
-            if (valueUnwrapped == true)
-            {
-                var top = $(element).offset().top;
-                console.log("Top: " + top);
-                $(".cards").animate({
-                    scrollTop: top
-                }, 500);
-            }
-        }
-    };
 
     var $board = $("#area");
     var boardOffset = $board.offset();
