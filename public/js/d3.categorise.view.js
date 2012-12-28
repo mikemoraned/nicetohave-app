@@ -1,15 +1,5 @@
 (function($, d3, global) {
     function D3CategoriseView(top, left, width, height) {
-        this.force = d3.layout.force()
-            .charge(-2)
-            .gravity(0)
-            .size([width, height]);
-
-        this.force
-            .nodes([])
-            .links([])
-            .start();
-
         this.maxRadius = 7;
 
         this.valueScale = d3.scale.linear()
@@ -69,11 +59,6 @@
             console.log("Brush Start");
             self.selecting = true;
             d3.select("body").classed("selecting", self.selecting);
-            self.svg.selectAll("circle.card")
-                .on('mousedown.drag', null)
-                .each(function(c) {
-                    c.fixed = true;
-                });
         }
     }
 
@@ -97,23 +82,11 @@
             self.selecting = !d3.event.target.empty();
             console.log("Brush End, Selecting: " + self.selecting);
             d3.select("body").classed("selecting", self.selecting);
-            if (!this.selecting) {
-                self.svg.selectAll("circle.card")
-                    .call(self.force.drag)
-                    .each(function(c) {
-                        c.fixed = false;
-                    });
-            }
         }
     }
 
     D3CategoriseView.prototype.update = function(cards) {
         var self = this;
-
-        self.force
-            .nodes(cards)
-            .links([])
-            .start();
 
         var existingCards = this.svg.selectAll("circle.card")
             .data(cards, function(d) { return d.id(); });
@@ -121,6 +94,16 @@
         function updateCardClasses(d) {
             d3.select(this).classed("selected", d.selected());
             d3.select(this).classed("highlighted", d.highlighted());
+        }
+
+        var drag = d3.behavior.drag()
+            .origin(Object)
+            .on("drag", dragmove);
+
+        function dragmove(d) {
+            d3.select(this)
+                .attr("cx", d.x = self.clampX(d3.event.x) )
+                .attr("cy", d.y = self.clampY(d3.event.y) );
         }
 
         existingCards.each(updateCardClasses);
@@ -131,27 +114,14 @@
             .append("circle")
             .attr("class", "card")
             .attr("r", self.maxRadius)
-            .each(function(c) {
-                c.y = self.riskScale(3 + Math.round(1.0));
-            })
-            .call(self.force.drag)
-            .on("click", function(c) {
-                console.log("Clicked on ");
-                console.dir(c);
-                var value = Math.floor(self.valueScale.invert(c.x));
-                var risk = Math.floor(self.riskScale.invert(c.y));
-                console.log("Value: " + self.values[value]);
-                console.log("Risk: " + self.risks[risk]);
-            })
+            .attr("cx", function(d) { return d.x = self.clampX(self.valueScale(Math.random() * 3)); })
+            .attr("cy", function(d) { return d.y = self.clampY(self.riskScale(3 + Math.random())); })
+            .call(drag)
             .on("mouseover", function(c) {
-                console.log("Moused over ");
-                console.dir(c);
                 c.highlighted(true);
                 d3.select(this).classed("highlighted", true);
             })
             .on("mouseout", function(c) {
-                console.log("Moused out ");
-                console.dir(c);
                 c.highlighted(false);
                 d3.select(this).classed("highlighted", false);
             })
@@ -159,12 +129,6 @@
             .text(function(c) { return c.name(); });
 
         existingCards.exit().remove();
-
-        self.force.on("tick", function() {
-             existingCards
-                 .attr("cx", function(d) { return d.x = self.clampX(d.x); })
-                 .attr("cy", function(d) { return d.y = self.clampY(d.y); });
-        });
     }
 
     global.D3CategoriseView = D3CategoriseView;
