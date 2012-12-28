@@ -186,7 +186,7 @@
                         <button class="span5 btn btn-mini btn-primary" type="button" data-bind="click: moveSelectedToTop, enable: hasSelected"><i class="icon-arrow-up"></i> </button>
 
                         <div class="list" data-bind="foreach: cards">
-                            <div class="card row" data-bind="scrollToWhen: highlighted, css: { selected: selected, highlighted: highlighted }">
+                            <div class="card row" data-bind="scrollToWhen: highlighted, scrollable:'.cards', css: { selected: selected, highlighted: highlighted }">
                                 <button class="span1 btn btn-mini btn-primary" type="button" data-bind="click: addToArea"><i class="icon-arrow-left"></i> </button>
                                 <div class="span4" data-bind="text: name"></div>
                             </div>

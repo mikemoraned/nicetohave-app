@@ -4,10 +4,12 @@
             var value = valueAccessor();
             var valueUnwrapped = ko.utils.unwrapObservable(value);
 
-            if (valueUnwrapped == true)
+            var allBindings = allBindingsAccessor();
+
+            if (valueUnwrapped == true && allBindings.scrollable)
             {
                 var top = $(element).offset().top;
-                $(".cards").animate({
+                $(allBindings.scrollable).animate({
                     scrollTop: top
                 }, 1000);
             }
