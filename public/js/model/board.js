@@ -37,6 +37,11 @@
             }
         }
 
+        self.goToBoardId = function(id) {
+            self.id(id);
+            self.refresh();
+        };
+
         // Operations
         self.refresh = function() {
             console.log("Asked to refresh");

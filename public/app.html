@@ -17,6 +17,8 @@
   <script src="../Kickstrap/js/jquery-1.8.3.min.js"></script>
   <script src="https://api.trello.com/1/client.js?key=afaec27e30009b0b1cfb14d85f384ee1"></script>
   <script src="js/knockout-2.2.0.js"></script>
+  <script src="js/sammy-0.7.2.min.js"></script>
+
   <script src="js/model/card.js"></script>
   <script src="js/model/list.js"></script>
   <script src="js/model/board.js"></script>
@@ -128,7 +130,7 @@
                     <label for="board-id">Choose Board Id</label>
                     <input id="board-id" type="text" class="span3" data-bind="value: board.id" placeholder="Your Board Id">
 
-                    <button type="submit" class="btn"data-bind="click: board.refresh"><i class="icon-refresh"></i> Use this</button>
+                    <button type="submit" class="btn"data-bind="click: goToBoardId"><i class="icon-refresh"></i> Use this</button>
 
                     <label for="lists">Select List</label>
                     <select id="lists" data-bind="options: board.lists, value: selectedList, optionsText: 'name', enable: board.lists().length > 0"></select>
@@ -236,6 +238,17 @@ $(function() {
             console.log("Selected list changed");
             list.refresh();
         });
+
+        self.goToBoardId = function() {
+            location.hash = self.board.id();
+        };
+
+        Sammy(function () {
+            this.get('#:boardId', function () {
+                self.board.goToBoardId(this.params.boardId);
+            });
+        }).run();
+
     }
 
     var $board = $("#area");
