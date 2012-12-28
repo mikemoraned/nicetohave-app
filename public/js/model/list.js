@@ -42,6 +42,20 @@
             }
         }
 
+        self.hasSomeNotInArea = ko.computed(function() {
+            return self.cards().filter(function(c) {
+                return !c.inArea();
+            }).length > 0;
+        });
+
+        self.addAllToArea = function() {
+            self.cards().forEach(function(c){
+                if (!c.inArea()) {
+                    c.inArea(true);
+                }
+            })
+        };
+
         self.pendingActions = ko.observableArray([]);
 
         self.hasPendingActions = ko.computed(function() {
@@ -64,8 +78,9 @@
                 console.log("Fetched cards");
                 console.dir(results);
                 self.cards([]);
-                results.forEach(function(d) {
-                    self.cards.push(new Card(d));
+                var position = 0;
+                results.forEach(function(d, i) {
+                    self.cards.push(new Card(d, i, results.length));
                 })
             });
         }

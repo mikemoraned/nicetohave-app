@@ -114,8 +114,12 @@
             .append("circle")
             .attr("class", "card")
             .attr("r", self.maxRadius)
-            .attr("cx", function(d) { return d.x = self.clampX(self.valueScale(Math.random() * 3)); })
-            .attr("cy", function(d) { return d.y = self.clampY(self.riskScale(3 + Math.random())); })
+            .attr("cx", function(d) {
+                return d.x = self.clampX(self.valueScale(3 - (3 * d.fractionThroughList)));
+            })
+            .attr("cy", function(d) {
+                return d.y = self.clampY(self.riskScale(3 + Math.random()));
+            })
             .call(drag)
             .on("mouseover", function(c) {
                 c.highlighted(true);

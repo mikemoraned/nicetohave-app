@@ -1,11 +1,13 @@
 (function(ko, global){
-    function Card(data) {
+    function Card(data, posInList, totalCards) {
         var self = this;
         self.id = ko.observable(data.id);
         self.name = ko.observable(data.name);
         self.selected = ko.observable(false);
         self.highlighted = ko.observable(false);
         self.inArea = ko.observable(false);
+
+        self.fractionThroughList = posInList / totalCards;
 
         self.highlight = function() {
             self.highlighted(true);

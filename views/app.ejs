@@ -183,8 +183,12 @@
             </div>
 
             <div class="span5" data-bind="visible: selectedList, with: selectedList">
+                <button class="btn btn-primary" type="button" data-bind="click: addAllToArea, enable: hasSomeNotInArea">
+                    <i class="icon-arrow-left"></i> add all
+                </button>
+
                 <button class="btn btn-primary" type="button" data-bind="click: moveSelectedToTop, enable: hasSelected">
-                    <i class="icon-arrow-up"></i> move selected to top
+                    <i class="icon-arrow-up"></i> move to top
                 </button>
 
                 <button class="btn btn-primary" type="button" data-bind="click: doPendingActions, enable: hasPendingActions">
@@ -206,7 +210,6 @@ $(function() {
     function NiceToHaveAppViewModel(categoriseView) {
         // Data
         var self = this;
-//        self.board = new Board("506b4237ead39f966c0d2f34");
         self.board = new Board("");
         self.selectedList = ko.observable();
 
