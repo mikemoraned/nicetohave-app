@@ -124,13 +124,15 @@
     <div class="container">
         <div class="row">
             <div class="row">
-                <div class="span7">
-                    <input data-bind="value: board.id" />
-                    <button class="btn" type="submit" data-bind="click: board.refresh"><i class="icon-refresh"></i> Use this</button>
-                </div>
-                <div class="span5">
-                    <select data-bind="options: board.lists, value: selectedList, optionsText: 'name', enable: board.lists().length > 0"></select>
-                </div>
+                <form class="well form-inline">
+                    <label for="board-id">Choose Board Id</label>
+                    <input id="board-id" type="text" class="span3" data-bind="value: board.id" placeholder="Your Board Id">
+
+                    <button type="submit" class="btn"data-bind="click: board.refresh"><i class="icon-refresh"></i> Use this</button>
+
+                    <label for="lists">Select List</label>
+                    <select id="lists" data-bind="options: board.lists, value: selectedList, optionsText: 'name', enable: board.lists().length > 0"></select>
+                </form>
             </div>
         </div>
 
