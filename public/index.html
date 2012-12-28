@@ -11,7 +11,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
   <!-- You can also compile style.less to use regular css. Your apps will still work. -->
   <style type="text/css">body{padding-top:60px}.hidden{margin:20px;border:5px solid #a24c4c;background-color:red;padding:10px;width:400px;color:white;font-family:helvetica,sans-serif}</style>
-  <link rel="stylesheet/less" type="text/css" href="../kickstrap.less">
+  <style>
+      .bookmarklet {
+          border-radius: 7px;
+          background-color: gray;
+          padding: 3px;
+          cursor: move;
+          margin-left: 5px;
+          margin-right: 5px;
+      }
+
+      .bookmarklet a, .bookmarklet a:hover, .bookmarklet a:visited {
+          color: white;
+          text-decoration: none;
+          cursor: move;
+      }
+  </style>
+    <link rel="stylesheet/less" type="text/css" href="../kickstrap.less">
   <script src="../Kickstrap/js/less-1.3.0.min.js"></script>
 </head>
 <body>
@@ -95,7 +111,7 @@
                         </header>
 
                         <ol>
-                            <li>Go to <a href="<a href="app.html">The App page</a></li>
+                            <li>Go to <a href="app.html">The App page</a></li>
                             <li>Feep</li>
                             <li>Farp</li>
                         </ol>
@@ -119,6 +135,12 @@
 
                 <aside class="span4 well">
                     <h4>Bookmarklet</h4>
+
+                    <p>Drag <span class="bookmarklet">
+                        <a href='javascript:var match=location.href.match(".+/trello.com/board/[^/]+/([0-9a-f]+)");if(match){var redirect="http://nicetohave.houseofmoran.com/app.html#"+match[1];location.href=redirect};'>Nice to have!</a>
+                    </span> to your bookmarks and be redirected to <a href="app.html">the app</a> when on trello.com.
+                    </p>
+
                 </aside>
             </section>
 
