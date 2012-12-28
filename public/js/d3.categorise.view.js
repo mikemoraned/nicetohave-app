@@ -133,7 +133,7 @@
                     return d.x = self.clampX(self.valueScale(3 - (3 * d.fractionThroughList)));
                 });
 
-        d3.selectAll("circle.node")
+        d3.selectAll("circle.card")
             .on("mouseover", function(c) {
                 c.highlighted(true);
                 d3.select(this).classed("highlighted", true);
