@@ -143,8 +143,15 @@
                 d3.select(this).classed("highlighted", false);
             });
 
-
-        existingCards.exit().remove();
+        existingCards.exit()
+            .transition()
+                .duration(200)
+                .style("opacity", 0)
+                .duration(250)
+                .attr("cy", function(d) {
+                    return self.riskScale(4);
+                })
+            .remove();
     }
 
     global.D3CategoriseView = D3CategoriseView;
