@@ -110,17 +110,30 @@
 
         var newCards = existingCards.enter();
 
-        newCards
-            .append("circle")
+        var newCardCircles = newCards
+          .append("circle")
             .attr("class", "card")
             .attr("r", self.maxRadius)
+            .call(drag);
+
+        newCardCircles
+          .append("title")
+            .text(function(c) { return c.name(); });
+
+        newCardCircles
             .attr("cx", function(d) {
-                return d.x = self.clampX(self.valueScale(3 - (3 * d.fractionThroughList)));
+                return d.x = self.clampX(self.valueScale(3));
             })
             .attr("cy", function(d) {
                 return d.y = self.clampY(self.riskScale(3 + Math.random()));
             })
-            .call(drag)
+            .transition()
+                .duration(500)
+                .attr("cx", function(d) {
+                    return d.x = self.clampX(self.valueScale(3 - (3 * d.fractionThroughList)));
+                });
+
+        d3.selectAll("circle.node")
             .on("mouseover", function(c) {
                 c.highlighted(true);
                 d3.select(this).classed("highlighted", true);
@@ -128,9 +141,8 @@
             .on("mouseout", function(c) {
                 c.highlighted(false);
                 d3.select(this).classed("highlighted", false);
-            })
-            .append("title")
-            .text(function(c) { return c.name(); });
+            });
+
 
         existingCards.exit().remove();
     }
