@@ -6,7 +6,7 @@
 
     MoveToTop.prototype.do = function (success, failure) {
         console.log("Moving " + this.cardId + " to top of " + this.listId);
-        success();
+        Trello.put("cards/" + this.cardId + "/pos", { value: "top" }, success, failure);
     }
 
     function List(data) {

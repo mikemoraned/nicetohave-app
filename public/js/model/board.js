@@ -32,6 +32,9 @@
                     error: function(error) {
                         console.log("Authorize failed");
                         console.dir(error);
+                    },
+                    scope: {
+                        read: true, write: true
                     }
                 });
             }
