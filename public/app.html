@@ -45,20 +45,22 @@
           stroke: #f00;
       }
 
-      div.card {
+      button.card {
           margin-top: 2px;
           margin-bottom: 2px;
+          display: block;
+          width: 100%;
       }
 
-      div.card.highlighted {
+      button.card.highlighted {
           background-color: red;
       }
 
-      .selecting div.card {
+      .selecting button.card {
           opacity:.2;
       }
 
-      .selecting div.card.selected {
+      .selecting button.card.selected {
           opacity: 1.0;
       }
 
@@ -176,19 +178,14 @@
                 </table>
             </div>
 
-            <div class="span5">
-                <div data-bind="visible: selectedList, with: selectedList">
-                    <button class="btn btn-large btn-primary" type="button" data-bind="click: moveSelectedToTop, enable: hasSelected">
-                        <i class="icon-arrow-up"></i> move selected to top
-                    </button>
+            <div class="span5" data-bind="visible: selectedList, with: selectedList">
+                <button class="btn btn-large btn-primary" type="button" data-bind="click: moveSelectedToTop, enable: hasSelected">
+                    <i class="icon-arrow-up"></i> move selected to top
+                </button>
 
-                    <div id="cards" data-bind="foreach: cards">
-                        <div class="card" data-bind="scrollToWhen: highlighted, scrollable:'#cards', css: { selected: selected, highlighted: highlighted }">
-                            <button class="btn" type="button" data-bind="click: addToArea">
-                                <span data-bind="text: name"></span>
-                            </button>
-                        </div>
-                    </div>
+                <div id="cards" data-bind="foreach: cards">
+                    <button class="btn card" type="button" data-bind="click: addToArea, text: name, scrollToWhen: highlighted, scrollable:'#cards', css: { selected: selected, highlighted: highlighted }">
+                    </button>
                 </div>
             </div>
         </div>
