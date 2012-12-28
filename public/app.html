@@ -126,7 +126,7 @@
             <div class="row">
                 <div class="span7">
                     <input data-bind="value: board.id" />
-                    <button class="btn" type="submit" data-bind="click: board.refresh()"><i class="icon-refresh"></i> Use this</button>
+                    <button class="btn" type="submit" data-bind="click: board.refresh"><i class="icon-refresh"></i> Use this</button>
                 </div>
                 <div class="span5">
                     <select data-bind="options: board.lists, value: selectedList, optionsText: 'name', enable: board.lists().length > 0"></select>
@@ -199,7 +199,6 @@ $(function() {
         var self = this;
 //        self.board = new Board("506b4237ead39f966c0d2f34");
         self.board = new Board("4ed7e27fe6abb2517a21383d");
-        self.list = new List({id: "4eea755f1576578f2713ec56"});
         self.selectedList = ko.observable();
 
         self.cardsInArea = ko.computed(function() {

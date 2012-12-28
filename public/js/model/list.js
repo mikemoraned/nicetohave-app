@@ -5,7 +5,6 @@
         self.name = ko.observable(data.name);
         self.cards = ko.observableArray([]);
 
-
         self.hasSelected = ko.computed(function() {
             return self.cards().filter(function(c) {
                 return c.selected();

@@ -40,6 +40,7 @@
 
         // Operations
         self.refresh = function() {
+            console.log("Asked to refresh");
             Trello.boards.get(self.id(), handleResults, onError);
         }
     }
