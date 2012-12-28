@@ -15,9 +15,11 @@
   <script src="../Kickstrap/js/less-1.3.0.min.js"></script>
   <script src="js/d3.v3.min.js"></script>
   <script src="../Kickstrap/js/jquery-1.8.3.min.js"></script>
-  <script src="js/knockout-2.2.0.js"></script>
   <script src="https://api.trello.com/1/client.js?key=afaec27e30009b0b1cfb14d85f384ee1"></script>
-
+  <script src="js/knockout-2.2.0.js"></script>
+  <script src="js/model/card.js"></script>
+  <script src="js/model/list.js"></script>
+  <script src="js/model/board.js"></script>
   <script src="js/d3.categorise.view.js"></script>
   <style>
       svg {
@@ -197,119 +199,11 @@
 <script type="application/javascript">
 
 $(function() {
-    function Board() {
-        // Data
-        var self = this;
-        self.id = ko.observable("4ed7e27fe6abb2517a21383d");
-//        self.id = ko.observable("506b4237ead39f966c0d2f34");
-        self.lists = ko.observableArray([]);
-        self.name = ko.observable("");
-
-        function handleResults(results) {
-            console.log("Fetched board info");
-            console.dir(results);
-            self.name(results.name);
-            Trello.boards.get(self.id() + "/lists", function(results) {
-                console.log("Fetched board lists");
-                self.lists([]);
-                console.dir(results);
-                results.forEach(function(d) {
-                    self.lists.push(new List(d));
-                })
-            });
-        };
-
-        function onError(error) {
-            console.dir(error);
-            if (error.status === 401) {
-                Trello.authorize({
-                    type: "popup",
-                    name: "Nice to have",
-                    success: function(foop){
-                        console.log("Authorize succeeded");
-                        console.dir(foop);
-                    },
-                    error: function(error) {
-                        console.log("Authorize failed");
-                        console.dir(error);
-                    }
-                });
-            }
-        }
-
-        // Operations
-        self.refresh = function() {
-            Trello.boards.get(self.id(), handleResults, onError);
-        }
-    }
-
-    function List(data) {
-        var self = this;
-        self.id = ko.observable(data.id);
-        self.name = ko.observable(data.name);
-        self.cards = ko.observableArray([]);
-        self.cardsInArea = ko.computed(function() {
-            return self.cards().filter(function(c) {
-                return c.inArea();
-            });
-        });
-
-        self.hasSelected = ko.computed(function() {
-            return self.cards().filter(function(c) {
-                return c.selected();
-            }).length > 0;
-        });
-
-        self.moveSelectedToTop = function() {
-            if (self.hasSelected()) {
-                var selected = self.cards().filter(function(c) {
-                    return c.selected();
-                });
-                var remaining = self.cards().filter(function(c) {
-                    return !c.selected();
-                });
-                console.log("Selected:");
-                console.dir(selected);
-                console.log("Remaining:");
-                console.dir(remaining);
-
-                self.cards(selected.concat(remaining));
-            }
-        }
-
-        self.refresh = function() {
-            Trello.lists.get(self.id() + "/cards", function(results) {
-                console.log("Fetched cards");
-                console.dir(results);
-                self.cards([]);
-                results.forEach(function(d) {
-                    self.cards.push(new Card(d));
-                })
-            });
-        }
-    }
-
-    function Card(data) {
-        var self = this;
-        self.id = ko.observable(data.id);
-        self.name = ko.observable(data.name);
-        self.selected = ko.observable(false);
-        self.highlighted = ko.observable(false);
-        self.inArea = ko.observable(false);
-
-        self.addToArea = function() {
-            self.inArea(true);
-        };
-
-        self.removeFromArea = function() {
-            self.inArea(false);
-        };
-    }
-
     function NiceToHaveAppViewModel(categoriseView) {
         // Data
         var self = this;
-        self.board = new Board();
+        self.board = new Board("506b4237ead39f966c0d2f34");
+//        self.board = new Board("4ed7e27fe6abb2517a21383d");
         self.list = new List({id: "4eea755f1576578f2713ec56"});
         self.selectedList = ko.observable();
         self.loggedIn = ko.observable(Trello.authorized());
