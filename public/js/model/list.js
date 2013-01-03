@@ -45,13 +45,6 @@
             })
         };
 
-        self.pendingActions = ko.observableArray([]);
-
-        self.hasPendingActions = ko.computed(function() {
-            return self.pendingActions().length > 0;
-        });
-
-
         self.refresh = function() {
             Trello.lists.get(self.id() + "/cards", function(results) {
                 console.log("Fetched cards");
