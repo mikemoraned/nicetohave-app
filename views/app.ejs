@@ -22,6 +22,7 @@
   <script src="/js/model/card.js"></script>
   <script src="/js/model/list.js"></script>
   <script src="/js/model/board.js"></script>
+  <script src="/js/model/persistence.js"></script>
 
   <script src="/js/ko.binding-handlers.js"></script>
   <script src="/js/d3.categorise.view.js"></script>
@@ -192,7 +193,7 @@
                     <i class="icon-arrow-up"></i> move to top
                 </button>
 
-                <button class="btn btn-primary" type="button" data-bind="click: doPendingActions, enable: hasPendingActions">
+                <button class="btn btn-primary" type="button" data-bind="click: persistence.saveAll, enable: persistence.canSaveAll">
                     <i class="icon-arrow-right"></i> save to trello
                 </button>
 
@@ -211,7 +212,8 @@ $(function() {
     function NiceToHaveAppViewModel(categoriseView) {
         // Data
         var self = this;
-        self.board = new Board("");
+        self.persistence = new Persistence();
+        self.board = new Board(self.persistence);
         self.selectedList = ko.observable();
 
         self.cardsInArea = ko.computed(function() {
@@ -246,6 +248,12 @@ $(function() {
             console.log("Selected list changed");
             list.refresh();
         });
+
+        self.persistence.saveState.subscribe(function(state) {
+            if (self.selectedList() && state === 'saved') {
+                self.selectedList().refresh();
+            }
+        })
 
         self.goToBoardId = function() {
             location.hash = self.board.id();

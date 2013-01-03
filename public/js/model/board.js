@@ -1,10 +1,11 @@
 (function(ko, Trello, global) {
-    function Board(defaultBoardId) {
+    function Board(persistence) {
         // Data
         var self = this;
-        self.id = ko.observable(defaultBoardId);
+        self.id = ko.observable();
         self.lists = ko.observableArray([]);
         self.name = ko.observable("");
+        self.persistence = persistence;
 
         function handleResults(results) {
             console.log("Fetched board info");
@@ -14,7 +15,7 @@
                 console.log("Fetched board lists");
                 self.lists([]);
                 lists.forEach(function(d) {
-                    self.lists.push(new List(d));
+                    self.lists.push(new List(d, self.persistence));
                 })
             });
         };

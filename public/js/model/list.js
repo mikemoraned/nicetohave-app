@@ -1,19 +1,10 @@
 (function(ko, Trello, global) {
-    function MoveToTop(listId, cardId) {
-        this.listId = listId;
-        this.cardId = cardId;
-    }
-
-    MoveToTop.prototype.do = function (success, failure) {
-        console.log("Moving " + this.cardId + " to top of " + this.listId);
-        Trello.put("cards/" + this.cardId + "/pos", { value: "top" }, success, failure);
-    }
-
-    function List(data) {
+    function List(data, persistence) {
         var self = this;
         self.id = ko.observable(data.id);
         self.name = ko.observable(data.name);
         self.cards = ko.observableArray([]);
+        self.persistence = persistence;
 
         self.hasSelected = ko.computed(function() {
             return self.cards().filter(function(c) {
@@ -34,9 +25,7 @@
                 console.log("Remaining:");
                 console.dir(remaining);
 
-                selected.forEach(function(c) {
-                    self.pendingActions.push(new MoveToTop(self.id(), c.id()));
-                });
+                self.persistence.movedToTop(self.id(), selected);
 
                 self.cards(selected.concat(remaining));
             }
@@ -62,16 +51,6 @@
             return self.pendingActions().length > 0;
         });
 
-        self.doPendingActions = function() {
-            console.log("Doing pending actions");
-            self.pendingActions().forEach(function(action) {
-                action.do(self.refresh, function(error) {
-                    console.log("Error:");
-                    console.dir(error);
-                });
-            });
-            self.pendingActions([]);
-        };
 
         self.refresh = function() {
             Trello.lists.get(self.id() + "/cards", function(results) {
