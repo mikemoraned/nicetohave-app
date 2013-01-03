@@ -35,15 +35,16 @@
         // Operations
         self.saveAll = function() {
             function moveNextToTop() {
-                var next = self.pendingMovesToTop().shift();
-                if (next) {
+                if (self.pendingMovesToTop().length > 0) {
                     self.saving(true);
+                    var next = self.pendingMovesToTop()[0];
                     console.log("Moving to top:");
                     console.dir(next);
                     Trello.put(
                         "cards/" + next.cardId + "/pos",
                         { value: "top" },
                         function() {
+                            self.pendingMovesToTop().shift();
                             console.log("Moved to top");
                             moveNextToTop();
                         },
@@ -58,10 +59,14 @@
             function failure(error) {
                 console.log("Error");
                 console.dir(error);
-                self.errors.push(error);
+                self.errors.push({
+                    code: error.status,
+                    text: error.responseText
+                });
                 self.saving(false);
             }
 
+            self.errors([]);
             moveNextToTop();
         };
     }

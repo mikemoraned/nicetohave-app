@@ -97,6 +97,14 @@
       table#area tbody .area.uncategorized {
           background-color: rgb(197, 228, 230);
       }
+
+      #errors {
+          display: none;
+      }
+
+      #errors.found {
+          display: block;
+      }
   </style>
 </head>
 <body>
@@ -204,6 +212,14 @@
                     <button class="btn card" type="button"
                             data-bind="click: addToArea, text: name, event: { mouseover: highlight, mouseout: unHighlight }, css: { selected: selected, highlighted: highlighted }">
                     </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div id="errors" class="span12" data-bind="foreach: persistence.errors, css: { found : persistence.errors().length > 0 }">
+                <div class="alert alert-error">
+                    <strong>Error</strong> <span data-bind="text: code"></span> <span data-bind="text: text"></span> Try again?
                 </div>
             </div>
         </div>
