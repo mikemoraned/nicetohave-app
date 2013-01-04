@@ -27,7 +27,7 @@
 <button data-bind="click: addComment">Add comment</button>
 
 <div data-bind="foreach: card.comments, visible: card.comments().length > 0">
-    <div class="comment" data-bind="text: name" />
+    <div class="comment" data-bind="text: text" />
 </div>
 
 <script type="application/javascript">
@@ -35,7 +35,7 @@
     $(function() {
 
         function Comment(text) {
-            this.text = text;
+            this.text = ko.observable(text);
         }
 
         function Card(id) {
@@ -48,11 +48,14 @@
 
                 Trello.cards.get(self.id() + "/actions",
                         { filter: "commentCard" },
+                        function (results) {
+                            self.comments(ko.utils.arrayMap(results, function(d) {
+                                return new Comment(d.data.text);
+                            }));
+                            console.dir(results);
+                        },
                         function(error) {
                             console.dir(error);
-                        },
-                        function (result) {
-                            console.dir(result);
                         });
             }
 
