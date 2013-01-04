@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+</style>
+<body>
+<script src="../Kickstrap/js/jquery-1.8.3.min.js"></script>
+<script src="../js/knockout-2.2.0.js"></script>
+<script src="https://api.trello.com/1/client.js?key=afaec27e30009b0b1cfb14d85f384ee1"></script>
+
+<div data-bind="visible: !loggedIn()">
+    <button data-bind="click: logIn">Log in</button>
+</div>
+
+<div data-bind="visible: loggedIn">
+    <button data-bind="click: logOut">Log out</button>
+</div>
+
+<h2>Cards</h2>
+
+<input data-bind="value: card.id" />
+
+<button data-bind="click: card.fetchComments">Get comments</button>
+
+<div data-bind="foreach: card.comments, visible: card.comments().length > 0">
+    <div class="comment" data-bind="text: name" />
+</div>
+
+<script type="application/javascript">
+
+    $(function() {
+
+        function Comment() {
+
+        }
+
+        function Card(id) {
+            var self = this;
+            this.id = ko.observable(id);
+            this.comments = ko.observableArray([]);
+
+            self.fetchComments = function() {
+                console.log("Fetching comments");
+
+                Trello.cards.get(self.id() + "/actions",
+                        { filter: "commentCard" },
+                        function(error) {
+                            console.dir(error);
+                        },
+                        function (result) {
+                            console.dir(result);
+                        });
+            }
+        }
+        function ViewModel() {
+            // Data
+            var self = this;
+            self.card = new Card("50e73cfde0da65fb1a000482");
+            self.loggedIn = ko.observable(false);
+
+            // Operations
+            self.logIn = function() {
+                console.log("Logging in");
+                Trello.authorize({
+                    type: "popup",
+                    success: self.updateLoggedIn
+                })
+            }
+
+            self.logOut = function() {
+                console.log("Logging out");
+                Trello.deauthorize();
+                self.updateLoggedIn();
+                self.clearCards();
+            }
+
+            self.updateLoggedIn = function() {
+                self.loggedIn(Trello.authorized());
+            };
+        }
+
+        var model = new ViewModel();
+
+        ko.applyBindings(model);
+
+        Trello.authorize({
+            interactive: false,
+            success: model.updateLoggedIn
+        });
+    });
+
+</script>
+</body>
