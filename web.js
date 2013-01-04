@@ -22,6 +22,8 @@ app.configure(function(){
     app.set('view engine', 'ejs');
     app.engine('html', require('ejs').renderFile);
 
+    app.set('version', p.version);
+
     //Error Handling
     app.use(express.logger());
     app.use(express.errorHandler({
