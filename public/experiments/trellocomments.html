@@ -22,6 +22,10 @@
 
 <button data-bind="click: card.fetchComments">Get comments</button>
 
+<input data-bind="value: nextComment.text" />
+
+<button data-bind="click: addComment">Add comment</button>
+
 <div data-bind="foreach: card.comments, visible: card.comments().length > 0">
     <div class="comment" data-bind="text: name" />
 </div>
@@ -30,8 +34,8 @@
 
     $(function() {
 
-        function Comment() {
-
+        function Comment(text) {
+            this.text = text;
         }
 
         function Card(id) {
@@ -51,19 +55,33 @@
                             console.dir(result);
                         });
             }
+
+            self.addComment = function(c) {
+                console.log("Adding comment");
+
+                Trello.post("/cards/" + self.id() + "/actions/comments",
+                        { text: c.text },
+                        function(error) {
+                            console.dir(error);
+                        });
+            }
         }
         function ViewModel() {
             // Data
             var self = this;
             self.card = new Card("50e73cfde0da65fb1a000482");
             self.loggedIn = ko.observable(false);
+            self.nextComment = new Comment();
 
             // Operations
             self.logIn = function() {
                 console.log("Logging in");
                 Trello.authorize({
                     type: "popup",
-                    success: self.updateLoggedIn
+                    success: self.updateLoggedIn,
+                    scope: {
+                        read: true, write: true
+                    }
                 })
             }
 
@@ -77,6 +95,10 @@
             self.updateLoggedIn = function() {
                 self.loggedIn(Trello.authorized());
             };
+
+            self.addComment = function() {
+                self.card.addComment(self.nextComment);
+            }
         }
 
         var model = new ViewModel();
