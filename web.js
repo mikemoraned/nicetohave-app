@@ -1,5 +1,6 @@
 var express = require("express");
 var app = express();
+var p = require('./package.json');
 
 var lessMiddleware = require('less-middleware');
 
@@ -20,6 +21,8 @@ app.configure(function(){
     app.set("view options", {layout: false});
     app.set('view engine', 'ejs');
     app.engine('html', require('ejs').renderFile);
+
+    app.set('version', p.version);
 
     //Error Handling
     app.use(express.logger());
@@ -42,5 +45,5 @@ app.get('/app', function(req, res){
 //Heroku
 var port = process.env.PORT || 3000;
 app.listen(port, function() {
-    console.log("Listening on " + port);
+    console.log("v" + p.version + " listening on " + port);
 });

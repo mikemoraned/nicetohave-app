@@ -51,6 +51,10 @@
                         <li class="active"><a href="/">Home</a></li>
                         <li><a href="/app">The App</a></li>
                     </ul>
+
+                    <ul class="nav pull-right">
+                        <li><a href="https://github.com/mikemoraned/nicetohave-app">v<%= settings.version %></a></li>
+                    </ul>
                 </div><!--/.nav-collapse -->
             </div>
         </div>
@@ -79,7 +83,7 @@
                         </header>
 
                         <p>This app brings some of the <a href="http://en.wikipedia.org/wiki/Extreme_programming_practices#Commitment_phase">The Planning Game</a> to <a href="http://trello.com/">Trello</a>.
-                            If you have a big backlog (don't we all?) then I recommend giving <a href="http://en.wikipedia.org/wiki/Extreme_programming_practices#Commitment_phase">The Planning Game</a>,
+                            If you have a big backlog (don't we all?) then <a href="http://www.houseofmoran.com/">I</a> recommend giving <a href="http://en.wikipedia.org/wiki/Extreme_programming_practices#Commitment_phase">The Planning Game</a>,
                             and this <a <a href="/app">app</a>, a try.</p>
                     </article>
 
@@ -92,13 +96,13 @@
 
                         <ul>
                             <li>
-                                <p>This is not a replacement for <a href="http://trello.com/">Trello</a>. It would be super-fun to re-implement <a href="http://trello.com/">Trello</a>, but not a good use of my time. Instead this app tries to do
+                                <p>This is not a replacement for <a href="http://trello.com/">Trello</a>. It would be super-fun to re-implement <a href="http://trello.com/">Trello</a>, but not a good use of <a href="http://www.houseofmoran.com/">my</a> time. Instead this app tries to do
                                    the minimum it <em>needs</em> to do itself, and leaves the rest to <a href="http://trello.com/">Trello</a>.</p>
                                 <p>This means that whenever you don't see a feature, it's likely <a href="http://trello.com/">Trello</a> already does it.</p>
                             </li>
                             <li>
                                 <p>This is not planning poker, or any other estimation method. It's up to you to decide how to assign risk or estimates to tasks/features/whatever.
-                                    This is just a way to visualise what you've decided.</p>
+                                    This is just a way to visualise what you've decided, and then save your decisions back into <a href="http://trello.com/">Trello</a>.</p>
                             </li>
                         </ul>
                     </article>
@@ -127,12 +131,29 @@
                             </hgroup>
                         </header>
 
-                        <p>I started using <a href="http://trello.com/">Trello</a> a lot at work and at home. Backlogs were created, and started to grow. I'd seen
-                            <a href="http://en.wikipedia.org/wiki/Extreme_programming_practices#Commitment_phase">The Planning Game</a> work well in the past, so I suggested to a colleague that
-                            we try it out. I was irked that we needed to write out the cards so that we could play it. I'm open to physical representations, but given we have the backlog in
+                        <h3>In the beginning...</h3>
+
+                        <p><a href="http://www.houseofmoran.com/">I</a> started using <a href="http://trello.com/">Trello</a> a lot at work and at home. Backlogs were created, and started to grow. I'd seen
+                            <a href="http://en.wikipedia.org/wiki/Extreme_programming_practices#Commitment_phase">The Planning Game</a> work well in the past, so <a href="http://www.houseofmoran.com/">I</a> suggested to a colleague that
+                            we try it out. <a href="http://www.houseofmoran.com/">I</a> was irked that we needed to write out the cards so that we could play it. I'm open to physical representations, but given we have the backlog in
                             <a href="http://trello.com/">Trello</a>, why can't we do it all online? So, "Nice to have" was born.
                         </p>
+
+                        <h3>v0.0.1</h3>
+
+                        <p>
+                        <a href="http://www.houseofmoran.com/">I</a> wrote a first version over <a href="http://blog.houseofmoran.com/post/39084311065/nice-to-have-v0-0000001">xmas 2012</a> and started using it myself. Works, mostly, but very basic.
+                        For instance, it doesn't remember the categorisations!
+                        </p>
+
+                        <h3>v<%= settings.version %></h3>
+
+                        <p>
+                            You're looking at it!
+                        </p>
+
                     </article>
+
                 </div>
 
                 <aside class="span4 well">
@@ -142,6 +163,15 @@
                         <a href='javascript:var match=location.href.match(".+/trello.com/board/[^/]+/([0-9a-f]+)");if(match){var redirect="http://nicetohave.houseofmoran.com/app#"+match[1];location.href=redirect};'>Nice to have!</a>
                     </span> to your bookmarks and be redirected to <a href="/app">the app</a> when on <a href="http://trello.com/">trello.com</a>.
                     </p>
+
+                    <h4>Features / Bugs?</h4>
+
+                    <p>Have an idea for a feature, or found a bug? Please add it to <a href="http://www.houseofmoran.com/">my</a> <a href="https://trello.com/board/nicetohavepublicboard/50d4b39f3d7039c91b001237">public Trello board</a>.</p>
+
+                    <h4>Fork it!</h4>
+
+                    <p><a href="http://www.houseofmoran.com/">I</a> can't guarantee I'll implement all (or any!) of your requests, so if you really want
+                       to scratch that itch then feel free to <a href="https://github.com/mikemoraned/nicetohave-app">fork the source</a>.</p>
 
                 </aside>
             </section>
@@ -153,7 +183,19 @@
    <div class="hidden"><h1>No Stylesheet Loaded</h1><p><strong>Could not load Kickstrap.</strong>There are <a href="http://getkickstrap.com/docs/1.2/troubleshooting/#lessjs-errors">several common reasons for this error.</a></p></div>
   <div id="push"></div></div> <!-- sf-wrapper -->
   <footer class="container" id="footer">
-	  <p>Built with <a href="http://getkickstrap.com">Kickstrap</a></p>
+	  <p><a href="http://blog.houseofmoran.com/tagged/nicetohave">Built</a> with
+          <a href="http://getkickstrap.com">Kickstrap</a>,
+          <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a>,
+          <a href="https://trello.com/docs/gettingstarted/clientjs.html">Trello JS API</a>,
+          <a href="http://jquery.com/">jquery</a>,
+          <a href="http://d3js.org/">D3</a>,
+          <a href="http://knockoutjs.com/">Knockout.js</a>,
+          <a href="http://sammyjs.org/">Sammy.js</a>,
+          <a href="http://nodejs.org/">Node</a>,
+          <a href="http://expressjs.com/">Express</a>,
+          <a href="http://embeddedjs.com/">EJS</a>,
+          <a href="http://lesscss.org/">Less</a>
+          and copious helpings of <a href="http://stackoverflow.com/">Stack Overflow</a>.</p>
   </footer>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
   <script>window.jQuery || document.write('<script src="Kickstrap/js/jquery-1.8.2.min.js"><\/script>');</script>
