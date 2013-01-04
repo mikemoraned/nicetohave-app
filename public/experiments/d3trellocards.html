@@ -3,28 +3,18 @@
 <style>
 
     svg {
-        /*border: 1px solid;*/
+        border: 1px solid;
     }
 
     .card {
         stroke: #fff;
         stroke-width: 1.5px;
     }
-
-    .axis text {
-        font: 10px sans-serif;
-    }
-
-    .axis path, .axis line {
-        fill: none;
-        stroke: #000;
-        shape-rendering: crispEdges;
-    }
 </style>
 <body>
-<script src="public/js/d3.v3.min.js"></script>
-<script src="public/js/underscore-min.js"></script>
-<script src="Kickstrap/js/jquery-1.8.3.min.js"></script>
+<script src="../js/d3.v3.min.js"></script>
+<script src="../js/underscore-min.js"></script>
+<script src="../Kickstrap/js/jquery-1.8.3.min.js"></script>
 <script src="https://api.trello.com/1/client.js?key=afaec27e30009b0b1cfb14d85f384ee1"></script>
 
 <div id="loggedout">
@@ -42,9 +32,8 @@
 
     var cards = [];
 
-    var margin = {top: 40, right: 40, bottom: 40, left: 50},
-            width = 960,
-            height = 500;
+    var width = 960,
+        height = 500;
 
     var force = d3.layout.force()
             .charge(-2)
@@ -56,41 +45,9 @@
             .links([])
             .start();
 
-    var svg = d3.select("body")
-      .append("svg")
-        .attr("width", width)
-        .attr("height", height)
-      .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-    var valueScale = d3.scale.ordinal()
-        .domain(["Nice to have", "Significant Business Value", "Critical"])
-        .rangePoints([0, width - margin.left - margin.right]);
-
-    var xAxis = d3.svg.axis()
-        .scale(valueScale)
-        .orient("top");
-
-    var riskScale = d3.scale.ordinal()
-        .domain(["Low", "Medium", "High"])
-        .rangePoints([0, height - margin.top - margin.bottom]);
-
-    var riskScaleInverse = d3.scale.linear()
-            .domain([0, height - margin.top - margin.bottom])
-            .range([1,3])
-            .clamp(true);
-
-    var yAxis = d3.svg.axis()
-        .scale(riskScale)
-        .orient("left");
-
-    svg.append("g")
-        .attr("class", "x axis")
-        .call(xAxis);
-
-    svg.append("g")
-        .attr("class", "y axis")
-        .call(yAxis);
+    var svg = d3.select("body").append("svg")
+            .attr("width", width)
+            .attr("height", height);
 
     var updateCards = function() {
         cards = [];
@@ -166,14 +123,6 @@
             .attr("class", "card")
             .attr("r", maxRadius)
             .call(force.drag)
-            .on("click", function(c) {
-                console.log("Clicked on ");
-                console.dir(c);
-                var value = valueScale(c.x);
-                var risk = riskScaleInverse(c.y);
-                console.log("Value: " + value);
-                console.log("Risk: " + risk);
-            })
           .append("title")
             .text(function(d) { return d.name; });
 

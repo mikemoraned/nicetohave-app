@@ -11,17 +11,13 @@
         stroke-width: 1.5px;
     }
 
-    .selecting circle.card {
-        fill-opacity: .2;
+    .axis text {
+        font: 10px sans-serif;
     }
 
-    .selecting circle.card.selected {
-        stroke: #f00;
-    }
-
-    .brush .extent {
-        stroke: #fff;
-        fill-opacity: .125;
+    .axis path, .axis line {
+        fill: none;
+        stroke: #000;
         shape-rendering: crispEdges;
     }
 
@@ -48,9 +44,9 @@
     }
 </style>
 <body>
-<script src="public/js/d3.v3.min.js"></script>
-<script src="public/js/underscore-min.js"></script>
-<script src="Kickstrap/js/jquery-1.8.3.min.js"></script>
+<script src="../js/d3.v3.min.js"></script>
+<script src="../js/underscore-min.js"></script>
+<script src="../Kickstrap/js/jquery-1.8.3.min.js"></script>
 <script src="https://api.trello.com/1/client.js?key=afaec27e30009b0b1cfb14d85f384ee1"></script>
 
 <table id="board" cellspacing="0" cellpadding="0">
@@ -202,55 +198,6 @@
         var values = ['N','S','C'];
         var risks = ['L','M','H'];
 
-        var brush = d3.svg.brush()
-                .x(valueScale)
-                .y(riskScale)
-                .on("brushstart", brushstart)
-                .on("brush", brush)
-                .on("brushend", brushend);
-
-        var selecting = false;
-
-        function brushstart() {
-            console.log("Brush Start");
-            selecting = true;
-            svg.classed("selecting", selecting);
-            svg.selectAll("circle.card")
-                    .on('mousedown.drag', null)
-                    .each(function(c) {
-                c.fixed = true;
-            });
-        }
-
-        function brush() {
-            console.log("Brush");
-            var e = d3.event.target.extent();
-            svg.selectAll("circle.card").classed("selected", function(c) {
-                var value = valueScale.invert(c.x);
-                var risk = riskScale.invert(c.y);
-                var inSelection = e[0][0] <= value && value <= e[1][0]
-                        && e[0][1] <= risk && risk <= e[1][1];
-                return inSelection;
-            });
-        }
-
-        function brushend() {
-            selecting = !d3.event.target.empty();
-            console.log("Brush End, Selecting: " + selecting);
-            svg.classed("selecting", selecting);
-            if (!selecting) {
-                svg.selectAll("circle.card")
-                        .call(force.drag)
-                        .each(function(c) {
-                    c.fixed = false;
-                });
-            }
-        }
-
-        svg.append("g")
-                .attr("class", "brush")
-                .call(brush);
-
         function update(cards) {
             force
                     .nodes(cards)
@@ -280,8 +227,8 @@
 
             force.on("tick", function() {
                 existingCards
-                        .attr("cx", function(d) { return d.x = clampX(d.x); })
-                        .attr("cy", function(d) { return d.y = clampY(d.y); });
+                        .attr("cx", function(d) { return clampX(d.x); })
+                        .attr("cy", function(d) { return clampY(d.y); });
             });
         }
     });
