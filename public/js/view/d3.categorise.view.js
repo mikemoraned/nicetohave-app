@@ -122,15 +122,15 @@
 
         newCardCircles
             .attr("cx", function(d) {
-                return d.x = self.clampX(self.valueScale(3));
+                return self.clampX(self.valueScale(3));
             })
             .attr("cy", function(d) {
-                return d.y = self.clampY(self.riskScale(3 + Math.random()));
+                return d.y = d.y || self.clampY(self.riskScale(3 + Math.random()));
             })
             .transition()
                 .duration(500)
                 .attr("cx", function(d) {
-                    return d.x = self.clampX(self.valueScale(3 - (3 * d.fractionThroughList)));
+                    return d.x = d.x || self.clampX(self.valueScale(3 - (3 * d.fractionThroughList)));
                 });
 
         d3.selectAll("circle.card")
