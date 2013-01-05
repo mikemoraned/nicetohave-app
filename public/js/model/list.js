@@ -46,14 +46,28 @@
         };
 
         self.refresh = function() {
-            Trello.lists.get(self.id() + "/cards", function(results) {
+            Trello.lists.get(self.id() + "/cards", function(trelloCards) {
                 console.log("Fetched cards");
-                console.dir(results);
-                self.cards([]);
+                console.dir(trelloCards);
+
+                var newOrUpdatedCards = [];
+
                 var position = 0;
-                results.forEach(function(d, i) {
-                    self.cards.push(new Card(d, i, results.length));
-                })
+                var totalCards = trelloCards.length;
+                trelloCards.forEach(function(trelloCard) {
+                    var existing = self.cards().filter(function(c){ return c.id() === trelloCard.id; });
+                    if (existing.length > 0) {
+                        console.log("Re-using existing card");
+                        newOrUpdatedCards.push(existing[0].update(trelloCard, position, totalCards));
+                    }
+                    else {
+                        console.log("Creating new card");
+                        newOrUpdatedCards.push(new Card(trelloCard, position, totalCards));
+                    }
+                    position += 1;
+                });
+
+                self.cards(newOrUpdatedCards);
             });
         }
     }
