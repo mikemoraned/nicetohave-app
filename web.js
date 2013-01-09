@@ -1,7 +1,7 @@
 var express = require("express");
 var app = express();
 var p = require('./package.json');
-
+var engine = require('ejs-locals');
 var lessMiddleware = require('less-middleware');
 
 // Configuration
@@ -20,7 +20,7 @@ app.configure(function(){
     app.set('views', __dirname + '/views');
     app.set("view options", {layout: false});
     app.set('view engine', 'ejs');
-    app.engine('html', require('ejs').renderFile);
+    app.engine('ejs', engine);
 
     app.set('version', p.version);
 

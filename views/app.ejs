@@ -1,119 +1,20 @@
-<!doctype html>
-<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en-gb"> <![endif]-->
-<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en-gb"> <![endif]-->
-<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en-gb"> <![endif]-->
-<!--[if gt IE 8]><!--> <html lang="en-gb"> <!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Nice to have</title>
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
-  <!-- You can also compile style.less to use regular css. Your apps will still work. -->
-  <style type="text/css">body{padding-top:60px}.hidden{margin:20px;border:5px solid #a24c4c;background-color:red;padding:10px;width:400px;color:white;font-family:helvetica,sans-serif}</style>
-  <link rel="stylesheet" type="text/css" href="/kickstrap.css">
-  <script src="/Kickstrap/js/less-1.3.0.min.js"></script>
-  <script src="/js/d3.v3.min.js"></script>
-  <script src="/Kickstrap/js/jquery-1.8.3.min.js"></script>
-  <script src="/js/jquery.blockUI.js"></script>
-  <script src="https://api.trello.com/1/client.js?key=afaec27e30009b0b1cfb14d85f384ee1"></script>
-  <script src="/js/knockout-2.2.0.js"></script>
-  <script src="/js/sammy-0.7.2.min.js"></script>
+<% layout('layout') -%>
+<% stylesheet('/css/app.css') -%>
 
-  <script src="/js/model/card.js"></script>
-  <script src="/js/model/list.js"></script>
-  <script src="/js/model/board.js"></script>
-  <script src="/js/model/persistence.js"></script>
+<% script('/js/d3.v3.min.js') -%>
+<% script('/Kickstrap/js/jquery-1.8.3.min.js') -%>
+<% script('/js/jquery.blockUI.js') -%>
+<% script('https://api.trello.com/1/client.js?key=afaec27e30009b0b1cfb14d85f384ee1') -%>
+<% script('/js/knockout-2.2.0.js') -%>
+<% script('/js/sammy-0.7.2.min.js') -%>
 
-  <script src="/js/ko.binding-handlers.js"></script>
-  <script src="/js/view/d3.categorise.view.js"></script>
-  <style>
-      svg {
-          /*border: 1px solid;*/
-      }
+<% script('/js/model/card.js') -%>
+<% script('/js/model/list.js') -%>
+<% script('/js/model/board.js') -%>
+<% script('/js/model/persistence.js') -%>
 
-      circle.card {
-          stroke: #fff;
-          stroke-width: 1.5px;
-      }
-
-      circle.card.highlighted {
-          stroke: red;
-          cursor: move;
-      }
-
-      .selecting circle.card {
-          fill-opacity: .2;
-      }
-
-      .selecting circle.card.selected {
-          stroke: #f00;
-      }
-
-      button.card {
-          margin-top: 2px;
-          margin-bottom: 2px;
-          display: block;
-          width: 100%;
-      }
-
-      button.card.highlighted {
-          background-color: red;
-      }
-
-      .selecting button.card {
-          opacity:.2;
-      }
-
-      .selecting button.card.selected {
-          opacity: 1.0;
-      }
-
-      .brush .extent {
-          stroke: #fff;
-          fill-opacity: .125;
-          shape-rendering: crispEdges;
-      }
-
-      table#area, div#cards {
-          height: 500px;
-      }
-
-      div#cards {
-          overflow-y: auto;
-      }
-
-      table#area thead th {
-          padding:15px;
-      }
-
-      table#area tbody th {
-          padding:15px;
-      }
-
-      table#area tbody .area.even {
-          background-color: rgb(243, 253, 255);
-      }
-      table#area tbody .area.uncategorized {
-          background-color: rgb(197, 228, 230);
-      }
-
-      #errors {
-          display: none;
-      }
-
-      #errors.found {
-          display: block;
-      }
-  </style>
-</head>
-<body>
-<div id="sf-wrapper"> <!-- Sticky Footer Wrapper -->
-  <!-- Prompt IE 6/7 users to install Chrome Frame. Remove this if you support IE 7-.
-       chromium.org/developers/how-tos/chrome-frame-getting-started -->
-  <!--[if lt IE 8]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
-<!--! END KICKSTRAP HEADER -->
-
+<% script('/js/ko.binding-handlers.js') -%>
+<% script('/js/view/d3.categorise.view.js') -%>
 
     <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
@@ -324,45 +225,3 @@ $(function($) {
 });
 
 </script>
-
-  <!--! KICKSTRAP FOOTER -->
-   <div class="hidden"><h1>No Stylesheet Loaded</h1><p><strong>Could not load Kickstrap.</strong>There are <a href="http://getkickstrap.com/docs/1.2/troubleshooting/#lessjs-errors">several common reasons for this error.</a></p></div>
-  <div id="push"></div></div> <!-- sf-wrapper -->
-  <footer class="container" id="footer">
-      <p><a href="http://blog.houseofmoran.com/tagged/nicetohave">Built</a> with
-          <a href="http://getkickstrap.com">Kickstrap</a>,
-          <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a>,
-          <a href="https://trello.com/docs/gettingstarted/clientjs.html">Trello JS API</a>,
-          <a href="http://jquery.com/">jquery</a>,
-          <a href="http://d3js.org/">D3</a>,
-          <a href="http://knockoutjs.com/">Knockout.js</a>,
-          <a href="http://sammyjs.org/">Sammy.js</a>,
-          <a href="http://nodejs.org/">Node</a>,
-          <a href="http://expressjs.com/">Express</a>,
-          <a href="http://embeddedjs.com/">EJS</a>,
-          <a href="http://lesscss.org/">Less</a>
-          and copious helpings of <a href="http://stackoverflow.com/">Stack Overflow</a>.</p>
-  </footer>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-  <script>window.jQuery || document.write('<script src="Kickstrap/js/jquery-1.8.2.min.js"><\/script>');</script>
-  <!-- Kickstrap CDN thanks to our friends at netDNA.com -->
-  <script id="appList" src="//netdna.getkickstrap.com/1.2/Kickstrap/js/kickstrap.min.js"></script>
-  <script>window.ks || document.write('<script id="appList" src="/Kickstrap/js/kickstrap.min.js"><\/script>')</script>
-  <script>
-
-  </script>
-<script type="text/javascript">
-
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-37323701-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>
-</body>
-</html>
