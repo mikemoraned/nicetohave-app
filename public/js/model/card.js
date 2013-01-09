@@ -5,7 +5,7 @@
         self.name = ko.observable(data.name);
         self.selected = ko.observable(false);
         self.highlighted = ko.observable(false);
-        self.inArea = ko.observable(false);
+        self.inArea = ko.observable(true);
 
         self.fractionThroughList = posInList / totalCards;
 
