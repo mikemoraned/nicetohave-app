@@ -47,18 +47,18 @@
                 </div>
             </div>
             <div class="row">
-                <div class="span12">
-
+                <div class="span7">
                     <form class="well well-small form-inline">
-                        <label for="board-id">Choose Board Id</label>
+                        <label for="board-id">Board Id</label>
                         <input id="board-id" type="text" class="span3" data-bind="value: board.id" placeholder="Your Board Id">
-
                         <button type="submit" class="btn"data-bind="click: goToBoardId"><i class="icon-refresh"></i> Use this</button>
-
-                        <label for="lists">Select List</label>
+                    </form>
+                </div>
+                <div class="span5">
+                    <form class="well well-small form-inline">
+                        <label for="lists">List</label>
                         <select id="lists" data-bind="options: board.lists, value: selectedList, optionsText: 'name', enable: board.lists().length > 0"></select>
                     </form>
-
                 </div>
             </div>
         </div>
