@@ -50,8 +50,8 @@
                 <div class="span7">
                     <form class="well well-small form-inline">
                         <label for="board-id">Board Id</label>
-                        <input id="board-id" type="text" class="span3" data-bind="value: board.id" placeholder="Your Board Id">
-                        <button type="submit" class="btn"data-bind="click: goToBoardId"><i class="icon-refresh"></i> Use this</button>
+                        <input id="board-id" type="text" class="span3" data-bind="value: board.id, valueUpdate: 'afterkeydown'" placeholder="Your Board Id">
+                        <button type="submit" class="btn" data-bind="click: goToBoardId"><i class="icon-refresh"></i> <span data-bind="text: goToBoardIdActionName"></span></button>
                     </form>
                 </div>
                 <div class="span5">
@@ -147,6 +147,16 @@ $(function($) {
         self.board = new Board(self.persistence);
         self.selectedList = ko.observable();
 
+        self.goToBoardIdActionName = ko.computed(function(){
+            var newHash = "#" + self.board.id();
+            if (location.hash === newHash) {
+                return "Reload";
+            }
+            else {
+                return "Go to";
+            }
+        });
+
         self.cardsInArea = ko.computed(function() {
             if (self.selectedList()) {
                 return self.selectedList().cards().filter(function(c) {
@@ -187,7 +197,13 @@ $(function($) {
         });
 
         self.goToBoardId = function() {
-            location.hash = self.board.id();
+            var newHash = "#" + self.board.id();
+            if (location.hash === newHash) {
+                location.reload();
+            }
+            else {
+                location.hash = newHash;
+            }
         };
 
         Sammy(function () {
