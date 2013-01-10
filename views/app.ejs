@@ -42,15 +42,24 @@
     <div class="container">
         <div class="row">
             <div class="row">
-                <form class="well well-small form-inline">
-                    <label for="board-id">Choose Board Id</label>
-                    <input id="board-id" type="text" class="span3" data-bind="value: board.id" placeholder="Your Board Id">
+                <div class="span12">
+                    <h2 data-bind="text: board.name">&nbsp;</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="span12">
 
-                    <button type="submit" class="btn"data-bind="click: goToBoardId"><i class="icon-refresh"></i> Use this</button>
+                    <form class="well well-small form-inline">
+                        <label for="board-id">Choose Board Id</label>
+                        <input id="board-id" type="text" class="span3" data-bind="value: board.id" placeholder="Your Board Id">
 
-                    <label for="lists">Select List</label>
-                    <select id="lists" data-bind="options: board.lists, value: selectedList, optionsText: 'name', enable: board.lists().length > 0"></select>
-                </form>
+                        <button type="submit" class="btn"data-bind="click: goToBoardId"><i class="icon-refresh"></i> Use this</button>
+
+                        <label for="lists">Select List</label>
+                        <select id="lists" data-bind="options: board.lists, value: selectedList, optionsText: 'name', enable: board.lists().length > 0"></select>
+                    </form>
+
+                </div>
             </div>
         </div>
 
