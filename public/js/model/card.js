@@ -10,8 +10,8 @@
         self.fractionThroughList = posInList / totalCards;
 
         self.update = function(data, posInList, totalCards) {
-            ko.observable(data.id);
-            ko.observable(data.name);
+            self.id(data.id);
+            self.name(data.name);
             self.fractionThroughList = posInList / totalCards;
             return self;
         }
