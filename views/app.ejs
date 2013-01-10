@@ -147,15 +147,25 @@ $(function($) {
         self.board = new Board(self.persistence);
         self.selectedList = ko.observable();
 
-        self.goToBoardIdActionName = ko.computed(function(){
+        self.goToBoardIdAction = ko.computed(function(){
             var newHash = "#" + self.board.id();
             if (location.hash === newHash) {
+                return "reload";
+            }
+            else {
+                return "goto";
+            }
+        });
+
+        self.goToBoardIdActionName = ko.computed(function(){
+            if (self.goToBoardIdAction() === 'reload') {
                 return "Reload";
             }
             else {
                 return "Go to";
             }
         });
+
 
         self.cardsInArea = ko.computed(function() {
             if (self.selectedList()) {
@@ -197,12 +207,11 @@ $(function($) {
         });
 
         self.goToBoardId = function() {
-            var newHash = "#" + self.board.id();
-            if (location.hash === newHash) {
+            if (self.goToBoardIdAction() === 'reload') {
                 location.reload();
             }
             else {
-                location.hash = newHash;
+                location.hash = "#" + self.board.id();
             }
         };
 
