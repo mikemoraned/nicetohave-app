@@ -18,15 +18,8 @@
 <div id="qunit-fixture"></div>
 <script src="/js/test/sinon-1.5.2.js"></script>
 <script src="/js/test/qunit-1.10.0.js"></script>
+<script src="/js/model/nicetohave/privilige.js"></script>
 <script src="/js/model/nicetohave/user.js"></script>
-<script>
-    // module("user: default status", {});
-
-    test( "create user", function() {
-        var u = new nicetohave.User();
-
-        equal(u.priviliges(), "read");
-    });
-</script>
+<script src="user.tests.js"></script>
 </body>
 </html>
