@@ -2,10 +2,33 @@
 (function() {
 
   describe('Card', function() {
-    return it('has an empty name', function() {
-      var card;
-      card = new nicetohave.Card();
-      return expect(card.name()).toBe("");
+    describe('initial state', function() {
+      it('cannot be created without an id', function() {
+        return expect(function() {
+          return new nicetohave.Card();
+        }).toThrow({
+          message: "Not a valid card id: 'undefined'"
+        });
+      });
+      it('must only accept an id of the right format', function() {
+        return expect(function() {
+          return new nicetohave.Card("abc");
+        }).toThrow({
+          message: "Not a valid card id: 'abc'"
+        });
+      });
+      return it('has an empty name on startup', function() {
+        var card;
+        card = new nicetohave.Card("4eea503d91e31d174600008f");
+        return expect(card.name()).toBe("");
+      });
+    });
+    return describe('loading', function() {
+      return it('when ', function() {
+        var card;
+        card = new nicetohave.Card("4eea503d91e31d174600008f");
+        return expect(card.name()).toBe("");
+      });
     });
   });
 

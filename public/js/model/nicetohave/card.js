@@ -8,7 +8,13 @@
 
   Card = (function() {
 
-    function Card() {}
+    function Card(id) {
+      if (!/[a-z0-9]{24}/.test(id)) {
+        throw {
+          message: "Not a valid card id: '" + id + "'"
+        };
+      }
+    }
 
     Card.prototype.name = ko.observable("");
 
