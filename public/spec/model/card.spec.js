@@ -53,10 +53,16 @@
       return it('when asked to load, loads name', function() {
         var card, privilige;
         privilige = new nicetohave.Privilege(trello);
+        privilige.level(nicetohave.PrivilegeLevel.READ_ONLY);
         card = new nicetohave.Card("4eea503d91e31d174600008f", privilige);
-        spyOn(trello.cards, 'get');
+        spyOn(trello.cards, 'get').andCallFake(function(id, params, successFn, errorFn) {
+          return successFn({
+            name: "A dummy name"
+          });
+        });
         card.load();
-        return expect(trello.cards.get).toHaveBeenCalled();
+        expect(trello.cards.get).toHaveBeenCalled();
+        return expect(card.name()).toEqual("A dummy name");
       });
     });
   });

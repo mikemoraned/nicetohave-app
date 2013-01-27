@@ -36,11 +36,16 @@ describe 'Card', ->
 
     it 'when asked to load, loads name', ->
       privilige = new nicetohave.Privilege(trello)
+      privilige.level(nicetohave.PrivilegeLevel.READ_ONLY)
+
       card = new nicetohave.Card("4eea503d91e31d174600008f", privilige)
 
-      spyOn(trello.cards, 'get')
+      spyOn(trello.cards, 'get').andCallFake((id, params, successFn, errorFn) ->
+        successFn({ name: "A dummy name"})
+      )
 
       card.load()
 
       expect(trello.cards.get).toHaveBeenCalled()
+      expect(card.name()).toEqual("A dummy name")
 
