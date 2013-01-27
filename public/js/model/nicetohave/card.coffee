@@ -12,7 +12,7 @@ class Card
   comments : ko.observableArray()
   loadStatus: ko.observable("created")
 
-  load: ->
+  load: =>
     @loadStatus("in-progress")
     onSuccess = (data) =>
       @_parseFields(data)
@@ -22,7 +22,7 @@ class Card
       trello.cards.get(@id(), { fields: "name" }, onSuccess, onFailure)
     )
 
-  _loadComments: ->
+  _loadComments: =>
     onSuccess = (data) =>
       @_parseComments(data)
       @loadStatus("loaded")
@@ -31,10 +31,10 @@ class Card
       trello.cards.get(@id() + "/actions", { entities: true, filter: "commentCard" }, onSuccess, onFailure)
     )
 
-  _parseFields: (data) ->
+  _parseFields: (data) =>
     @name(data.name)
 
-  _parseComments: (data) ->
+  _parseComments: (data) =>
     @comments(data.map((d)->
       texts = (e.text for e in d.entities when e.type == 'comment')
       new nicetohave.Comment(texts[0])

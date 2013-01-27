@@ -42,6 +42,10 @@ app.get('/app', function(req, res){
     res.render("app");
 });
 
+app.get('/app2', function(req, res){
+    res.render("app2");
+});
+
 //Heroku
 var port = process.env.PORT || 3000;
 app.listen(port, function() {
