@@ -8,15 +8,41 @@
 
   Card = (function() {
 
-    function Card(id) {
+    function Card(id, privilege) {
       if (!/[a-z0-9]{24}/.test(id)) {
         throw {
           message: "Not a valid card id: '" + id + "'"
         };
       }
+      this.id = ko.observable(id);
+      this.privilege = privilege;
     }
 
     Card.prototype.name = ko.observable("");
+
+    Card.prototype.loadStatus = ko.observable("created");
+
+    Card.prototype.load = function() {
+      var onFailure, onSuccess,
+        _this = this;
+      this.loadStatus("in-progress");
+      onSuccess = function(data) {
+        _this.parseFromTrello(data);
+        return _this.loadStatus("loaded");
+      };
+      onFailure = function() {
+        return _this.loadStatus("load-failed");
+      };
+      return this.privilege.using(nicetohave.PrivilegeLevel.READ_ONLY, function(trello) {
+        return trello.cards.get(_this.id(), {
+          fields: "name"
+        }, onSuccess, onFailure);
+      });
+    };
+
+    Card.prototype.parseFromTrello = function(data) {
+      return this.name(data.name);
+    };
 
     return Card;
 

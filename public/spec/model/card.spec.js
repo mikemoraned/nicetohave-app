@@ -10,24 +10,40 @@
           message: "Not a valid card id: 'undefined'"
         });
       });
-      it('must only accept an id of the right format', function() {
+      it('must only accept an id of the right format (alphanumeric)', function() {
         return expect(function() {
-          return new nicetohave.Card("abc");
+          return new nicetohave.Card("  csdc  scd");
         }).toThrow({
-          message: "Not a valid card id: 'abc'"
+          message: "Not a valid card id: '  csdc  scd'"
         });
       });
-      return it('has an empty name on startup', function() {
+      it('must only accept an id of the right length (24  )', function() {
+        return expect(function() {
+          return new nicetohave.Card("4eea503d91e31d174600");
+        }).toThrow({
+          message: "Not a valid card id: '4eea503d91e31d174600'"
+        });
+      });
+      it('has an empty name', function() {
         var card;
         card = new nicetohave.Card("4eea503d91e31d174600008f");
         return expect(card.name()).toBe("");
+      });
+      it('has an id', function() {
+        var card;
+        card = new nicetohave.Card("4eea503d91e31d174600008f");
+        return expect(card.id()).toBe("4eea503d91e31d174600008f");
+      });
+      return it('has a created load status', function() {
+        var card;
+        card = new nicetohave.Card("4eea503d91e31d174600008f");
+        return expect(card.loadStatus()).toBe("created");
       });
     });
     return describe('loading', function() {
-      return it('when ', function() {
+      return it('when asked to load, loads name', function() {
         var card;
-        card = new nicetohave.Card("4eea503d91e31d174600008f");
-        return expect(card.name()).toBe("");
+        return card = new nicetohave.Card("4eea503d91e31d174600008f");
       });
     });
   });
