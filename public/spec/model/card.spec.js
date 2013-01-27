@@ -41,9 +41,22 @@
       });
     });
     return describe('loading', function() {
+      var trello;
+      trello = null;
+      beforeEach(function() {
+        return trello = {
+          cards: {
+            get: function(id, params, successFn, errorFn) {}
+          }
+        };
+      });
       return it('when asked to load, loads name', function() {
-        var card;
-        return card = new nicetohave.Card("4eea503d91e31d174600008f");
+        var card, privilige;
+        privilige = new nicetohave.Privilege(trello);
+        card = new nicetohave.Card("4eea503d91e31d174600008f", privilige);
+        spyOn(trello.cards, 'get');
+        card.load();
+        return expect(trello.cards.get).toHaveBeenCalled();
       });
     });
   });

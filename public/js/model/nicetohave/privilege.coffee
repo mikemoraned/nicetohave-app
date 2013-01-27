@@ -1,13 +1,13 @@
 window.nicetohave ?= {}
 
 class Privilege
-  level : ko.observable(nicetohave.PrivilegeLevel.READ_ONLY)
+  level : ko.observable(nicetohave.PrivilegeLevel.NONE)
 
   constructor: (trello) -> @trello = trello
 
   using: (expectedLevel, success) ->
     if @level().satisfies(expectedLevel)
-      success(Trello)
+      success(@trello)
     else
       @raiseTo(expectedLevel, success)
 

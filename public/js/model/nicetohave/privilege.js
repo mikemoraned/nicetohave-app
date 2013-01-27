@@ -8,7 +8,7 @@
 
   Privilege = (function() {
 
-    Privilege.prototype.level = ko.observable(nicetohave.PrivilegeLevel.READ_ONLY);
+    Privilege.prototype.level = ko.observable(nicetohave.PrivilegeLevel.NONE);
 
     function Privilege(trello) {
       this.trello = trello;
@@ -16,7 +16,7 @@
 
     Privilege.prototype.using = function(expectedLevel, success) {
       if (this.level().satisfies(expectedLevel)) {
-        return success(Trello);
+        return success(this.trello);
       } else {
         return this.raiseTo(expectedLevel, success);
       }

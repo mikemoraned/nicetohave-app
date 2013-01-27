@@ -10,6 +10,17 @@
 
     function PrivilegeLevel() {}
 
+    PrivilegeLevel.NONE = {
+      name: "none",
+      trelloScope: {
+        read: false,
+        write: false
+      },
+      satisfies: function(otherLevel) {
+        return !otherLevel.trelloScope.read && !otherLevel.trelloScope.write;
+      }
+    };
+
     PrivilegeLevel.READ_ONLY = {
       name: "read",
       trelloScope: {
@@ -17,7 +28,7 @@
         write: false
       },
       satisfies: function(otherLevel) {
-        return otherLevel.read;
+        return !otherLevel.trelloScope.write;
       }
     };
 
@@ -28,7 +39,7 @@
         write: true
       },
       satisfies: function(otherLevel) {
-        return otherLevel.read && otherLevel.write;
+        return true;
       }
     };
 

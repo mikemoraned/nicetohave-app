@@ -25,6 +25,22 @@ describe 'Card', ->
 
   describe 'loading', ->
 
+    trello = null
+
+    beforeEach ->
+      trello = {
+        cards: {
+          get: (id, params, successFn, errorFn) ->
+        }
+      }
+
     it 'when asked to load, loads name', ->
-      card = new nicetohave.Card("4eea503d91e31d174600008f")
+      privilige = new nicetohave.Privilege(trello)
+      card = new nicetohave.Card("4eea503d91e31d174600008f", privilige)
+
+      spyOn(trello.cards, 'get')
+
+      card.load()
+
+      expect(trello.cards.get).toHaveBeenCalled()
 
