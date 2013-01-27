@@ -20,6 +20,8 @@
 
     Card.prototype.name = ko.observable("");
 
+    Card.prototype.comments = ko.observableArray();
+
     Card.prototype.loadStatus = ko.observable("created");
 
     Card.prototype.load = function() {
@@ -27,8 +29,8 @@
         _this = this;
       this.loadStatus("in-progress");
       onSuccess = function(data) {
-        _this.parseFromTrello(data);
-        return _this.loadStatus("loaded");
+        _this._parseFields(data);
+        return _this._loadComments();
       };
       onFailure = function() {
         return _this.loadStatus("load-failed");
@@ -40,8 +42,45 @@
       });
     };
 
-    Card.prototype.parseFromTrello = function(data) {
+    Card.prototype._loadComments = function() {
+      var onFailure, onSuccess,
+        _this = this;
+      onSuccess = function(data) {
+        _this._parseComments(data);
+        return _this.loadStatus("loaded");
+      };
+      onFailure = function() {
+        return _this.loadStatus("load-failed");
+      };
+      return this.privilege.using(nicetohave.PrivilegeLevel.READ_ONLY, function(trello) {
+        return trello.cards.get(_this.id() + "/actions", {
+          entities: true,
+          filter: "commentCard"
+        }, onSuccess, onFailure);
+      });
+    };
+
+    Card.prototype._parseFields = function(data) {
       return this.name(data.name);
+    };
+
+    Card.prototype._parseComments = function(data) {
+      return this.comments(data.map(function(d) {
+        var e, texts;
+        texts = (function() {
+          var _i, _len, _ref1, _results;
+          _ref1 = d.entities;
+          _results = [];
+          for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+            e = _ref1[_i];
+            if (e.type === 'comment') {
+              _results.push(e.text);
+            }
+          }
+          return _results;
+        })();
+        return new nicetohave.Comment(texts[0]);
+      }));
     };
 
     return Card;
