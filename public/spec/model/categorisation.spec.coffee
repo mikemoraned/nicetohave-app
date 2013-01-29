@@ -53,6 +53,28 @@ describe 'Categorisation', ->
       expect(categorisation.axis("value").hasValue()).toEqual(true)
       expect(categorisation.axis("value").value()).toEqual(1.0)
 
+    it 'when given card with a single comment, with an assignment to both axes, but mixed with guff, assigns to both', ->
+      privilege = new nicetohave.Privilege({})
+      card = new nicetohave.Card("510557f3e002eb8d56002e04", privilege)
+      card.comments([new nicetohave.Comment("hello risk:0.2 some guff, blah value:0.3 chumley")])
+      categorisation = new nicetohave.Categorisation(card)
+
+      expect(categorisation.axis("risk").hasValue()).toEqual(true)
+      expect(categorisation.axis("risk").value()).toEqual(0.2)
+      expect(categorisation.axis("value").hasValue()).toEqual(true)
+      expect(categorisation.axis("value").value()).toEqual(0.3)
+
+    it 'when given card with a single comment, with an assignment to both axes, but in other order, assigns to both', ->
+      privilege = new nicetohave.Privilege({})
+      card = new nicetohave.Card("510557f3e002eb8d56002e04", privilege)
+      card.comments([new nicetohave.Comment("value:0.3 risk:0.2")])
+      categorisation = new nicetohave.Categorisation(card)
+
+      expect(categorisation.axis("risk").hasValue()).toEqual(true)
+      expect(categorisation.axis("risk").value()).toEqual(0.2)
+      expect(categorisation.axis("value").hasValue()).toEqual(true)
+      expect(categorisation.axis("value").value()).toEqual(0.3)
+
     it 'when given card with a two comments, with an assignment to both axes, values are taken from latest comment', ->
       privilege = new nicetohave.Privilege({})
       card = new nicetohave.Card("510557f3e002eb8d56002e04", privilege)
