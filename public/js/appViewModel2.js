@@ -10,7 +10,7 @@
 
     function AppViewModel() {
       this.privilege = new nicetohave.Privilege(Trello);
-      this.card = new nicetohave.Card("5105af6108fa2a6e21000dc5", this.privilege);
+      this.cards = ko.observableArray([new nicetohave.Card("510557f3e002eb8d56002e04", this.privilege), new nicetohave.Card("5105af6108fa2a6e21000dc5", this.privilege)]);
     }
 
     return AppViewModel;
