@@ -17,6 +17,8 @@
       this._loadComments = __bind(this._loadComments, this);
 
       this.load = __bind(this.load, this);
+
+      var _this = this;
       if (!/[a-z0-9]{24}/.test(id)) {
         throw {
           message: "Not a valid card id: '" + id + "'"
@@ -24,13 +26,20 @@
       }
       this.id = ko.observable(id);
       this.privilege = privilege;
+      this.name = ko.observable("");
+      this.comments = ko.observableArray();
+      this.loadStatus = ko.observable("created");
+      this.hasComments = ko.computed(function() {
+        return _this.comments().length > 0;
+      });
+      this.latestComment = ko.computed(function() {
+        if (_this.hasComments()) {
+          return _this.comments()[0];
+        } else {
+          return null;
+        }
+      });
     }
-
-    Card.prototype.name = ko.observable("");
-
-    Card.prototype.comments = ko.observableArray();
-
-    Card.prototype.loadStatus = ko.observable("created");
 
     Card.prototype.load = function() {
       var onFailure, onSuccess,

@@ -7,10 +7,19 @@ class Card
       throw { message: "Not a valid card id: '#{id}'" }
     @id = ko.observable(id)
     @privilege = privilege
+    @name = ko.observable("")
+    @comments = ko.observableArray()
+    @loadStatus = ko.observable("created")
 
-  name : ko.observable("")
-  comments : ko.observableArray()
-  loadStatus: ko.observable("created")
+    @hasComments = ko.computed(() =>
+      @comments().length > 0
+    )
+    @latestComment = ko.computed(() =>
+      if (@hasComments())
+        @comments()[0]
+      else
+        null
+    )
 
   load: =>
     @loadStatus("in-progress")
