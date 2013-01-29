@@ -11,6 +11,8 @@
 
     function Position(v) {
       this.v = v;
+      this.toString = __bind(this.toString, this);
+
       this.value = __bind(this.value, this);
 
       this.hasValue = __bind(this.hasValue, this);
@@ -31,6 +33,14 @@
       return this.v;
     };
 
+    Position.prototype.toString = function() {
+      if (this.v != null) {
+        return this.v.toString();
+      } else {
+        return "unknown";
+      }
+    };
+
     return Position;
 
   })();
@@ -42,7 +52,7 @@
 
       var _this = this;
       this.card = card;
-      this.axes = ko.computed(function() {
+      this._axes = ko.computed(function() {
         var axes, comment, _i, _len, _ref1;
         axes = {
           "risk": new Position(),
@@ -59,12 +69,21 @@
         }
         return axes;
       });
+      this.axes = ko.computed(function() {
+        return [
+          {
+            name: "risk",
+            position: _this._axes()["risk"]
+          }, {
+            name: "value",
+            position: _this._axes()["value"]
+          }
+        ];
+      });
     }
 
     Categorisation.prototype.axis = function(name) {
-      var position;
-      position = this.axes()[name];
-      return position;
+      return this._axes()[name];
     };
 
     Categorisation.prototype._parseComment = function(text, axes) {

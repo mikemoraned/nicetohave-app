@@ -12,6 +12,7 @@
 <% script('/js/model/nicetohave/privilege.js') -%>
 <% script('/js/model/nicetohave/comment.js') -%>
 <% script('/js/model/nicetohave/card.js') -%>
+<% script('/js/model/nicetohave/categorisation.js') -%>
 <% script('/js/appViewModel2.js') -%>
 
     <div class="navbar navbar-fixed-top">
@@ -43,11 +44,14 @@
         </div>
 
         <div class="row">
-            <div id="cards" data-bind="foreach: cards">
-                <h2 data-bind="text: name"></span></h2>
-                <button data-bind="click: load">Load</button>
-                <div id="comments" data-bind="foreach: comments">
+            <div id="categorisations" data-bind="foreach: categorisations">
+                <h2 data-bind="text: card.name"></span></h2>
+                <button data-bind="click: card.load">Load</button>
+                <div id="comments" data-bind="foreach: card.comments">
                     <li><span data-bind="text: text"></span></li>
+                </div>
+                <div id="axes" data-bind="foreach: axes">
+                    <span data-bind="text: name"></span>:<span data-bind="text: position"></span>
                 </div>
             </div>
         </div>

@@ -9,8 +9,14 @@
   AppViewModel = (function() {
 
     function AppViewModel() {
+      var _this = this;
       this.privilege = new nicetohave.Privilege(Trello);
       this.cards = ko.observableArray([new nicetohave.Card("510557f3e002eb8d56002e04", this.privilege), new nicetohave.Card("5105af6108fa2a6e21000dc5", this.privilege)]);
+      this.categorisations = ko.computed(function() {
+        return _this.cards().map(function(card) {
+          return new nicetohave.Categorisation(card);
+        });
+      });
     }
 
     return AppViewModel;

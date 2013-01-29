@@ -10,11 +10,17 @@ class Position
 
   value: () => @v
 
+  toString: () =>
+    if @v?
+      @v.toString()
+    else
+      "unknown"
+
 class Categorisation
 
   constructor: (card) ->
     @card = card
-    @axes = ko.computed(() =>
+    @_axes = ko.computed(() =>
       axes = { "risk": new Position(), "value": new Position() }
       if (@card.hasComments())
         for comment in @card.comments()
@@ -22,10 +28,14 @@ class Categorisation
             break
       axes
     )
+    @axes = ko.computed(() =>
+      [
+        { name: "risk", position: @_axes()["risk"] },
+        { name: "value", position: @_axes()["value"] },
+      ]
+    )
 
-  axis: (name) =>
-    position = @axes()[name]
-    position
+  axis: (name) => @_axes()[name]
 
   _parseComment: (text, axes) ->
     re = /(risk|value):([\d.]+)/g
