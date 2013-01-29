@@ -64,7 +64,7 @@
         expect(categorisation.axis("value").hasValue()).toEqual(true);
         return expect(categorisation.axis("value").value()).toEqual(0.1);
       });
-      it('when given card with a three comments, first and last with an assignment to both axes, values are taken from latest comment', function() {
+      it('when given card with three comments, first and last with an assignment to both axes, values are taken from latest comment', function() {
         var card, categorisation, privilege;
         privilege = new nicetohave.Privilege({});
         card = new nicetohave.Card("510557f3e002eb8d56002e04", privilege);
@@ -74,6 +74,17 @@
         expect(categorisation.axis("risk").value()).toEqual(0.2);
         expect(categorisation.axis("value").hasValue()).toEqual(true);
         return expect(categorisation.axis("value").value()).toEqual(0.1);
+      });
+      it('when given card with three comments, middle only one with an assignment, values are taken from middle comment', function() {
+        var card, categorisation, privilege;
+        privilege = new nicetohave.Privilege({});
+        card = new nicetohave.Card("510557f3e002eb8d56002e04", privilege);
+        card.comments([new nicetohave.Comment("some other random crap"), new nicetohave.Comment("risk:0.6 value:0.7"), new nicetohave.Comment("some other random crap")]);
+        categorisation = new nicetohave.Categorisation(card);
+        expect(categorisation.axis("risk").hasValue()).toEqual(true);
+        expect(categorisation.axis("risk").value()).toEqual(0.6);
+        expect(categorisation.axis("value").hasValue()).toEqual(true);
+        return expect(categorisation.axis("value").value()).toEqual(0.7);
       });
       return it('when card comments change, values are updated automatically from latest comments', function() {
         var card, categorisation, privilege;

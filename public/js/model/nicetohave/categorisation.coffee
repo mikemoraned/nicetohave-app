@@ -17,7 +17,9 @@ class Categorisation
     @axes = ko.computed(() =>
       axes = { "risk": new Position(), "value": new Position() }
       if (@card.hasComments())
-        @_parseComment(@card.latestComment().text(), axes)
+        for comment in @card.comments()
+          if @_parseComment(comment.text(), axes)
+            break
       axes
     )
 
@@ -27,10 +29,12 @@ class Categorisation
 
   _parseComment: (text, axes) ->
     re = /(risk|value):([\d.]+)/g
+    matched = false
     while (match = re.exec(text))
+      matched = true
       axis = match[1]
       value = parseFloat(match[2])
       axes[axis] = new Position(value)
-    axes
+    matched
 
 window.nicetohave.Categorisation = Categorisation

@@ -43,13 +43,19 @@
       var _this = this;
       this.card = card;
       this.axes = ko.computed(function() {
-        var axes;
+        var axes, comment, _i, _len, _ref1;
         axes = {
           "risk": new Position(),
           "value": new Position()
         };
         if (_this.card.hasComments()) {
-          _this._parseComment(_this.card.latestComment().text(), axes);
+          _ref1 = _this.card.comments();
+          for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+            comment = _ref1[_i];
+            if (_this._parseComment(comment.text(), axes)) {
+              break;
+            }
+          }
         }
         return axes;
       });
@@ -62,14 +68,16 @@
     };
 
     Categorisation.prototype._parseComment = function(text, axes) {
-      var axis, match, re, value;
+      var axis, match, matched, re, value;
       re = /(risk|value):([\d.]+)/g;
+      matched = false;
       while ((match = re.exec(text))) {
+        matched = true;
         axis = match[1];
         value = parseFloat(match[2]);
         axes[axis] = new Position(value);
       }
-      return axes;
+      return matched;
     };
 
     return Categorisation;
