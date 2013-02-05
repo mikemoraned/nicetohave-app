@@ -84,8 +84,13 @@
                         <tr>
                             <th scope="row">Low risk</th>
                             <td colspan="3" rowspan="4">
-                                <svg viewBox="0 0 500 500">
+                                <svg viewBox="0 0 600 600">
+                                    <line x1="0" y1="150" x2="600" y2="150" class="divider horizontal"/>
+                                    <line x1="0" y1="300" x2="600" y2="300" class="divider horizontal"/>
+                                    <line x1="0" y1="450" x2="600" y2="450" class="divider horizontal"/>
 
+                                    <line x1="200" y1="0" x2="200" y2="600" class="divider vertical"/>
+                                    <line x1="400" y1="0" x2="400" y2="600" class="divider vertical"/>
                                 </svg>
                             </td>
                         </tr>
@@ -214,32 +219,14 @@ $(function($) {
         }).run();
     }
 
-//    var $board = $("#area");
-//
-//    function findBoardPosition(callbackFn) {
-//        var boardOffset = $board.offset();
-//        var boardDimension = {
-//            width: $board.width(),
-//            height: $board.height()
-//        };
-//        var originOffset = $("#area .origin").offset();
-//
-//        var width = boardDimension.width - (originOffset.left - boardOffset.left);
-//        var height = boardDimension.height - (originOffset.top - boardOffset.top);
-//
-//        callbackFn(originOffset.top, originOffset.left, width, height);
-//    }
-
     var model = new NiceToHaveAppViewModel();
 
     ko.applyBindings(model);
 
-//    findBoardPosition(function(top, left, width, height) {
-        var categoriseView = new D3CategoriseView(0, 0, 500, 500);
-        model.cardsInArea.subscribe(function(cards) {
-            categoriseView.update(cards);
-        });
-//    });
+    var categoriseView = new D3CategoriseView(0, 0, 600, 600);
+    model.cardsInArea.subscribe(function(cards) {
+        categoriseView.update(cards);
+    });
 
     model.persistence.saveState.subscribe(function(state) {
         if (state === 'saving') {
