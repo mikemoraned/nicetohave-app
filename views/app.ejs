@@ -7,6 +7,7 @@
 <% script('https://api.trello.com/1/client.js?key=afaec27e30009b0b1cfb14d85f384ee1') -%>
 <% script('/js/knockout-2.2.0.js') -%>
 <% script('/js/sammy-0.7.2.min.js') -%>
+<% script('/js/underscore-min.js') -%>
 
 <% script('/js/model/card.js') -%>
 <% script('/js/model/list.js') -%>
@@ -118,7 +119,9 @@
 
                 <div id="cards" data-bind="foreach: cards">
                     <button class="btn card" type="button"
-                            data-bind="click: addToArea, text: name, event: { mouseover: highlight, mouseout: unHighlight }, css: { selected: selected, highlighted: highlighted }">
+                            data-bind="click: addToArea, event: { mouseover: highlight, mouseout: unHighlight }, css: { selected: selected, highlighted: highlighted }">
+                        <span data-bind="text: shortId"></span>:
+                        <span data-bind="text: name"></span>
                     </button>
                 </div>
             </div>
@@ -136,8 +139,10 @@
     </div>
 
 <div class="print" data-bind="visible: selectedList, with: selectedList">
-    <div data-bind="foreach: cards">
-        <span class="card" data-bind="text: name">
+    <div data-bind="foreach: cardsSortedByShortId">
+        <span class="card">
+            <span class="shortId" data-bind="text: shortId"></span>:
+            <span class="name" data-bind="text: name"></span>
         </span>
     </div>
 </div>
@@ -170,7 +175,6 @@ $(function($) {
                 return "Go to";
             }
         });
-
 
         self.cardsInArea = ko.computed(function() {
             if (self.selectedList()) {

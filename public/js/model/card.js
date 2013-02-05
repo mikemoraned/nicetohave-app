@@ -2,6 +2,7 @@
     function Card(data, posInList, totalCards) {
         var self = this;
         self.id = ko.observable(data.id);
+        self.shortId = ko.observable(data.idShort);
         self.name = ko.observable(data.name);
         self.selected = ko.observable(false);
         self.highlighted = ko.observable(false);

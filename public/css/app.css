@@ -112,10 +112,8 @@
         height: 500px;
     }
 
-    .card {
-        /*border: 1px solid;*/
-        /*width: 33%;*/
-        /*float: left;*/
+    .card .shortId {
+        font-weight: bold;
     }
 
     .navbar,footer,.noprint {
