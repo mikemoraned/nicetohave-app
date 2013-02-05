@@ -23,13 +23,7 @@
             .on("brush", this.brush(this))
             .on("brushend", this.brushend(this));
 
-        this.svg = d3.select("body")
-            .append("svg")
-            .style("position", "absolute")
-            .style("top", top + "px")
-            .style("left", left + "px")
-            .attr("width", width)
-            .attr("height", height);
+        this.svg = d3.select("svg");
 
         this.svg.append("g")
             .attr("class", "brush")

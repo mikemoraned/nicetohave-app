@@ -1,6 +1,8 @@
 @media screen {
     svg {
-        /*border: 1px solid;*/
+        border: 1px solid;
+        width: 100%;
+        height: 100%;
     }
 
     circle.card {
@@ -83,6 +85,37 @@
 }
 
 @media print {
+
+    svg {
+        border: 1px solid;
+        width: 100%;
+        height: 100%;
+    }
+
+    circle.card {
+        stroke: #fff;
+        stroke-width: 1.5px;
+    }
+
+    circle.card.highlighted {
+        stroke: red;
+        cursor: move;
+    }
+
+    .selecting circle.card {
+        fill-opacity: .2;
+    }
+
+    .selecting circle.card.selected {
+        stroke: #f00;
+    }
+
+    button.card {
+        margin-top: 2px;
+        margin-bottom: 2px;
+        display: block;
+        width: 100%;
+    }
 
     table#area {
         width: 100%;

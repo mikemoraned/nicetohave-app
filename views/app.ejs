@@ -83,27 +83,20 @@
                     <tbody>
                         <tr>
                             <th scope="row">Low risk</th>
-                            <td class="area even origin"></td>
-                            <td class="area odd"></td>
-                            <td class="area even"></td>
+                            <td colspan="3" rowspan="4">
+                                <svg viewBox="0 0 500 500">
+
+                                </svg>
+                            </td>
                         </tr>
                         <tr>
                             <th scope="row">Medium risk</th>
-                            <td class="area odd"></td>
-                            <td class="area even"></td>
-                            <td class="area odd"></td>
                         </tr>
                         <tr>
                             <th scope="row">High risk</th>
-                            <td class="area even"></td>
-                            <td class="area odd"></td>
-                            <td class="area even"></td>
                         </tr>
                         <tr>
                             <th scope="row">Uncategorized</th>
-                            <td class="area uncategorized"></td>
-                            <td class="area uncategorized"></td>
-                            <td class="area uncategorized"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -147,7 +140,7 @@
 <script type="application/javascript">
 
 $(function($) {
-    function NiceToHaveAppViewModel(categoriseView) {
+    function NiceToHaveAppViewModel() {
         // Data
         var self = this;
         self.persistence = new Persistence();
@@ -194,10 +187,6 @@ $(function($) {
             }
         });
 
-        self.cardsInArea.subscribe(function(cards) {
-            categoriseView.update(cards);
-        });
-
         self.selectedList.subscribe(function(list){
             console.log("Selected list changed");
             list.refresh();
@@ -225,22 +214,32 @@ $(function($) {
         }).run();
     }
 
-    var $board = $("#area");
-    var boardOffset = $board.offset();
-    var boardDimension = {
-        width: $board.width(),
-        height: $board.height()
-    };
-    var originOffset = $("#area .origin").offset();
+//    var $board = $("#area");
+//
+//    function findBoardPosition(callbackFn) {
+//        var boardOffset = $board.offset();
+//        var boardDimension = {
+//            width: $board.width(),
+//            height: $board.height()
+//        };
+//        var originOffset = $("#area .origin").offset();
+//
+//        var width = boardDimension.width - (originOffset.left - boardOffset.left);
+//        var height = boardDimension.height - (originOffset.top - boardOffset.top);
+//
+//        callbackFn(originOffset.top, originOffset.left, width, height);
+//    }
 
-    var width = boardDimension.width - (originOffset.left - boardOffset.left);
-    var height = boardDimension.height - (originOffset.top - boardOffset.top);
-
-    var categoriseView = new D3CategoriseView(originOffset.top, originOffset.left, width, height);
-
-    var model = new NiceToHaveAppViewModel(categoriseView);
+    var model = new NiceToHaveAppViewModel();
 
     ko.applyBindings(model);
+
+//    findBoardPosition(function(top, left, width, height) {
+        var categoriseView = new D3CategoriseView(0, 0, 500, 500);
+        model.cardsInArea.subscribe(function(cards) {
+            categoriseView.update(cards);
+        });
+//    });
 
     model.persistence.saveState.subscribe(function(state) {
         if (state === 'saving') {
