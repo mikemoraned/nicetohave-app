@@ -1,77 +1,100 @@
-svg {
-    /*border: 1px solid;*/
+@media screen {
+    svg {
+        /*border: 1px solid;*/
+    }
+
+    circle.card {
+        stroke: #fff;
+        stroke-width: 1.5px;
+    }
+
+    circle.card.highlighted {
+        stroke: red;
+        cursor: move;
+    }
+
+    .selecting circle.card {
+        fill-opacity: .2;
+    }
+
+    .selecting circle.card.selected {
+        stroke: #f00;
+    }
+
+    button.card {
+        margin-top: 2px;
+        margin-bottom: 2px;
+        display: block;
+        width: 100%;
+    }
+
+    button.card.highlighted {
+        background-color: red;
+    }
+
+    .selecting button.card {
+        opacity:.2;
+    }
+
+    .selecting button.card.selected {
+        opacity: 1.0;
+    }
+
+    .brush .extent {
+        stroke: #fff;
+        fill-opacity: .125;
+        shape-rendering: crispEdges;
+    }
+
+    table#area, div#cards {
+        height: 500px;
+    }
+
+    div#cards {
+        overflow-y: auto;
+    }
+
+    table#area thead th {
+        padding:15px;
+    }
+
+    table#area tbody th {
+        padding:15px;
+    }
+
+    table#area tbody .area.even {
+        background-color: rgb(243, 253, 255);
+    }
+    table#area tbody .area.uncategorized {
+        background-color: rgb(197, 228, 230);
+    }
+
+    #errors {
+        display: none;
+    }
+
+    #errors.found {
+        display: block;
+    }
+
+    .print {
+        display: none;
+    }
 }
 
-circle.card {
-    stroke: #fff;
-    stroke-width: 1.5px;
-}
+@media print {
 
-circle.card.highlighted {
-    stroke: red;
-    cursor: move;
-}
+    table#area {
+        width: 100%;
+        height: 500px;
+    }
 
-.selecting circle.card {
-    fill-opacity: .2;
-}
+    .card {
+        width: 33%;
+        float: left;
+    }
 
-.selecting circle.card.selected {
-    stroke: #f00;
-}
-
-button.card {
-    margin-top: 2px;
-    margin-bottom: 2px;
-    display: block;
-    width: 100%;
-}
-
-button.card.highlighted {
-    background-color: red;
-}
-
-.selecting button.card {
-    opacity:.2;
-}
-
-.selecting button.card.selected {
-    opacity: 1.0;
-}
-
-.brush .extent {
-    stroke: #fff;
-    fill-opacity: .125;
-    shape-rendering: crispEdges;
-}
-
-table#area, div#cards {
-    height: 500px;
-}
-
-div#cards {
-    overflow-y: auto;
-}
-
-table#area thead th {
-    padding:15px;
-}
-
-table#area tbody th {
-    padding:15px;
-}
-
-table#area tbody .area.even {
-    background-color: rgb(243, 253, 255);
-}
-table#area tbody .area.uncategorized {
-    background-color: rgb(197, 228, 230);
-}
-
-#errors {
-    display: none;
-}
-
-#errors.found {
-    display: block;
+    .navbar,footer,.noprint {
+        display: none;
+    }
 }

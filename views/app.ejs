@@ -46,7 +46,7 @@
                     <h2 data-bind="text: board.name">&nbsp;</h2>
                 </div>
             </div>
-            <div class="row">
+            <div class="row noprint">
                 <div class="span7">
                     <form class="well well-small form-inline">
                         <label for="board-id">Board Id</label>
@@ -109,7 +109,7 @@
                 </table>
             </div>
 
-            <div class="span5" data-bind="visible: selectedList, with: selectedList">
+            <div class="span5 noprint" data-bind="visible: selectedList, with: selectedList">
                 <button class="btn btn-primary" type="button" data-bind="click: moveSelectedToTop, enable: hasSelected">
                     <i class="icon-arrow-up"></i> move to top
                 </button>
@@ -126,7 +126,7 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="row noprint">
             <div id="errors" class="span12" data-bind="foreach: persistence.errors, css: { found : persistence.errors().length > 0 }">
                 <div class="alert alert-error">
                     <strong>Error</strong> <span data-bind="text: code"></span> <span data-bind="text: text"></span> Try again?
@@ -136,6 +136,13 @@
 
         </section>
     </div>
+
+<div class="print" data-bind="visible: selectedList, with: selectedList">
+    <div data-bind="foreach: cards">
+        <div class="card" data-bind="text: name">
+        </div>
+    </div>
+</div>
 
 <script type="application/javascript">
 
