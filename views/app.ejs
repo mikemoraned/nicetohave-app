@@ -139,8 +139,8 @@
 
 <div class="print" data-bind="visible: selectedList, with: selectedList">
     <div data-bind="foreach: cards">
-        <div class="card" data-bind="text: name">
-        </div>
+        <span class="card" data-bind="text: name">
+        </span>
     </div>
 </div>
 
@@ -196,10 +196,6 @@ $(function($) {
 
         self.cardsInArea.subscribe(function(cards) {
             categoriseView.update(cards);
-        });
-
-        self.cardsHighlightedInArea.subscribe(function() {
-            categoriseView.update(self.cardsInArea());
         });
 
         self.selectedList.subscribe(function(list){

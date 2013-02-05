@@ -1,7 +1,11 @@
 (function($, d3, global) {
     function D3CategoriseView(top, left, width, height) {
         this.maxRadius = 7;
+        this.selecting = false;
+        this.moveTo(top, left, width, height);
+    }
 
+    D3CategoriseView.prototype.moveTo = function(top, left, width, height) {
         this.valueScale = d3.scale.linear()
             .domain([0, 3])
             .range([0, width])
@@ -12,9 +16,6 @@
             .range([0, height])
             .clamp(true);
 
-        this.values = ['N','S','C'];
-        this.risks = ['L','M','H','U'];
-
         this.brush = d3.svg.brush()
             .x(this.valueScale)
             .y(this.riskScale)
@@ -22,12 +23,6 @@
             .on("brush", this.brush(this))
             .on("brushend", this.brushend(this));
 
-        this.selecting = false;
-
-        this.moveTo(top, left, width, height);
-    }
-
-    D3CategoriseView.prototype.moveTo = function(top, left, width, height) {
         this.svg = d3.select("body")
             .append("svg")
             .style("position", "absolute")

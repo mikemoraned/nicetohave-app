@@ -90,8 +90,9 @@
     }
 
     .card {
-        width: 33%;
-        float: left;
+        /*border: 1px solid;*/
+        /*width: 33%;*/
+        /*float: left;*/
     }
 
     .navbar,footer,.noprint {
