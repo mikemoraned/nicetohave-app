@@ -1,4 +1,4 @@
-(function(ko, Trello, global) {
+(function(ko, Trello, _, global) {
     function List(data, persistence) {
         var self = this;
         self.id = ko.observable(data.id);
@@ -10,6 +10,10 @@
             return self.cards().filter(function(c) {
                 return c.selected();
             }).length > 0;
+        });
+
+        self.cardsSortedByShortId = ko.computed(function() {
+            return _(self.cards()).sortBy(function(c) { return c.shortId(); });
         });
 
         self.moveSelectedToTop = function() {
@@ -73,4 +77,4 @@
     }
 
     global.List = List;
-})(ko, Trello, window);
+})(ko, Trello, _, window);

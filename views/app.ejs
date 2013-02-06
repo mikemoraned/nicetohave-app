@@ -7,6 +7,7 @@
 <% script('https://api.trello.com/1/client.js?key=afaec27e30009b0b1cfb14d85f384ee1') -%>
 <% script('/js/knockout-2.2.0.js') -%>
 <% script('/js/sammy-0.7.2.min.js') -%>
+<% script('/js/underscore-min.js') -%>
 
 <% script('/js/model/card.js') -%>
 <% script('/js/model/list.js') -%>
@@ -39,14 +40,19 @@
         </div>
     </div>
 
+    <h1 class="print" data-bind="text: board.name"></h1>
+    <div class="print" data-bind="visible: selectedList, with: selectedList">
+        <h2 data-bind="text: $data.name()"></h2>
+    </div>
+
     <div class="container">
         <div class="row">
-            <div class="row">
+            <div class="row noprint">
                 <div class="span12">
                     <h2 data-bind="text: board.name">&nbsp;</h2>
                 </div>
             </div>
-            <div class="row">
+            <div class="row noprint">
                 <div class="span7">
                     <form class="well well-small form-inline">
                         <label for="board-id">Board Id</label>
@@ -83,33 +89,39 @@
                     <tbody>
                         <tr>
                             <th scope="row">Low risk</th>
-                            <td class="area even origin"></td>
-                            <td class="area odd"></td>
-                            <td class="area even"></td>
+                            <td colspan="3" rowspan="4">
+                                <svg viewBox="0 0 600 600">
+                                    <line x1="0" y1="150" x2="600" y2="150" class="divider horizontal print"/>
+                                    <line x1="0" y1="300" x2="600" y2="300" class="divider horizontal print"/>
+                                    <line x1="0" y1="450" x2="600" y2="450" class="divider horizontal print"/>
+
+                                    <line x1="200" y1="0" x2="200" y2="600" class="divider vertical print"/>
+                                    <line x1="400" y1="0" x2="400" y2="600" class="divider vertical print"/>
+
+                                    <rect x="0"   y="0"   width="200" height="150" class="patch" />
+                                    <rect x="400" y="0"   width="200" height="150" class="patch" />
+                                    <rect x="200" y="150" width="200" height="150" class="patch" />
+                                    <rect x="0"   y="300" width="200" height="150" class="patch" />
+                                    <rect x="400" y="300" width="200" height="150" class="patch" />
+
+                                    <rect x="0" y="450" width="600" height="150" class="patch uncategorized" />
+                                </svg>
+                            </td>
                         </tr>
                         <tr>
                             <th scope="row">Medium risk</th>
-                            <td class="area odd"></td>
-                            <td class="area even"></td>
-                            <td class="area odd"></td>
                         </tr>
                         <tr>
                             <th scope="row">High risk</th>
-                            <td class="area even"></td>
-                            <td class="area odd"></td>
-                            <td class="area even"></td>
                         </tr>
                         <tr>
                             <th scope="row">Uncategorized</th>
-                            <td class="area uncategorized"></td>
-                            <td class="area uncategorized"></td>
-                            <td class="area uncategorized"></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-            <div class="span5" data-bind="visible: selectedList, with: selectedList">
+            <div class="span5 noprint" data-bind="visible: selectedList, with: selectedList">
                 <button class="btn btn-primary" type="button" data-bind="click: moveSelectedToTop, enable: hasSelected">
                     <i class="icon-arrow-up"></i> move to top
                 </button>
@@ -120,13 +132,15 @@
 
                 <div id="cards" data-bind="foreach: cards">
                     <button class="btn card" type="button"
-                            data-bind="click: addToArea, text: name, event: { mouseover: highlight, mouseout: unHighlight }, css: { selected: selected, highlighted: highlighted }">
+                            data-bind="click: addToArea, event: { mouseover: highlight, mouseout: unHighlight }, css: { selected: selected, highlighted: highlighted }">
+                        <span data-bind="text: shortId"></span>:
+                        <span data-bind="text: name"></span>
                     </button>
                 </div>
             </div>
         </div>
 
-        <div class="row">
+        <div class="row noprint">
             <div id="errors" class="span12" data-bind="foreach: persistence.errors, css: { found : persistence.errors().length > 0 }">
                 <div class="alert alert-error">
                     <strong>Error</strong> <span data-bind="text: code"></span> <span data-bind="text: text"></span> Try again?
@@ -137,10 +151,19 @@
         </section>
     </div>
 
+<div class="print" data-bind="visible: selectedList, with: selectedList">
+    <div data-bind="foreach: cardsSortedByShortId">
+        <span class="card">
+            <span class="shortId" data-bind="text: shortId"></span>:
+            <span class="name" data-bind="text: name"></span>
+        </span>
+    </div>
+</div>
+
 <script type="application/javascript">
 
 $(function($) {
-    function NiceToHaveAppViewModel(categoriseView) {
+    function NiceToHaveAppViewModel() {
         // Data
         var self = this;
         self.persistence = new Persistence();
@@ -166,7 +189,6 @@ $(function($) {
             }
         });
 
-
         self.cardsInArea = ko.computed(function() {
             if (self.selectedList()) {
                 return self.selectedList().cards().filter(function(c) {
@@ -185,14 +207,6 @@ $(function($) {
             } else {
                 return [];
             }
-        });
-
-        self.cardsInArea.subscribe(function(cards) {
-            categoriseView.update(cards);
-        });
-
-        self.cardsHighlightedInArea.subscribe(function() {
-            categoriseView.update(self.cardsInArea());
         });
 
         self.selectedList.subscribe(function(list){
@@ -222,22 +236,14 @@ $(function($) {
         }).run();
     }
 
-    var $board = $("#area");
-    var boardOffset = $board.offset();
-    var boardDimension = {
-        width: $board.width(),
-        height: $board.height()
-    };
-    var originOffset = $("#area .origin").offset();
-
-    var width = boardDimension.width - (originOffset.left - boardOffset.left);
-    var height = boardDimension.height - (originOffset.top - boardOffset.top);
-
-    var categoriseView = new D3CategoriseView(originOffset.top, originOffset.left, width, height);
-
-    var model = new NiceToHaveAppViewModel(categoriseView);
+    var model = new NiceToHaveAppViewModel();
 
     ko.applyBindings(model);
+
+    var categoriseView = new D3CategoriseView(0, 0, 600, 600);
+    model.cardsInArea.subscribe(function(cards) {
+        categoriseView.update(cards);
+    });
 
     model.persistence.saveState.subscribe(function(state) {
         if (state === 'saving') {

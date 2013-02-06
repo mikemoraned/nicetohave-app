@@ -1,7 +1,11 @@
 (function($, d3, global) {
     function D3CategoriseView(top, left, width, height) {
         this.maxRadius = 7;
+        this.selecting = false;
+        this.moveTo(top, left, width, height);
+    }
 
+    D3CategoriseView.prototype.moveTo = function(top, left, width, height) {
         this.valueScale = d3.scale.linear()
             .domain([0, 3])
             .range([0, width])
@@ -12,9 +16,6 @@
             .range([0, height])
             .clamp(true);
 
-        this.values = ['N','S','C'];
-        this.risks = ['L','M','H','U'];
-
         this.brush = d3.svg.brush()
             .x(this.valueScale)
             .y(this.riskScale)
@@ -22,19 +23,7 @@
             .on("brush", this.brush(this))
             .on("brushend", this.brushend(this));
 
-        this.selecting = false;
-
-        this.moveTo(top, left, width, height);
-    }
-
-    D3CategoriseView.prototype.moveTo = function(top, left, width, height) {
-        this.svg = d3.select("body")
-            .append("svg")
-            .style("position", "absolute")
-            .style("top", top + "px")
-            .style("left", left + "px")
-            .attr("width", width)
-            .attr("height", height);
+        this.svg = d3.select("svg");
 
         this.svg.append("g")
             .attr("class", "brush")
@@ -88,8 +77,10 @@
     D3CategoriseView.prototype.update = function(cards) {
         var self = this;
 
+        var cardIdentity = function(d) { return d.id(); };
+
         var existingCards = this.svg.selectAll("circle.card")
-            .data(cards, function(d) { return d.id(); });
+            .data(cards, cardIdentity);
 
         function updateCardClasses(d) {
             d3.select(this).classed("selected", d.selected());
@@ -104,6 +95,9 @@
             d3.select(this)
                 .attr("cx", d.x = self.clampX(d3.event.x) )
                 .attr("cy", d.y = self.clampY(d3.event.y) );
+            d3.select("text#text" + d.shortId())
+                .attr("x", function(d) { return d.x; })
+                .attr("y", function(d) { return d.y; });
         }
 
         existingCards.each(updateCardClasses);
@@ -152,6 +146,21 @@
                     return self.riskScale(4);
                 })
             .remove();
+
+        this.svg.selectAll("text.card").remove();
+
+        var allShortIds = this.svg.selectAll("text.card")
+            .data(cards);
+
+        allShortIds.enter().append("text")
+            .attr("class", "card")
+            .attr("id", function(d) { return "text" + d.shortId(); })
+            .attr("x", function(d) { return d.x; })
+            .attr("y", function(d) { return d.y; })
+            .attr("text-anchor","middle")
+            .text(function(d) { return d.shortId(); });
+
+        allShortIds.exit().remove();
     }
 
     global.D3CategoriseView = D3CategoriseView;
