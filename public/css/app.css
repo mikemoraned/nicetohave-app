@@ -69,15 +69,18 @@
         padding:15px;
     }
 
-    table#area tbody th {
-        padding:15px;
-    }
-
     table#area tbody .area.even {
         background-color: rgb(243, 253, 255);
     }
     table#area tbody .area.uncategorized {
         background-color: rgb(197, 228, 230);
+    }
+
+    rect.patch {
+        fill: rgb(243, 253, 255);
+    }
+    rect.patch.uncategorized {
+        fill: rgb(197, 228, 230);
     }
 
     #errors {
@@ -101,9 +104,13 @@
         height: 100%;
     }
 
-    line.divider {
+    line.divider.print {
         stroke: #eee;
         stroke-width: 1px;
+    }
+
+    rect.patch {
+        display: none;
     }
 
     circle.card {
