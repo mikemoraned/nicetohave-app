@@ -10,6 +10,10 @@
         stroke-width: 1px;
     }
 
+    text.card {
+        display: none;
+    }
+
     circle.card {
         stroke: #fff;
         stroke-width: 1.5px;
@@ -103,8 +107,7 @@
     }
 
     circle.card {
-        stroke: #fff;
-        stroke-width: 1.5px;
+        display: none;
     }
 
     table#area {

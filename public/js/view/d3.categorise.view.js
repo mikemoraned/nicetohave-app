@@ -157,6 +157,7 @@
             .attr("id", function(d) { return "text" + d.shortId(); })
             .attr("x", function(d) { return d.x; })
             .attr("y", function(d) { return d.y; })
+            .attr("text-anchor","middle")
             .text(function(d) { return d.shortId(); });
 
         allShortIds.exit().remove();
