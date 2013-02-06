@@ -77,8 +77,10 @@
     D3CategoriseView.prototype.update = function(cards) {
         var self = this;
 
+        var cardIdentity = function(d) { return d.id(); };
+
         var existingCards = this.svg.selectAll("circle.card")
-            .data(cards, function(d) { return d.id(); });
+            .data(cards, cardIdentity);
 
         function updateCardClasses(d) {
             d3.select(this).classed("selected", d.selected());
@@ -93,6 +95,9 @@
             d3.select(this)
                 .attr("cx", d.x = self.clampX(d3.event.x) )
                 .attr("cy", d.y = self.clampY(d3.event.y) );
+            d3.select("text#text" + d.shortId())
+                .attr("x", function(d) { return d.x; })
+                .attr("y", function(d) { return d.y; });
         }
 
         existingCards.each(updateCardClasses);
@@ -141,6 +146,20 @@
                     return self.riskScale(4);
                 })
             .remove();
+
+        this.svg.selectAll("text.card").remove();
+
+        var allShortIds = this.svg.selectAll("text.card")
+            .data(cards);
+
+        allShortIds.enter().append("text")
+            .attr("class", "card")
+            .attr("id", function(d) { return "text" + d.shortId(); })
+            .attr("x", function(d) { return d.x; })
+            .attr("y", function(d) { return d.y; })
+            .text(function(d) { return d.shortId(); });
+
+        allShortIds.exit().remove();
     }
 
     global.D3CategoriseView = D3CategoriseView;
