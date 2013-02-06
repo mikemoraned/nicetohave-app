@@ -40,9 +40,14 @@
         </div>
     </div>
 
+    <h1 class="print" data-bind="text: board.name"></h1>
+    <div class="print" data-bind="visible: selectedList, with: selectedList">
+        <h2 data-bind="text: $data.name()"></h2>
+    </div>
+
     <div class="container">
         <div class="row">
-            <div class="row">
+            <div class="row noprint">
                 <div class="span12">
                     <h2 data-bind="text: board.name">&nbsp;</h2>
                 </div>
