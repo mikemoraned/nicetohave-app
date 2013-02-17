@@ -20,8 +20,6 @@ class CommentPosition extends Position
       write: (v) =>
         @_v(@clamp(v))
     )
-    console.log("Created CommentPosition: #{@value()}")
-
 
 class EditablePosition extends Position
 
@@ -37,7 +35,6 @@ class EditablePosition extends Position
         @_v(@clamp(v))
     )
     @hasEdits = ko.computed(() => @value() != commentPos.value())
-    console.log("Created EditablePosition: #{@value()}")
 
 class Categorisation
 
@@ -50,8 +47,8 @@ class Categorisation
     @editableRisk = new EditablePosition(@commentRisk)
     @editableValue = new EditablePosition(@commentValue)
 
-    @updateCommentValues(@card.comments())
-    @card.comments.subscribe(@updateCommentValues)
+    @_updateCommentValues(@card.comments())
+    @card.comments.subscribe(@_updateCommentValues)
 
     @axes = ko.computed(() =>
       [
@@ -60,23 +57,32 @@ class Categorisation
       ]
     )
 
-  updateCommentValues: (comments) =>
-    console.log("Updating values")
-    console.dir(comments)
+    @hasEdits = ko.computed(() =>
+      @editableRisk.hasEdits() || @editableValue.hasEdits()
+    )
+
+  axis: (name) =>
+    if name == "risk"
+      @editableRisk
+    else if name == "value"
+      @editableValue
+    else
+      null
+
+  saveEdits: () =>
+    if @hasEdits()
+      formatted = []
+      if @editableRisk.hasEdits()
+        formatted.push("risk:#{@editableRisk.value()}")
+      if @editableValue.hasEdits()
+        formatted.push("value:#{@editableValue.value()}")
+      @card.addComment(new nicetohave.Comment(formatted.join(" ")))
+
+  _updateCommentValues: (comments) =>
     axes = { "risk": @commentRisk, "value": @commentValue }
     for comment in comments
       if @_parseComment(comment.text(), axes)
         break
-
-  axis: (name) =>
-    if name == "risk"
-      console.log("risk: #{@editableRisk.value()}")
-      @editableRisk
-    else if name == "value"
-      console.log("value: #{@editableValue.value()}")
-      @editableValue
-    else
-      null
 
   _parseComment: (text, axes) ->
     re = /(risk|value):([\d.]+)/g

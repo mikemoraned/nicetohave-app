@@ -44,6 +44,10 @@
         </div>
 
         <div class="row">
+            <button data-bind="click: saveEdits, enable: hasEdits">Save changes</button>
+        </div>
+
+        <div class="row">
             <div id="categorisations" data-bind="foreach: categorisations">
                 <h2 data-bind="text: card.name"></span></h2>
                 <button data-bind="click: card.load">Load</button>

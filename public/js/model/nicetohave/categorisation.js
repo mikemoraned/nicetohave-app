@@ -41,7 +41,6 @@
           return _this._v(_this.clamp(v));
         }
       });
-      console.log("Created CommentPosition: " + (this.value()));
     }
 
     return CommentPosition;
@@ -70,7 +69,6 @@
       this.hasEdits = ko.computed(function() {
         return _this.value() !== commentPos.value();
       });
-      console.log("Created EditablePosition: " + (this.value()));
     }
 
     return EditablePosition;
@@ -80,9 +78,11 @@
   Categorisation = (function() {
 
     function Categorisation(card) {
-      this.axis = __bind(this.axis, this);
+      this._updateCommentValues = __bind(this._updateCommentValues, this);
 
-      this.updateCommentValues = __bind(this.updateCommentValues, this);
+      this.saveEdits = __bind(this.saveEdits, this);
+
+      this.axis = __bind(this.axis, this);
 
       var _this = this;
       this.card = card;
@@ -90,8 +90,8 @@
       this.commentValue = new CommentPosition();
       this.editableRisk = new EditablePosition(this.commentRisk);
       this.editableValue = new EditablePosition(this.commentValue);
-      this.updateCommentValues(this.card.comments());
-      this.card.comments.subscribe(this.updateCommentValues);
+      this._updateCommentValues(this.card.comments());
+      this.card.comments.subscribe(this._updateCommentValues);
       this.axes = ko.computed(function() {
         return [
           {
@@ -103,12 +103,37 @@
           }
         ];
       });
+      this.hasEdits = ko.computed(function() {
+        return _this.editableRisk.hasEdits() || _this.editableValue.hasEdits();
+      });
     }
 
-    Categorisation.prototype.updateCommentValues = function(comments) {
+    Categorisation.prototype.axis = function(name) {
+      if (name === "risk") {
+        return this.editableRisk;
+      } else if (name === "value") {
+        return this.editableValue;
+      } else {
+        return null;
+      }
+    };
+
+    Categorisation.prototype.saveEdits = function() {
+      var formatted;
+      if (this.hasEdits()) {
+        formatted = [];
+        if (this.editableRisk.hasEdits()) {
+          formatted.push("risk:" + (this.editableRisk.value()));
+        }
+        if (this.editableValue.hasEdits()) {
+          formatted.push("value:" + (this.editableValue.value()));
+        }
+        return this.card.addComment(new nicetohave.Comment(formatted.join(" ")));
+      }
+    };
+
+    Categorisation.prototype._updateCommentValues = function(comments) {
       var axes, comment, _i, _len, _results;
-      console.log("Updating values");
-      console.dir(comments);
       axes = {
         "risk": this.commentRisk,
         "value": this.commentValue
@@ -123,18 +148,6 @@
         }
       }
       return _results;
-    };
-
-    Categorisation.prototype.axis = function(name) {
-      if (name === "risk") {
-        console.log("risk: " + (this.editableRisk.value()));
-        return this.editableRisk;
-      } else if (name === "value") {
-        console.log("value: " + (this.editableValue.value()));
-        return this.editableValue;
-      } else {
-        return null;
-      }
     };
 
     Categorisation.prototype._parseComment = function(text, axes) {

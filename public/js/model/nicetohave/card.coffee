@@ -31,6 +31,15 @@ class Card
       trello.cards.get(@id(), { fields: "name" }, onSuccess, onFailure)
     )
 
+  addComment: (comment) =>
+    onSuccess = () =>
+      @loadStatus("saved")
+      @load()
+    onFailure = => @loadStatus("save-failed")
+    @privilege.using(nicetohave.PrivilegeLevel.READ_WRITE, (trello) =>
+      trello.post("/cards/" + @id() + "/actions/comments", { text: comment.text() }, onSuccess, onFailure)
+    )
+
   _loadComments: =>
     onSuccess = (data) =>
       @_parseComments(data)
