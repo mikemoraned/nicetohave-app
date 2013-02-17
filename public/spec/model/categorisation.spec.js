@@ -18,8 +18,7 @@
       return DummyCard;
 
     })();
-    return describe('loading from card', function() {
-      beforeEach(function() {});
+    describe('loading from card', function() {
       it('when given card with no comments, has default categories', function() {
         var card, categorisation;
         card = new DummyCard();
@@ -84,7 +83,7 @@
         expect(categorisation.axis("value").hasValue()).toEqual(true);
         return expect(categorisation.axis("value").value()).toEqual(0.3);
       });
-      it('when given card with a two comments, with an assignment to both axes, values are taken from latest comment', function() {
+      it('when given card with two comments, with an assignment to both axes, values are taken from latest comment', function() {
         var card, categorisation;
         card = new DummyCard();
         card.comments([new nicetohave.Comment("risk:0.2 value:0.1"), new nicetohave.Comment("risk:0.6 value:0.7")]);
@@ -129,6 +128,18 @@
         expect(categorisation.axis("value").hasValue()).toEqual(true);
         return expect(categorisation.axis("value").value()).toEqual(0.1);
       });
+      return it('when an assignment to both axes is split across different comments, values are taken from both', function() {
+        var card, categorisation;
+        card = new DummyCard();
+        card.comments([new nicetohave.Comment("risk:0.2"), new nicetohave.Comment("value:0.1")]);
+        categorisation = new nicetohave.Categorisation(card);
+        expect(categorisation.axis("risk").hasValue()).toEqual(true);
+        expect(categorisation.axis("risk").value()).toEqual(0.2);
+        expect(categorisation.axis("value").hasValue()).toEqual(true);
+        return expect(categorisation.axis("value").value()).toEqual(0.1);
+      });
+    });
+    describe('local edits', function() {
       it('when local edits made, and value is different, then this is regarded as a change', function() {
         var card, categorisation;
         card = new DummyCard();
@@ -150,7 +161,7 @@
         expect(categorisation.axis("value").hasEdits()).toEqual(true);
         return expect(categorisation.hasEdits()).toEqual(true);
       });
-      it('when local edits made, and value is same, then this is not regarded as a change', function() {
+      return it('when local edits made, and value is same, then this is not regarded as a change', function() {
         var card, categorisation;
         card = new DummyCard();
         card.comments([new nicetohave.Comment("risk:0.6 value:0.7")]);
@@ -171,6 +182,8 @@
         expect(categorisation.axis("value").hasEdits()).toEqual(false);
         return expect(categorisation.hasEdits()).toEqual(false);
       });
+    });
+    return describe('local edits followed by save', function() {
       it('when local edits made, and value is same, and save requested, then no comment is saved', function() {
         var card, categorisation;
         card = new DummyCard();

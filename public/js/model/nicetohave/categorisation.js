@@ -133,7 +133,11 @@
     };
 
     Categorisation.prototype._updateCommentValues = function(comments) {
-      var axes, comment, _i, _len, _results;
+      var axes, comment, foundValue, _i, _len, _results;
+      foundValue = {
+        "risk": false,
+        "value": false
+      };
       axes = {
         "risk": this.commentRisk,
         "value": this.commentValue
@@ -141,25 +145,25 @@
       _results = [];
       for (_i = 0, _len = comments.length; _i < _len; _i++) {
         comment = comments[_i];
-        if (this._parseComment(comment.text(), axes)) {
-          break;
+        _results.push(this._parseComment(comment.text(), axes, foundValue));
+      }
+      return _results;
+    };
+
+    Categorisation.prototype._parseComment = function(text, axes, foundValue) {
+      var axis, match, re, _results;
+      re = /(risk|value):([\d.]+)/g;
+      _results = [];
+      while ((match = re.exec(text))) {
+        axis = match[1];
+        if (!foundValue[axis]) {
+          axes[axis].value(parseFloat(match[2]));
+          _results.push(foundValue[axis] = true);
         } else {
           _results.push(void 0);
         }
       }
       return _results;
-    };
-
-    Categorisation.prototype._parseComment = function(text, axes) {
-      var axis, match, matched, re;
-      re = /(risk|value):([\d.]+)/g;
-      matched = false;
-      while ((match = re.exec(text))) {
-        matched = true;
-        axis = match[1];
-        axes[axis].value(parseFloat(match[2]));
-      }
-      return matched;
     };
 
     return Categorisation;

@@ -17,12 +17,15 @@
       if (this.level().satisfies(expectedLevel)) {
         return success(this.trello);
       } else {
+        console.log("Raising level to");
+        console.dir(expectedLevel);
         return this.raiseTo(expectedLevel, success);
       }
     };
 
     Privilege.prototype.raiseTo = function(level, success) {
       var _this = this;
+      this.trello.deauthorize();
       return this.trello.authorize({
         type: "popup",
         name: "Nice to have",

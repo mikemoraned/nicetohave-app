@@ -79,18 +79,17 @@ class Categorisation
       @card.addComment(new nicetohave.Comment(formatted.join(" ")))
 
   _updateCommentValues: (comments) =>
+    foundValue = { "risk" : false, "value" : false }
     axes = { "risk": @commentRisk, "value": @commentValue }
     for comment in comments
-      if @_parseComment(comment.text(), axes)
-        break
+      @_parseComment(comment.text(), axes, foundValue)
 
-  _parseComment: (text, axes) ->
+  _parseComment: (text, axes, foundValue) ->
     re = /(risk|value):([\d.]+)/g
-    matched = false
     while (match = re.exec(text))
-      matched = true
       axis = match[1]
-      axes[axis].value(parseFloat(match[2]))
-    matched
+      if not foundValue[axis]
+        axes[axis].value(parseFloat(match[2]))
+        foundValue[axis] = true
 
 window.nicetohave.Categorisation = Categorisation

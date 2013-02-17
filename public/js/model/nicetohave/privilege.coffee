@@ -9,9 +9,12 @@ class Privilege
     if @level().satisfies(expectedLevel)
       success(@trello)
     else
+      console.log("Raising level to")
+      console.dir(expectedLevel)
       @raiseTo(expectedLevel, success)
 
   raiseTo: (level, success) ->
+    @trello.deauthorize()
     @trello.authorize({
       type: "popup",
       name: "Nice to have",

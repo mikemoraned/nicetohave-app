@@ -9,8 +9,6 @@ describe 'Categorisation', ->
 
   describe 'loading from card', ->
 
-    beforeEach ->
-
     it 'when given card with no comments, has default categories', ->
       card = new DummyCard()
       categorisation = new nicetohave.Categorisation(card)
@@ -75,7 +73,7 @@ describe 'Categorisation', ->
       expect(categorisation.axis("value").hasValue()).toEqual(true)
       expect(categorisation.axis("value").value()).toEqual(0.3)
 
-    it 'when given card with a two comments, with an assignment to both axes, values are taken from latest comment', ->
+    it 'when given card with two comments, with an assignment to both axes, values are taken from latest comment', ->
       card = new DummyCard()
       card.comments([
         new nicetohave.Comment("risk:0.2 value:0.1"),
@@ -138,6 +136,23 @@ describe 'Categorisation', ->
       expect(categorisation.axis("value").hasValue()).toEqual(true)
       expect(categorisation.axis("value").value()).toEqual(0.1)
 
+    it 'when an assignment to both axes is split across different comments, values are taken from both', ->
+      card = new DummyCard()
+      card.comments([
+        new nicetohave.Comment("risk:0.2"),
+        new nicetohave.Comment("value:0.1")
+      ])
+      categorisation = new nicetohave.Categorisation(card)
+
+      expect(categorisation.axis("risk").hasValue()).toEqual(true)
+      expect(categorisation.axis("risk").value()).toEqual(0.2)
+      expect(categorisation.axis("value").hasValue()).toEqual(true)
+      expect(categorisation.axis("value").value()).toEqual(0.1)
+
+
+
+  describe 'local edits', ->
+
     it 'when local edits made, and value is different, then this is regarded as a change', ->
       card = new DummyCard()
       card.comments([
@@ -195,6 +210,8 @@ describe 'Categorisation', ->
       expect(categorisation.axis("value").hasEdits()).toEqual(false)
 
       expect(categorisation.hasEdits()).toEqual(false)
+
+  describe 'local edits followed by save', ->
 
     it 'when local edits made, and value is same, and save requested, then no comment is saved', ->
       card = new DummyCard()
