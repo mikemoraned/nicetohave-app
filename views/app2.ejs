@@ -51,7 +51,9 @@
                     <li><span data-bind="text: text"></span></li>
                 </div>
                 <div id="axes" data-bind="foreach: axes">
-                    <span data-bind="text: name"></span>:<span data-bind="text: position"></span>
+                    <div data-bind="style: { 'background-color': position.hasEdits() ? 'red' : 'blue'}">
+                        <span data-bind="text: name"></span>:<input data-bind="value: position.value">
+                    </div>
                 </div>
             </div>
         </div>

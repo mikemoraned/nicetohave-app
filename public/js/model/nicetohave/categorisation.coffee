@@ -4,42 +4,79 @@ class Position
 
   constructor: (v) ->
     @_v = ko.observable(if v? then @clamp(v) else null)
-    @value = ko.computed(
-      read: @_v
-      write: (v) => @_v(@clamp(v))
-    )
 
-  hasValue: () => @_v()?
+  hasValue: () => @value()?
 
   clamp: (v) ->
     Math.min(1.0, Math.max(0.0, v))
 
-  toString: () =>
-    if @hasValue()
-      @value().toString()
-    else
-      "unknown"
+
+class CommentPosition extends Position
+
+  constructor: (v) ->
+    super v
+    @value = ko.computed(
+      read: @_v
+      write: (v) =>
+        @_v(@clamp(v))
+    )
+    console.log("Created CommentPosition: #{@value()}")
+
+
+class EditablePosition extends Position
+
+  constructor: (commentPos) ->
+    super null
+    @value = ko.computed(
+      read: () =>
+        if @_v()?
+          @_v()
+        else
+          commentPos.value()
+      write: (v) =>
+        @_v(@clamp(v))
+    )
+    @hasEdits = ko.computed(() => @value() != commentPos.value())
+    console.log("Created EditablePosition: #{@value()}")
 
 class Categorisation
 
   constructor: (card) ->
     @card = card
-    @_axes = ko.computed(() =>
-      axes = { "risk": new Position(), "value": new Position() }
-      if (@card.hasComments())
-        for comment in @card.comments()
-          if @_parseComment(comment.text(), axes)
-            break
-      axes
-    )
+
+    @commentRisk = new CommentPosition()
+    @commentValue = new CommentPosition()
+
+    @editableRisk = new EditablePosition(@commentRisk)
+    @editableValue = new EditablePosition(@commentValue)
+
+    @updateCommentValues(@card.comments())
+    @card.comments.subscribe(@updateCommentValues)
+
     @axes = ko.computed(() =>
       [
-        { name: "risk", position: @_axes()["risk"] },
-        { name: "value", position: @_axes()["value"] },
+        { name: "risk", position: @editableRisk },
+        { name: "value", position: @editableValue },
       ]
     )
 
-  axis: (name) => @_axes()[name]
+  updateCommentValues: (comments) =>
+    console.log("Updating values")
+    console.dir(comments)
+    axes = { "risk": @commentRisk, "value": @commentValue }
+    for comment in comments
+      if @_parseComment(comment.text(), axes)
+        break
+
+  axis: (name) =>
+    if name == "risk"
+      console.log("risk: #{@editableRisk.value()}")
+      @editableRisk
+    else if name == "value"
+      console.log("value: #{@editableValue.value()}")
+      @editableValue
+    else
+      null
 
   _parseComment: (text, axes) ->
     re = /(risk|value):([\d.]+)/g
@@ -47,8 +84,7 @@ class Categorisation
     while (match = re.exec(text))
       matched = true
       axis = match[1]
-      value = parseFloat(match[2])
-      axes[axis] = new Position(value)
+      axes[axis].value(parseFloat(match[2]))
     matched
 
 window.nicetohave.Categorisation = Categorisation

@@ -108,7 +108,7 @@
         expect(categorisation.axis("value").hasValue()).toEqual(true);
         return expect(categorisation.axis("value").value()).toEqual(0.7);
       });
-      return it('when card comments change, values are updated automatically from latest comments', function() {
+      it('when card comments change, values are updated automatically from latest comments', function() {
         var card, categorisation, privilege;
         privilege = new nicetohave.Privilege({});
         card = new nicetohave.Card("510557f3e002eb8d56002e04", privilege);
@@ -123,6 +123,47 @@
         expect(categorisation.axis("risk").value()).toEqual(0.2);
         expect(categorisation.axis("value").hasValue()).toEqual(true);
         return expect(categorisation.axis("value").value()).toEqual(0.1);
+      });
+      it('when local edits made, and value is different, then this is regarded as a change', function() {
+        var card, categorisation, privilege;
+        privilege = new nicetohave.Privilege({});
+        card = new nicetohave.Card("510557f3e002eb8d56002e04", privilege);
+        card.comments([new nicetohave.Comment("risk:0.6 value:0.7")]);
+        categorisation = new nicetohave.Categorisation(card);
+        expect(categorisation.axis("risk").hasValue()).toEqual(true);
+        expect(categorisation.axis("risk").value()).toEqual(0.6);
+        expect(categorisation.axis("risk").hasEdits()).toEqual(false);
+        expect(categorisation.axis("value").hasValue()).toEqual(true);
+        expect(categorisation.axis("value").value()).toEqual(0.7);
+        expect(categorisation.axis("value").hasEdits()).toEqual(false);
+        categorisation.axis("value").value(0.8);
+        console.log("Foop: " + (categorisation.axis("value").value()));
+        expect(categorisation.axis("risk").hasValue()).toEqual(true);
+        expect(categorisation.axis("risk").value()).toEqual(0.6);
+        expect(categorisation.axis("risk").hasEdits()).toEqual(false);
+        expect(categorisation.axis("value").hasValue()).toEqual(true);
+        expect(categorisation.axis("value").value()).toEqual(0.8);
+        return expect(categorisation.axis("value").hasEdits()).toEqual(true);
+      });
+      return it('when local edits made, and value is same, then this is not regarded as a change', function() {
+        var card, categorisation, privilege;
+        privilege = new nicetohave.Privilege({});
+        card = new nicetohave.Card("510557f3e002eb8d56002e04", privilege);
+        card.comments([new nicetohave.Comment("risk:0.6 value:0.7")]);
+        categorisation = new nicetohave.Categorisation(card);
+        expect(categorisation.axis("risk").hasValue()).toEqual(true);
+        expect(categorisation.axis("risk").value()).toEqual(0.6);
+        expect(categorisation.axis("risk").hasEdits()).toEqual(false);
+        expect(categorisation.axis("value").hasValue()).toEqual(true);
+        expect(categorisation.axis("value").value()).toEqual(0.7);
+        expect(categorisation.axis("value").hasEdits()).toEqual(false);
+        categorisation.axis("value").value(0.7);
+        expect(categorisation.axis("risk").hasValue()).toEqual(true);
+        expect(categorisation.axis("risk").value()).toEqual(0.6);
+        expect(categorisation.axis("risk").hasEdits()).toEqual(false);
+        expect(categorisation.axis("value").hasValue()).toEqual(true);
+        expect(categorisation.axis("value").value()).toEqual(0.7);
+        return expect(categorisation.axis("value").hasEdits()).toEqual(false);
       });
     });
   });
