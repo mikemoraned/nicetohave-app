@@ -2,17 +2,21 @@ window.nicetohave ?= {}
 
 class Position
 
-  constructor: (@v) ->
-    @v = 1.0 if @v > 1.0
-    @v = 0.0 if @v < 0.0
+  constructor: (v) ->
+    @_v = ko.observable(if v? then @clamp(v) else null)
+    @value = ko.computed(
+      read: @_v
+      write: (v) => @_v(@clamp(v))
+    )
 
-  hasValue: () => @v?
+  hasValue: () => @_v()?
 
-  value: () => @v
+  clamp: (v) ->
+    Math.min(1.0, Math.max(0.0, v))
 
   toString: () =>
-    if @v?
-      @v.toString()
+    if @hasValue()
+      @value().toString()
     else
       "unknown"
 

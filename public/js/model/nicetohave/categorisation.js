@@ -10,32 +10,31 @@
   Position = (function() {
 
     function Position(v) {
-      this.v = v;
       this.toString = __bind(this.toString, this);
-
-      this.value = __bind(this.value, this);
 
       this.hasValue = __bind(this.hasValue, this);
 
-      if (this.v > 1.0) {
-        this.v = 1.0;
-      }
-      if (this.v < 0.0) {
-        this.v = 0.0;
-      }
+      var _this = this;
+      this._v = ko.observable(v != null ? this.clamp(v) : null);
+      this.value = ko.computed({
+        read: this._v,
+        write: function(v) {
+          return _this._v(_this.clamp(v));
+        }
+      });
     }
 
     Position.prototype.hasValue = function() {
-      return this.v != null;
+      return this._v() != null;
     };
 
-    Position.prototype.value = function() {
-      return this.v;
+    Position.prototype.clamp = function(v) {
+      return Math.min(1.0, Math.max(0.0, v));
     };
 
     Position.prototype.toString = function() {
-      if (this.v != null) {
-        return this.v.toString();
+      if (this.hasValue()) {
+        return this.value().toString();
       } else {
         return "unknown";
       }
