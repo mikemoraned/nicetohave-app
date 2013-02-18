@@ -2,8 +2,9 @@ window.nicetohave ?= {}
 
 class WorkingArea
 
-  constructor: (@privilege, cards) ->
-    @cards = ko.observableArray(cards)
+  constructor: (@privilege) ->
+    @list = ko.observable(new nicetohave.List("50f5c98fe0314ccd5500a51d", @privilege))
+    @cards = ko.computed(() => @list().cards())
 
     @_cachedCategorisations = {};
 

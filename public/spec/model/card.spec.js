@@ -17,7 +17,7 @@
           message: "Not a valid card id: '  csdc  scd'"
         });
       });
-      it('must only accept an id of the right length (24  )', function() {
+      it('must only accept an id of the right length (24)', function() {
         return expect(function() {
           return new nicetohave.Card("4eea503d91e31d174600");
         }).toThrow({

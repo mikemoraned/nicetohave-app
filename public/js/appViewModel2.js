@@ -10,7 +10,7 @@
 
     function AppViewModel() {
       this.privilege = new nicetohave.Privilege(Trello);
-      this.workingArea = ko.observable(new nicetohave.WorkingArea(this.privilege, [new nicetohave.Card("510557f3e002eb8d56002e04", this.privilege), new nicetohave.Card("5105af6108fa2a6e21000dc5", this.privilege)]));
+      this.workingArea = ko.observable(new nicetohave.WorkingArea(this.privilege));
     }
 
     return AppViewModel;

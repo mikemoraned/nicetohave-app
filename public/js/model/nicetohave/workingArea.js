@@ -9,12 +9,15 @@
 
   WorkingArea = (function() {
 
-    function WorkingArea(privilege, cards) {
+    function WorkingArea(privilege) {
       var _this = this;
       this.privilege = privilege;
       this.saveEdits = __bind(this.saveEdits, this);
 
-      this.cards = ko.observableArray(cards);
+      this.list = ko.observable(new nicetohave.List("50f5c98fe0314ccd5500a51d", this.privilege));
+      this.cards = ko.computed(function() {
+        return _this.list().cards();
+      });
       this._cachedCategorisations = {};
       this.categorisations = ko.computed(function() {
         return _this.cards().map(function(card) {

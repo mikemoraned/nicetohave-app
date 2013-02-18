@@ -14,12 +14,6 @@ class Card
     @hasComments = ko.computed(() =>
       @comments().length > 0
     )
-    @latestComment = ko.computed(() =>
-      if (@hasComments())
-        @comments()[0]
-      else
-        null
-    )
 
   load: =>
     @loadStatus("in-progress")

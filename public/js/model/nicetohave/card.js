@@ -34,13 +34,6 @@
       this.hasComments = ko.computed(function() {
         return _this.comments().length > 0;
       });
-      this.latestComment = ko.computed(function() {
-        if (_this.hasComments()) {
-          return _this.comments()[0];
-        } else {
-          return null;
-        }
-      });
     }
 
     Card.prototype.load = function() {

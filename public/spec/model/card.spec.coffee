@@ -8,7 +8,7 @@ describe 'Card', ->
     it 'must only accept an id of the right format (alphanumeric)', ->
       expect(-> new nicetohave.Card("  csdc  scd")).toThrow({ message: "Not a valid card id: '  csdc  scd'" })
 
-    it 'must only accept an id of the right length (24  )', ->
+    it 'must only accept an id of the right length (24)', ->
       expect(-> new nicetohave.Card("4eea503d91e31d174600")).toThrow({ message: "Not a valid card id: '4eea503d91e31d174600'" })
 
     it 'has an empty name', ->
