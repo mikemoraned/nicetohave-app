@@ -13,6 +13,7 @@
 <% script('/js/model/nicetohave/comment.js') -%>
 <% script('/js/model/nicetohave/card.js') -%>
 <% script('/js/model/nicetohave/categorisation.js') -%>
+<% script('/js/model/nicetohave/workingArea.js') -%>
 <% script('/js/appViewModel2.js') -%>
 
     <div class="navbar navbar-fixed-top">
@@ -43,20 +44,22 @@
             <div data-bind="text: privilege.level().name"></div>
         </div>
 
-        <div class="row">
-            <button data-bind="click: saveEdits, enable: hasEdits">Save changes</button>
-        </div>
+        <div data-bind="with: workingArea">
+            <div class="row">
+                <button data-bind="click: saveEdits, enable: hasEdits">Save changes</button>
+            </div>
 
-        <div class="row">
-            <div id="categorisations" data-bind="foreach: categorisations">
-                <h2 data-bind="text: card.name"></span></h2>
-                <button data-bind="click: card.load">Load</button>
-                <div id="comments" data-bind="foreach: card.comments">
-                    <li><span data-bind="text: text"></span></li>
-                </div>
-                <div id="axes" data-bind="foreach: axes">
-                    <div data-bind="style: { 'background-color': position.hasEdits() ? 'red' : 'blue'}">
-                        <span data-bind="text: name"></span>:<input data-bind="value: position.value">
+            <div class="row">
+                <div id="categorisations" data-bind="foreach: categorisations">
+                    <h2 data-bind="text: card.name"></span></h2>
+                    <button data-bind="click: card.load">Load</button>
+                    <div id="comments" data-bind="foreach: card.comments">
+                        <li><span data-bind="text: text"></span></li>
+                    </div>
+                    <div id="axes" data-bind="foreach: axes">
+                        <div data-bind="style: { 'background-color': position.hasEdits() ? 'red' : 'blue'}">
+                            <span data-bind="text: name"></span>:<input data-bind="value: position.value">
+                        </div>
                     </div>
                 </div>
             </div>
