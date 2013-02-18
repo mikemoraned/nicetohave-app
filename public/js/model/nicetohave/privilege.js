@@ -30,6 +30,7 @@
         type: "popup",
         name: "Nice to have",
         success: function() {
+          console.log("Success!");
           _this.level(level);
           return success(_this.trello);
         },

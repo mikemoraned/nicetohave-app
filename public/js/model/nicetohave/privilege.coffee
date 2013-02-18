@@ -18,7 +18,8 @@ class Privilege
     @trello.authorize({
       type: "popup",
       name: "Nice to have",
-      success: =>
+      success: () =>
+        console.log("Success!")
         @level(level)
         success(@trello)
       ,
