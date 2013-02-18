@@ -15,6 +15,7 @@ class Privilege
 
   raiseTo: (level, success) ->
     @trello.deauthorize()
+    @level(nicetohave.PrivilegeLevel.NONE)
     @trello.authorize({
       type: "popup",
       name: "Nice to have",

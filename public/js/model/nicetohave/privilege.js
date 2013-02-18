@@ -26,6 +26,7 @@
     Privilege.prototype.raiseTo = function(level, success) {
       var _this = this;
       this.trello.deauthorize();
+      this.level(nicetohave.PrivilegeLevel.NONE);
       return this.trello.authorize({
         type: "popup",
         name: "Nice to have",
