@@ -8,6 +8,9 @@
             var a;
             return null != j[c] ? g(j[c]) : (null != (a = h[c]) ? a : h[c] = []).push(g)
         };
+        var clearAuthorization = function () {
+            j.authorized = null;
+        };
         w = function(c, g) {
             var a, f, d, z;
             j[c] = g;
@@ -59,6 +62,7 @@
             },authorized: function() {
                 return null != e
             },deauthorize: function() {
+                clearAuthorization();
                 e = null;
                 q("token",
                     e)
