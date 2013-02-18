@@ -12,16 +12,19 @@
       trello = null;
       beforeEach(function() {
         return trello = {
-          authorize: function(opts) {}
+          authorize: function(opts) {},
+          deauthorize: function() {}
         };
       });
       it('when needs to go from none to read-only, asks for authorization', function() {
         var privilige;
         privilige = new nicetohave.Privilege(trello);
+        spyOn(trello, 'deauthorize');
         spyOn(trello, 'authorize').andCallFake(function(opts) {
           return opts.success();
         });
         privilige.using(nicetohave.PrivilegeLevel.READ_ONLY, function(trello) {});
+        expect(trello.deauthorize).toHaveBeenCalled();
         expect(trello.authorize).toHaveBeenCalled();
         return expect(privilige.level()).toEqual(nicetohave.PrivilegeLevel.READ_ONLY);
       });

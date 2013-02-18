@@ -12,15 +12,18 @@ describe 'Privilege', ->
     beforeEach ->
       trello = {
         authorize: (opts) ->
+        deauthorize: () ->
       }
 
     it 'when needs to go from none to read-only, asks for authorization', ->
       privilige = new nicetohave.Privilege(trello)
 
+      spyOn(trello, 'deauthorize')
       spyOn(trello, 'authorize').andCallFake((opts) -> opts.success())
 
       privilige.using(nicetohave.PrivilegeLevel.READ_ONLY, (trello) -> )
 
+      expect(trello.deauthorize).toHaveBeenCalled()
       expect(trello.authorize).toHaveBeenCalled()
       expect(privilige.level()).toEqual(nicetohave.PrivilegeLevel.READ_ONLY)
 
