@@ -43,7 +43,6 @@
     return describe('loading', function() {
       var commentsResponse, trello;
       trello = null;
-      commentsResponse = JSON.parse("[{\"id\":\"51059bc37001c216210011b0\",\"idMemberCreator\":\"506b41beead39f966c0ce110\",\"data\":{\"text\":\"This is a comment\",\"board\":{\"name\":\"NiceToHaveTestBoard\",\"id\":\"50f5c98fe0314ccd5500a51b\"},\"card\":{\"name\":\"Test card\",\"idShort\":1,\"id\":\"510557f3e002eb8d56002e04\"},\"dateLastEdited\":\"2013-01-27T21:52:51.575Z\"},\"type\":\"commentCard\",\"date\":\"2013-01-27T21:27:31.934Z\",\"memberCreator\":{\"id\":\"506b41beead39f966c0ce110\",\"avatarHash\":null,\"fullName\":\"Mike Moran\",\"initials\":\"MM\",\"username\":\"lazysurefix\"},\"entities\":[{\"type\":\"member\",\"id\":\"506b41beead39f966c0ce110\",\"text\":\"Mike Moran\"},{\"type\":\"text\",\"text\":\"on\",\"idContext\":\"510557f3e002eb8d56002e04\",\"hideIfContext\":true},{\"type\":\"card\",\"id\":\"510557f3e002eb8d56002e04\",\"text\":\"Test card\",\"hideIfContext\":true},{\"type\":\"comment\",\"text\":\"This is a comment\",\"textHtml\":\"This is a comment\"}]}]");
       beforeEach(function() {
         trello = {
           cards: {
@@ -69,7 +68,7 @@
         expect(trello.cards.get).toHaveBeenCalled();
         return expect(card.name()).toEqual("A dummy name");
       });
-      return it('when asked to load, loads comments', function() {
+      it('when asked to load, loads comments', function() {
         var card, privilige;
         privilige = new nicetohave.Privilege(trello);
         privilige.level(nicetohave.PrivilegeLevel.READ_ONLY);
@@ -78,6 +77,7 @@
         expect(card.comments().length).toEqual(1);
         return expect(card.comments()[0].text()).toEqual("This is a comment");
       });
+      return commentsResponse = JSON.parse("[\n   {\n      \"id\":\"51059bc37001c216210011b0\",\n      \"idMemberCreator\":\"506b41beead39f966c0ce110\",\n      \"data\":{\n         \"text\":\"This is a comment\",\n         \"board\":{\n            \"name\":\"NiceToHaveTestBoard\",\n            \"id\":\"50f5c98fe0314ccd5500a51b\"\n         },\n         \"card\":{\n            \"name\":\"Test card\",\n            \"idShort\":1,\n            \"id\":\"510557f3e002eb8d56002e04\"\n         },\n         \"dateLastEdited\":\"2013-01-27T21:52:51.575Z\"\n      },\n      \"type\":\"commentCard\",\n      \"date\":\"2013-01-27T21:27:31.934Z\",\n      \"memberCreator\":{\n         \"id\":\"506b41beead39f966c0ce110\",\n         \"avatarHash\":null,\n         \"fullName\":\"Mike Moran\",\n         \"initials\":\"MM\",\n         \"username\":\"lazysurefix\"\n      },\n      \"entities\":[\n         {\n            \"type\":\"member\",\n            \"id\":\"506b41beead39f966c0ce110\",\n            \"text\":\"Mike Moran\"\n         },\n         {\n            \"type\":\"text\",\n            \"text\":\"on\",\n            \"idContext\":\"510557f3e002eb8d56002e04\",\n            \"hideIfContext\":true\n         },\n         {\n            \"type\":\"card\",\n            \"id\":\"510557f3e002eb8d56002e04\",\n            \"text\":\"Test card\",\n            \"hideIfContext\":true\n         },\n         {\n            \"type\":\"comment\",\n            \"text\":\"This is a comment\",\n            \"textHtml\":\"This is a comment\"\n         }\n      ]\n   }\n]");
     });
   });
 
