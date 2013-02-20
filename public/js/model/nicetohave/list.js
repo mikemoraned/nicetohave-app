@@ -12,6 +12,8 @@
     function List(id, privilege) {
       this._getCard = __bind(this._getCard, this);
 
+      this._loadAllCards = __bind(this._loadAllCards, this);
+
       this._parseCards = __bind(this._parseCards, this);
 
       this._parseFields = __bind(this._parseFields, this);
@@ -40,9 +42,10 @@
       return this.privilege.using(nicetohave.PrivilegeLevel.READ_ONLY, function(trello) {
         return trello.lists.get(_this.id(), {}, function(data) {
           _this._parseFields(data);
-          return trello.lists.get(_this.id() + "/cards", {}, (function(data) {
-            return _this._parseCards(data);
-          }), onFailure);
+          return trello.lists.get(_this.id() + "/cards", {}, function(data) {
+            _this._parseCards(data);
+            return _this._loadAllCards();
+          }, onFailure);
         }, onFailure);
       });
     };
@@ -62,6 +65,17 @@
         }
         return _results;
       }).call(this));
+    };
+
+    List.prototype._loadAllCards = function() {
+      var card, _i, _len, _ref1, _results;
+      _ref1 = this.cards();
+      _results = [];
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        card = _ref1[_i];
+        _results.push(card.load());
+      }
+      return _results;
     };
 
     List.prototype._getCard = function(id) {

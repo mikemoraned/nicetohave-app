@@ -41,6 +41,8 @@ describe 'List', ->
             successFn(cardsResponse)
       )
 
+      spyOn(nicetohave.Card.prototype, "load")
+
     it 'when asked to load, loads name', ->
       privilige = new nicetohave.Privilege(trello)
       privilige.level(nicetohave.PrivilegeLevel.READ_ONLY)
@@ -89,6 +91,18 @@ describe 'List', ->
       expect(list.cards()[0]).toBe(card1)
       expect(list.cards()[1]).toBe(card2)
       expect(list.cards()[2]).toBe(card3)
+
+    it 'when asked to load, call load on Card', ->
+      privilige = new nicetohave.Privilege(trello)
+      privilige.level(nicetohave.PrivilegeLevel.READ_ONLY)
+
+      list = new nicetohave.List("50f5c98fe0314ccd5500a51d", privilige)
+
+      expect(nicetohave.Card.prototype.load).not.toHaveBeenCalled()
+
+      list.load()
+
+      expect(nicetohave.Card.prototype.load).toHaveBeenCalled()
 
     listResponse = JSON.parse("""
                               {"id":"50f5c98fe0314ccd5500a51d",

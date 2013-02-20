@@ -49,7 +49,7 @@
             get: function(path, params, successFn, errorFn) {}
           }
         };
-        return spyOn(trello.lists, 'get').andCallFake(function(path, params, successFn, errorFn) {
+        spyOn(trello.lists, 'get').andCallFake(function(path, params, successFn, errorFn) {
           if (path === '50f5c98fe0314ccd5500a51d') {
             return successFn(listResponse);
           } else {
@@ -58,6 +58,7 @@
             }
           }
         });
+        return spyOn(nicetohave.Card.prototype, "load");
       });
       it('when asked to load, loads name', function() {
         var list, privilige;
@@ -97,6 +98,15 @@
         expect(list.cards()[0]).toBe(card1);
         expect(list.cards()[1]).toBe(card2);
         return expect(list.cards()[2]).toBe(card3);
+      });
+      it('when asked to load, call load on Card', function() {
+        var list, privilige;
+        privilige = new nicetohave.Privilege(trello);
+        privilige.level(nicetohave.PrivilegeLevel.READ_ONLY);
+        list = new nicetohave.List("50f5c98fe0314ccd5500a51d", privilige);
+        expect(nicetohave.Card.prototype.load).not.toHaveBeenCalled();
+        list.load();
+        return expect(nicetohave.Card.prototype.load).toHaveBeenCalled();
       });
       listResponse = JSON.parse("{\"id\":\"50f5c98fe0314ccd5500a51d\",\n \"name\":\"Doing\",\n \"closed\":false,\n \"idBoard\":\"50f5c98fe0314ccd5500a51b\",\n \"pos\":32768}");
       return cardsResponse = JSON.parse("[\n    {\n       \"id\":\"510557f3e002eb8d56002e04\",\n       \"badges\":{\n          \"votes\":0,\n          \"viewingMemberVoted\":false,\n          \"subscribed\":false,\n          \"fogbugz\":\"\",\n          \"checkItems\":0,\n          \"checkItemsChecked\":0,\n          \"comments\":10,\n          \"attachments\":0,\n          \"description\":false,\n          \"due\":null\n       },\n       \"checkItemStates\":[\n\n       ],\n       \"closed\":false,\n       \"dateLastActivity\":\"2013-01-27T21:27:31.963Z\",\n       \"desc\":\"\",\n       \"due\":null,\n       \"idBoard\":\"50f5c98fe0314ccd5500a51b\",\n       \"idChecklists\":[\n\n       ],\n       \"idList\":\"50f5c98fe0314ccd5500a51d\",\n       \"idMembers\":[\n\n       ],\n       \"idMembersVoted\":[\n\n       ],\n       \"idShort\":1,\n       \"idAttachmentCover\":null,\n       \"manualCoverAttachment\":false,\n       \"labels\":[\n\n       ],\n       \"name\":\"Test card\",\n       \"pos\":65535,\n       \"shortUrl\":\"https://trello.com/c/MZkgftNb\",\n       \"subscribed\":false,\n       \"url\":\"https://trello.com/card/test-card/50f5c98fe0314ccd5500a51b/1\"\n    },\n    {\n       \"id\":\"5105af6108fa2a6e21000dc5\",\n       \"badges\":{\n          \"votes\":0,\n          \"viewingMemberVoted\":false,\n          \"subscribed\":false,\n          \"fogbugz\":\"\",\n          \"checkItems\":0,\n          \"checkItemsChecked\":0,\n          \"comments\":6,\n          \"attachments\":0,\n          \"description\":false,\n          \"due\":null\n       },\n       \"checkItemStates\":[\n\n       ],\n       \"closed\":false,\n       \"dateLastActivity\":\"2013-01-29T23:32:37.852Z\",\n       \"desc\":\"\",\n       \"due\":null,\n       \"idBoard\":\"50f5c98fe0314ccd5500a51b\",\n       \"idChecklists\":[\n\n       ],\n       \"idList\":\"50f5c98fe0314ccd5500a51d\",\n       \"idMembers\":[\n\n       ],\n       \"idMembersVoted\":[\n\n       ],\n       \"idShort\":2,\n       \"idAttachmentCover\":null,\n       \"manualCoverAttachment\":false,\n       \"labels\":[\n\n       ],\n       \"name\":\"Another test card with assignments\",\n       \"pos\":131071,\n       \"shortUrl\":\"https://trello.com/c/ZtpHkA0R\",\n       \"subscribed\":false,\n       \"url\":\"https://trello.com/card/another-test-card-with-assignments/50f5c98fe0314ccd5500a51b/2\"\n    },\n    {\n       \"id\":\"5122b28d00e3df314d005722\",\n       \"badges\":{\n          \"votes\":0,\n          \"viewingMemberVoted\":false,\n          \"subscribed\":false,\n          \"fogbugz\":\"\",\n          \"checkItems\":0,\n          \"checkItemsChecked\":0,\n          \"comments\":3,\n          \"attachments\":0,\n          \"description\":false,\n          \"due\":null\n       },\n       \"checkItemStates\":[\n\n       ],\n       \"closed\":false,\n       \"dateLastActivity\":\"2013-02-18T23:03:10.779Z\",\n       \"desc\":\"\",\n       \"due\":null,\n       \"idBoard\":\"50f5c98fe0314ccd5500a51b\",\n       \"idChecklists\":[\n\n       ],\n       \"idList\":\"50f5c98fe0314ccd5500a51d\",\n       \"idMembers\":[\n\n       ],\n       \"idMembersVoted\":[\n\n       ],\n       \"idShort\":3,\n       \"idAttachmentCover\":null,\n       \"manualCoverAttachment\":false,\n       \"labels\":[\n\n       ],\n       \"name\":\"Foop\",\n       \"pos\":196607,\n       \"shortUrl\":\"https://trello.com/c/pbhsBB5j\",\n       \"subscribed\":false,\n       \"url\":\"https://trello.com/card/foop/50f5c98fe0314ccd5500a51b/3\"\n    }\n]");

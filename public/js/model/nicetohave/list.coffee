@@ -21,9 +21,12 @@ class List
       trello.lists.get(@id(), {},
         (data) =>
           @_parseFields(data)
-          trello.lists.get(@id() + "/cards", {}, ((data) => @_parseCards(data)), onFailure)
-        ,
-        onFailure)
+          trello.lists.get(@id() + "/cards", {},
+          (data) =>
+            @_parseCards(data)
+            @_loadAllCards()
+          , onFailure)
+        , onFailure)
     )
 
   _parseFields: (data) =>
@@ -31,6 +34,10 @@ class List
 
   _parseCards: (data) =>
     @cards(@_getCard(c.id) for c in data)
+
+  _loadAllCards: =>
+    for card in @cards()
+      card.load()
 
   _getCard: (id) =>
     if not @_existingCards[id]?
