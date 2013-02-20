@@ -30,16 +30,16 @@
     }
 
     List.prototype.load = function() {
-      var onFailure, onSuccess,
+      var onFailure,
         _this = this;
       this.loadStatus("in-progress");
-      onSuccess = onFailure = function() {
+      onFailure = function() {
         return _this.loadStatus("load-failed");
       };
       return this.privilege.using(nicetohave.PrivilegeLevel.READ_ONLY, function(trello) {
-        return trello.lists.get(_this.id(), function(data) {
+        return trello.lists.get(_this.id(), {}, function(data) {
           _this._parseFields(data);
-          return trello.lists.get(_this.id() + "/cards", (function(data) {
+          return trello.lists.get(_this.id() + "/cards", {}, (function(data) {
             return _this._parseCards(data);
           }), onFailure);
         }, onFailure);
@@ -52,7 +52,6 @@
 
     List.prototype._parseCards = function(data) {
       var c;
-      console.dir(data);
       return this.cards((function() {
         var _i, _len, _results;
         _results = [];

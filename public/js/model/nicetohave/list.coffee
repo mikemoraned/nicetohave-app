@@ -14,13 +14,12 @@ class List
 
   load: () =>
     @loadStatus("in-progress")
-    onSuccess =
     onFailure = => @loadStatus("load-failed")
     @privilege.using(nicetohave.PrivilegeLevel.READ_ONLY, (trello) =>
-      trello.lists.get(@id(),
+      trello.lists.get(@id(), {},
         (data) =>
           @_parseFields(data)
-          trello.lists.get(@id() + "/cards", ((data) => @_parseCards(data)), onFailure)
+          trello.lists.get(@id() + "/cards", {}, ((data) => @_parseCards(data)), onFailure)
         ,
         onFailure)
     )
@@ -29,7 +28,6 @@ class List
     @name(data.name)
 
   _parseCards: (data) =>
-    console.dir(data)
     @cards(@_getCard(c.id) for c in data)
 
   _getCard: (id) =>
