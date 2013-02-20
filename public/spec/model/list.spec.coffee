@@ -60,7 +60,11 @@ describe 'List', ->
 
       list = new nicetohave.List("50f5c98fe0314ccd5500a51d", privilige)
 
+      expect(list.loadStatus()).toEqual("created")
+
       list.load()
+
+      expect(list.loadStatus()).toEqual("load-success")
 
       expect(trello.lists.get).toHaveBeenCalled()
       expect(list.cards().length).toEqual(3)
@@ -74,7 +78,11 @@ describe 'List', ->
 
       list = new nicetohave.List("50f5c98fe0314ccd5500a51d", privilige)
 
+      expect(list.loadStatus()).toEqual("created")
+
       list.load()
+
+      expect(list.loadStatus()).toEqual("load-success")
 
       expect(trello.lists.get).toHaveBeenCalled()
 
@@ -100,7 +108,11 @@ describe 'List', ->
 
       expect(nicetohave.Card.prototype.load).not.toHaveBeenCalled()
 
+      expect(list.loadStatus()).toEqual("created")
+
       list.load()
+
+      expect(list.loadStatus()).toEqual("load-success")
 
       expect(nicetohave.Card.prototype.load).toHaveBeenCalled()
 

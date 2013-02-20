@@ -74,7 +74,9 @@
         privilige = new nicetohave.Privilege(trello);
         privilige.level(nicetohave.PrivilegeLevel.READ_ONLY);
         list = new nicetohave.List("50f5c98fe0314ccd5500a51d", privilige);
+        expect(list.loadStatus()).toEqual("created");
         list.load();
+        expect(list.loadStatus()).toEqual("load-success");
         expect(trello.lists.get).toHaveBeenCalled();
         expect(list.cards().length).toEqual(3);
         expect(list.cards()[0].id()).toEqual("510557f3e002eb8d56002e04");
@@ -86,7 +88,9 @@
         privilige = new nicetohave.Privilege(trello);
         privilige.level(nicetohave.PrivilegeLevel.READ_ONLY);
         list = new nicetohave.List("50f5c98fe0314ccd5500a51d", privilige);
+        expect(list.loadStatus()).toEqual("created");
         list.load();
+        expect(list.loadStatus()).toEqual("load-success");
         expect(trello.lists.get).toHaveBeenCalled();
         expect(list.cards().length).toEqual(3);
         expect(list.cards()[0].id()).toEqual("510557f3e002eb8d56002e04");
@@ -105,7 +109,9 @@
         privilige.level(nicetohave.PrivilegeLevel.READ_ONLY);
         list = new nicetohave.List("50f5c98fe0314ccd5500a51d", privilige);
         expect(nicetohave.Card.prototype.load).not.toHaveBeenCalled();
+        expect(list.loadStatus()).toEqual("created");
         list.load();
+        expect(list.loadStatus()).toEqual("load-success");
         return expect(nicetohave.Card.prototype.load).toHaveBeenCalled();
       });
       listResponse = JSON.parse("{\"id\":\"50f5c98fe0314ccd5500a51d\",\n \"name\":\"Doing\",\n \"closed\":false,\n \"idBoard\":\"50f5c98fe0314ccd5500a51b\",\n \"pos\":32768}");

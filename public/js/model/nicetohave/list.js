@@ -44,7 +44,8 @@
           _this._parseFields(data);
           return trello.lists.get(_this.id() + "/cards", {}, function(data) {
             _this._parseCards(data);
-            return _this._loadAllCards();
+            _this._loadAllCards();
+            return _this.loadStatus("load-success");
           }, onFailure);
         }, onFailure);
       });

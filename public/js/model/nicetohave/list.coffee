@@ -25,6 +25,7 @@ class List
           (data) =>
             @_parseCards(data)
             @_loadAllCards()
+            @loadStatus("load-success")
           , onFailure)
         , onFailure)
     )
