@@ -66,6 +66,30 @@ describe 'List', ->
       expect(list.cards()[1].id()).toEqual("5105af6108fa2a6e21000dc5")
       expect(list.cards()[2].id()).toEqual("5122b28d00e3df314d005722")
 
+    it 'when asked to load twice, re-use existing card objects for same id', ->
+      privilige = new nicetohave.Privilege(trello)
+      privilige.level(nicetohave.PrivilegeLevel.READ_ONLY)
+
+      list = new nicetohave.List("50f5c98fe0314ccd5500a51d", privilige)
+
+      list.load()
+
+      expect(trello.lists.get).toHaveBeenCalled()
+
+      expect(list.cards().length).toEqual(3)
+      expect(list.cards()[0].id()).toEqual("510557f3e002eb8d56002e04")
+      expect(list.cards()[1].id()).toEqual("5105af6108fa2a6e21000dc5")
+      expect(list.cards()[2].id()).toEqual("5122b28d00e3df314d005722")
+
+      [card1, card2, card3] = list.cards()
+
+      list.load()
+
+      expect(list.cards().length).toEqual(3)
+      expect(list.cards()[0]).toBe(card1)
+      expect(list.cards()[1]).toBe(card2)
+      expect(list.cards()[2]).toBe(card3)
+
     listResponse = JSON.parse("""
                               {"id":"50f5c98fe0314ccd5500a51d",
                                "name":"Doing",

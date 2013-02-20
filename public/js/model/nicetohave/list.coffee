@@ -9,6 +9,8 @@ class List
     @privilege = privilege
     @loadStatus = ko.observable("created")
 
+    @_existingCards = {}
+
     @name = ko.observable("")
     @cards = ko.observableArray()
 
@@ -31,6 +33,8 @@ class List
     @cards(@_getCard(c.id) for c in data)
 
   _getCard: (id) =>
-    new nicetohave.Card(id, @privilege)
+    if not @_existingCards[id]?
+      @_existingCards[id] = new nicetohave.Card(id, @privilege)
+    @_existingCards[id]
 
 window.nicetohave.List = List

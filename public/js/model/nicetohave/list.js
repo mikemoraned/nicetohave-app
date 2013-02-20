@@ -25,6 +25,7 @@
       this.id = ko.observable(id);
       this.privilege = privilege;
       this.loadStatus = ko.observable("created");
+      this._existingCards = {};
       this.name = ko.observable("");
       this.cards = ko.observableArray();
     }
@@ -64,7 +65,10 @@
     };
 
     List.prototype._getCard = function(id) {
-      return new nicetohave.Card(id, this.privilege);
+      if (!(this._existingCards[id] != null)) {
+        this._existingCards[id] = new nicetohave.Card(id, this.privilege);
+      }
+      return this._existingCards[id];
     };
 
     return List;
