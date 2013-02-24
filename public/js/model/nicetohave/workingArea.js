@@ -14,6 +14,9 @@
       this.privilege = privilege;
       this.saveEdits = __bind(this.saveEdits, this);
 
+      this.load = __bind(this.load, this);
+
+      this.board = ko.observable(new nicetohave.Board("50f5c98fe0314ccd5500a51b", this.privilege));
       this.list = ko.observable(new nicetohave.List("50f5c98fe0314ccd5500a51d", this.privilege));
       this.cards = ko.computed(function() {
         return _this.list().cards();
@@ -38,6 +41,11 @@
         return _this.haveEdits().length > 0;
       });
     }
+
+    WorkingArea.prototype.load = function() {
+      this.board().load();
+      return this.list().load();
+    };
 
     WorkingArea.prototype.saveEdits = function() {
       return this.haveEdits().forEach(function(h) {

@@ -31,7 +31,10 @@ class List
     )
 
   _parseFields: (data) =>
-    @name(data.name)
+    if data?
+      @name(data.name)
+    else
+      console.log("Workaround for list data being undefined and then later defined, https://trello.com/c/k2VKLuJg")
 
   _parseCards: (data) =>
     @cards(@_getCard(c.id) for c in data)

@@ -13,6 +13,7 @@
 <% script('/js/model/nicetohave/comment.js') -%>
 <% script('/js/model/nicetohave/card.js') -%>
 <% script('/js/model/nicetohave/list.js') -%>
+<% script('/js/model/nicetohave/board.js') -%>
 <% script('/js/model/nicetohave/categorisation.js') -%>
 <% script('/js/model/nicetohave/workingArea.js') -%>
 <% script('/js/appViewModel2.js') -%>
@@ -48,11 +49,15 @@
         <div data-bind="with: workingArea">
             <div class="row">
                 <button data-bind="click: saveEdits, enable: hasEdits">Save changes</button>
+                <button data-bind="click: load">Load</button>
+            </div>
+
+            <div class="row">
+                <h1 data-bind="text: board().name">  </h1>
             </div>
 
             <div class="row">
                 <h1 data-bind="text: list().name">  </h1>
-                <button data-bind="click: list().load">Load</button>
             </div>
 
             <div class="row">

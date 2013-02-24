@@ -3,6 +3,9 @@ window.nicetohave ?= {}
 class WorkingArea
 
   constructor: (@privilege) ->
+
+    @board = ko.observable(new nicetohave.Board("50f5c98fe0314ccd5500a51b", @privilege))
+
     @list = ko.observable(new nicetohave.List("50f5c98fe0314ccd5500a51d", @privilege))
     @cards = ko.computed(() => @list().cards())
 
@@ -22,6 +25,10 @@ class WorkingArea
     )
 
     @hasEdits = ko.computed(() => @haveEdits().length > 0)
+
+  load: =>
+    @board().load()
+    @list().load()
 
   saveEdits: =>
     @haveEdits().forEach((h) -> h.saveEdits())

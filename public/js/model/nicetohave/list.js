@@ -52,7 +52,11 @@
     };
 
     List.prototype._parseFields = function(data) {
-      return this.name(data.name);
+      if (data != null) {
+        return this.name(data.name);
+      } else {
+        return console.log("Workaround for list data being undefined and then later defined, https://trello.com/c/k2VKLuJg");
+      }
     };
 
     List.prototype._parseCards = function(data) {

@@ -1,0 +1,63 @@
+describe 'Board', ->
+
+  describe 'initial state', ->
+
+    it 'cannot be created without an id', ->
+      expect(-> new nicetohave.Board()).toThrow({ message: "Not a valid board id: 'undefined'" })
+
+    it 'must only accept an id of the right format (alphanumeric)', ->
+      expect(-> new nicetohave.Board("  csdc  scd")).toThrow({ message: "Not a valid board id: '  csdc  scd'" })
+
+    it 'must only accept an id of the right length (24)', ->
+      expect(-> new nicetohave.Board("4eea503d91e31d174600")).toThrow({ message: "Not a valid board id: '4eea503d91e31d174600'" })
+
+    it 'has an empty name', ->
+      board = new nicetohave.Board("4eea503d91e31d174600008f")
+      expect(board.name()).toBe ""
+
+    it 'has an id', ->
+      board = new nicetohave.Board("4eea503d91e31d174600008f")
+      expect(board.id()).toBe "4eea503d91e31d174600008f"
+
+    it 'has a created load status', ->
+      board = new nicetohave.Board("4eea503d91e31d174600008f")
+      expect(board.loadStatus()).toBe "created"
+
+  describe 'loading', ->
+
+    trello = null
+
+    beforeEach ->
+      trello = {
+        boards: {
+          get: (path, params, successFn, errorFn) ->
+        }
+      }
+      spyOn(trello.boards, 'get').andCallFake((path, params, successFn, errorFn) ->
+        if (path == '50f5c98fe0314ccd5500a51b')
+          successFn(boardResponse)
+        else
+          if (path == '50f5c98fe0314ccd5500a51b/boards')
+            successFn(listsResponse)
+      )
+
+      spyOn(nicetohave.Card.prototype, "load")
+
+    it 'when asked to load, loads name', ->
+      privilige = new nicetohave.Privilege(trello)
+      privilige.level(nicetohave.PrivilegeLevel.READ_ONLY)
+
+      board = new nicetohave.Board("50f5c98fe0314ccd5500a51b", privilige)
+
+      board.load()
+
+      expect(trello.boards.get).toHaveBeenCalled()
+      expect(board.name()).toEqual("NiceToHaveTestBoard")
+
+    boardResponse = JSON.parse("""
+                               {"id":"50f5c98fe0314ccd5500a51b","name":"NiceToHaveTestBoard","desc":"","closed":false,"idOrganization":null,"pinned":true,"url":"https://trello.com/board/nicetohavetestboard/50f5c98fe0314ccd5500a51b","prefs":{"permissionLevel":"private","voting":"members","comments":"members","invitations":"members","selfJoin":false,"cardCovers":true},"labelNames":{"red":"","orange":"","yellow":"","green":"","blue":"","purple":""}}
+                               """)
+
+    listsResponse = JSON.parse("""
+                               []
+                               """)
