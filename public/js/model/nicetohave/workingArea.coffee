@@ -6,8 +6,12 @@ class WorkingArea
 
     @board = ko.observable(new nicetohave.Board("50f5c98fe0314ccd5500a51b", @privilege))
 
-    @list = ko.observable(new nicetohave.List("50f5c98fe0314ccd5500a51d", @privilege))
-    @cards = ko.computed(() => @list().cards())
+    @cards = ko.computed(() =>
+      cards = []
+      for list in @board().lists()
+        cards = cards.concat(list.cards())
+      cards
+    )
 
     @_cachedCategorisations = {};
 
@@ -28,7 +32,6 @@ class WorkingArea
 
   load: =>
     @board().load()
-    @list().load()
 
   saveEdits: =>
     @haveEdits().forEach((h) -> h.saveEdits())

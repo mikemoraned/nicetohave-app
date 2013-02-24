@@ -17,9 +17,15 @@
       this.load = __bind(this.load, this);
 
       this.board = ko.observable(new nicetohave.Board("50f5c98fe0314ccd5500a51b", this.privilege));
-      this.list = ko.observable(new nicetohave.List("50f5c98fe0314ccd5500a51d", this.privilege));
       this.cards = ko.computed(function() {
-        return _this.list().cards();
+        var cards, list, _i, _len, _ref1;
+        cards = [];
+        _ref1 = _this.board().lists();
+        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+          list = _ref1[_i];
+          cards = cards.concat(list.cards());
+        }
+        return cards;
       });
       this._cachedCategorisations = {};
       this.categorisations = ko.computed(function() {
@@ -43,8 +49,7 @@
     }
 
     WorkingArea.prototype.load = function() {
-      this.board().load();
-      return this.list().load();
+      return this.board().load();
     };
 
     WorkingArea.prototype.saveEdits = function() {

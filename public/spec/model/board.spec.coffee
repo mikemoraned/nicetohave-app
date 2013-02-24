@@ -100,6 +100,20 @@ describe 'Board', ->
       expect(board.lists()[1]).toBe(list2)
       expect(board.lists()[2]).toBe(list3)
 
+    it 'when asked to load, call load on List', ->
+      privilige = new nicetohave.Privilege(trello)
+      privilige.level(nicetohave.PrivilegeLevel.READ_ONLY)
+
+      board = new nicetohave.Board("50f5c98fe0314ccd5500a51b", privilige)
+
+      expect(board.loadStatus()).toEqual("created")
+
+      board.load()
+
+      expect(board.loadStatus()).toEqual("load-success")
+
+      expect(nicetohave.List.prototype.load).toHaveBeenCalled()
+
     boardResponse = JSON.parse("""
                                {"id":"50f5c98fe0314ccd5500a51b","name":"NiceToHaveTestBoard","desc":"","closed":false,"idOrganization":null,"pinned":true,"url":"https://trello.com/board/nicetohavetestboard/50f5c98fe0314ccd5500a51b","prefs":{"permissionLevel":"private","voting":"members","comments":"members","invitations":"members","selfJoin":false,"listCovers":true},"labelNames":{"red":"","orange":"","yellow":"","green":"","blue":"","purple":""}}
                                """)
