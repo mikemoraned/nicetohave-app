@@ -71,7 +71,35 @@ describe 'Board', ->
       expect(board.lists()[0].id()).toEqual("50f5c98fe0314ccd5500a51c")
       expect(board.lists()[1].id()).toEqual("50f5c98fe0314ccd5500a51d")
       expect(board.lists()[2].id()).toEqual("50f5c98fe0314ccd5500a51e")
-      
+
+    it 'when asked to load twice, re-use existing list objects for same id', ->
+      privilige = new nicetohave.Privilege(trello)
+      privilige.level(nicetohave.PrivilegeLevel.READ_ONLY)
+
+      board = new nicetohave.Board("50f5c98fe0314ccd5500a51b", privilige)
+
+      expect(board.loadStatus()).toEqual("created")
+
+      board.load()
+
+      expect(board.loadStatus()).toEqual("load-success")
+
+      expect(trello.boards.get).toHaveBeenCalled()
+
+      expect(board.lists().length).toEqual(3)
+      expect(board.lists()[0].id()).toEqual("50f5c98fe0314ccd5500a51c")
+      expect(board.lists()[1].id()).toEqual("50f5c98fe0314ccd5500a51d")
+      expect(board.lists()[2].id()).toEqual("50f5c98fe0314ccd5500a51e")
+
+      [list1, list2, list3] = board.lists()
+
+      board.load()
+
+      expect(board.lists().length).toEqual(3)
+      expect(board.lists()[0]).toBe(list1)
+      expect(board.lists()[1]).toBe(list2)
+      expect(board.lists()[2]).toBe(list3)
+
     boardResponse = JSON.parse("""
                                {"id":"50f5c98fe0314ccd5500a51b","name":"NiceToHaveTestBoard","desc":"","closed":false,"idOrganization":null,"pinned":true,"url":"https://trello.com/board/nicetohavetestboard/50f5c98fe0314ccd5500a51b","prefs":{"permissionLevel":"private","voting":"members","comments":"members","invitations":"members","selfJoin":false,"listCovers":true},"labelNames":{"red":"","orange":"","yellow":"","green":"","blue":"","purple":""}}
                                """)
