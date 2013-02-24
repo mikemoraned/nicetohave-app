@@ -27,7 +27,7 @@
       this.id = ko.observable(id);
       this.privilege = privilege;
       this.loadStatus = ko.observable("created");
-      this._existingCards = {};
+      this._existingLists = {};
       this.name = ko.observable("");
       this.lists = ko.observableArray();
     }
@@ -41,7 +41,12 @@
       };
       return this.privilege.using(nicetohave.PrivilegeLevel.READ_ONLY, function(trello) {
         return trello.boards.get(_this.id(), {}, function(data) {
-          return _this._parseFields(data);
+          _this._parseFields(data);
+          return trello.boards.get(_this.id() + "/lists", {}, function(data) {
+            _this._parseLists(data);
+            _this._loadAllLists();
+            return _this.loadStatus("load-success");
+          }, onFailure);
         }, onFailure);
       });
     };

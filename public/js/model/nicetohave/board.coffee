@@ -9,7 +9,7 @@ class Board
     @privilege = privilege
     @loadStatus = ko.observable("created")
 
-    @_existingCards = {}
+    @_existingLists = {}
 
     @name = ko.observable("")
     @lists = ko.observableArray()
@@ -21,6 +21,12 @@ class Board
       trello.boards.get(@id(), {},
       (data) =>
         @_parseFields(data)
+        trello.boards.get(@id() + "/lists", {},
+        (data) =>
+          @_parseLists(data)
+          @_loadAllLists()
+          @loadStatus("load-success")
+        , onFailure)
       , onFailure)
     )
 
