@@ -61,6 +61,9 @@ class Categorisation
       @editableRisk.hasEdits() || @editableValue.hasEdits()
     )
 
+  fullyDefined: () =>
+    @editableRisk.hasValue() && @editableRisk.hasValue()
+
   axis: (name) =>
     if name == "risk"
       @editableRisk

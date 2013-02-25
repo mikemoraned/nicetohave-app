@@ -6,31 +6,53 @@ class D3CategorisationView
     @maxRadius = 7
     @_setup()
 
-  subscribeTo: (categorisations) =>
-    categorisations.subscribe(@_update)
-    @_update(categorisations())
-
   _setup: () =>
     @root = d3.select(@rootSelector)
 
     @valueScale = d3.scale.linear()
-    .domain([0, 3])
+    .domain([0, 1])
     .range([0, @width])
     .clamp(true)
 
     @riskScale = d3.scale.linear()
-    .domain([0, 4])
-    .range([0, @height])
+    .domain([0, 1])
+    .range([0, 0.75 * @height])
+    .clamp(true)
+
+    @uncategorisedScale = d3.scale.linear()
+    .domain([0, 1])
+    .range([0.75 * @height, @height])
     .clamp(true)
 
     self = @
 
     dragmove = (d) ->
-      d3.select(this)
-      .attr("cx", d.x = self._clampX(d3.event.x) )
-      .attr("cy", d.y = self._clampY(d3.event.y) )
+#      d3.select(this)
+#      .attr("cx", d.x = self._clampX(d3.event.x) )
+#      .attr("cy", d.y = self._clampY(d3.event.y) )
 
     @drag = d3.behavior.drag().origin(Object).on("drag", dragmove)
+
+  subscribeTo: (categorisations) =>
+    @mapped = ko.computed(() =>
+      categorisations().map(@_mappingForCategorisation)
+    )
+    @mapped.subscribe(@_updateDisplay)
+    @_updateDisplay(@mapped())
+
+  _mappingForCategorisation: (c) =>
+    if c.fullyDefined()
+      console.log("Fully defined")
+      id: c.card.id()
+      x: @valueScale(c.axis("value").value())
+      y: @riskScale(c.axis("risk").value())
+      card: c.card
+    else
+      console.log("Not defined")
+      id: c.card.id()
+      x: @valueScale(c.axis("value").value() or Math.random())
+      y: @uncategorisedScale(Math.random())
+      card: c.card
 
   _clampX: (x) =>
     Math.max(@maxRadius, Math.min(x, @width - @maxRadius))
@@ -38,12 +60,18 @@ class D3CategorisationView
   _clampY: (y) =>
     Math.max(@maxRadius, Math.min(y, @height - @maxRadius))
 
-  _update: (categorisations) =>
-    console.dir(categorisations)
+  _updateDisplay: (mapped) =>
+    console.dir(mapped)
 
-    identity = (d) => d.card.id()
+    existingCategorisations = @root.selectAll("circle.card").data(mapped, (d) => d.id)
 
-    existingCategorisations = @root.selectAll("circle.card").data(categorisations, identity)
+    existingCategorisations
+    .transition()
+    .duration(200)
+    .attr("cx", (d) => d.x)
+    .attr("cy", (d) => d.y)
+    .select("title")
+    .text((d) -> return d.card.name())
 
     newCategorisations = existingCategorisations.enter()
 
@@ -58,15 +86,8 @@ class D3CategorisationView
     .text((d) -> return d.card.name())
 
     newCategorisationCircles
-    .attr("cx", (d) => @_clampX(@valueScale(3)))
-    .attr("cy", (d) =>
-      d.y = d.y || @_clampY(@riskScale(Math.random()))
-    )
-    .transition()
-    .duration(500)
-    .attr("cx", (d) =>
-      d.x = d.x || @_clampX(@valueScale(Math.random()))
-    )
+    .attr("cx", (d) => d.x)
+    .attr("cy", (d) => d.y)
 
     existingCategorisations.exit()
     .transition()

@@ -13,35 +13,60 @@
       this.rootSelector = rootSelector;
       this.width = width;
       this.height = height;
-      this._update = __bind(this._update, this);
+      this._updateDisplay = __bind(this._updateDisplay, this);
 
       this._clampY = __bind(this._clampY, this);
 
       this._clampX = __bind(this._clampX, this);
 
-      this._setup = __bind(this._setup, this);
+      this._mappingForCategorisation = __bind(this._mappingForCategorisation, this);
 
       this.subscribeTo = __bind(this.subscribeTo, this);
+
+      this._setup = __bind(this._setup, this);
 
       this.maxRadius = 7;
       this._setup();
     }
 
-    D3CategorisationView.prototype.subscribeTo = function(categorisations) {
-      categorisations.subscribe(this._update);
-      return this._update(categorisations());
-    };
-
     D3CategorisationView.prototype._setup = function() {
       var dragmove, self;
       this.root = d3.select(this.rootSelector);
-      this.valueScale = d3.scale.linear().domain([0, 3]).range([0, this.width]).clamp(true);
-      this.riskScale = d3.scale.linear().domain([0, 4]).range([0, this.height]).clamp(true);
+      this.valueScale = d3.scale.linear().domain([0, 1]).range([0, this.width]).clamp(true);
+      this.riskScale = d3.scale.linear().domain([0, 1]).range([0, 0.75 * this.height]).clamp(true);
+      this.uncategorisedScale = d3.scale.linear().domain([0, 1]).range([0.75 * this.height, this.height]).clamp(true);
       self = this;
-      dragmove = function(d) {
-        return d3.select(this).attr("cx", d.x = self._clampX(d3.event.x)).attr("cy", d.y = self._clampY(d3.event.y));
-      };
+      dragmove = function(d) {};
       return this.drag = d3.behavior.drag().origin(Object).on("drag", dragmove);
+    };
+
+    D3CategorisationView.prototype.subscribeTo = function(categorisations) {
+      var _this = this;
+      this.mapped = ko.computed(function() {
+        return categorisations().map(_this._mappingForCategorisation);
+      });
+      this.mapped.subscribe(this._updateDisplay);
+      return this._updateDisplay(this.mapped());
+    };
+
+    D3CategorisationView.prototype._mappingForCategorisation = function(c) {
+      if (c.fullyDefined()) {
+        console.log("Fully defined");
+        return {
+          id: c.card.id(),
+          x: this.valueScale(c.axis("value").value()),
+          y: this.riskScale(c.axis("risk").value()),
+          card: c.card
+        };
+      } else {
+        console.log("Not defined");
+        return {
+          id: c.card.id(),
+          x: this.valueScale(c.axis("value").value() || Math.random()),
+          y: this.uncategorisedScale(Math.random()),
+          card: c.card
+        };
+      }
     };
 
     D3CategorisationView.prototype._clampX = function(x) {
@@ -52,25 +77,29 @@
       return Math.max(this.maxRadius, Math.min(y, this.height - this.maxRadius));
     };
 
-    D3CategorisationView.prototype._update = function(categorisations) {
-      var existingCategorisations, identity, newCategorisationCircles, newCategorisations,
+    D3CategorisationView.prototype._updateDisplay = function(mapped) {
+      var existingCategorisations, newCategorisationCircles, newCategorisations,
         _this = this;
-      console.dir(categorisations);
-      identity = function(d) {
-        return d.card.id();
-      };
-      existingCategorisations = this.root.selectAll("circle.card").data(categorisations, identity);
+      console.dir(mapped);
+      existingCategorisations = this.root.selectAll("circle.card").data(mapped, function(d) {
+        return d.id;
+      });
+      existingCategorisations.transition().duration(200).attr("cx", function(d) {
+        return d.x;
+      }).attr("cy", function(d) {
+        return d.y;
+      }).select("title").text(function(d) {
+        return d.card.name();
+      });
       newCategorisations = existingCategorisations.enter();
       newCategorisationCircles = newCategorisations.append("circle").attr("class", "card").attr("r", this.maxRadius).call(this.drag);
       newCategorisationCircles.append("title").text(function(d) {
         return d.card.name();
       });
       newCategorisationCircles.attr("cx", function(d) {
-        return _this._clampX(_this.valueScale(3));
+        return d.x;
       }).attr("cy", function(d) {
-        return d.y = d.y || _this._clampY(_this.riskScale(Math.random()));
-      }).transition().duration(500).attr("cx", function(d) {
-        return d.x = d.x || _this._clampX(_this.valueScale(Math.random()));
+        return d.y;
       });
       return existingCategorisations.exit().transition().duration(200).style("opacity", 0).duration(250).attr("cy", function(d) {
         return _this.riskScale(4);

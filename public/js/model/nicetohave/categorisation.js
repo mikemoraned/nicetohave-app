@@ -84,6 +84,8 @@
 
       this.axis = __bind(this.axis, this);
 
+      this.fullyDefined = __bind(this.fullyDefined, this);
+
       var _this = this;
       this.card = card;
       this.commentRisk = new CommentPosition();
@@ -107,6 +109,10 @@
         return _this.editableRisk.hasEdits() || _this.editableValue.hasEdits();
       });
     }
+
+    Categorisation.prototype.fullyDefined = function() {
+      return this.editableRisk.hasValue() && this.editableRisk.hasValue();
+    };
 
     Categorisation.prototype.axis = function(name) {
       if (name === "risk") {
