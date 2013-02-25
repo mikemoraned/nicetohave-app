@@ -52,6 +52,8 @@
     __extends(EditablePosition, _super);
 
     function EditablePosition(commentPos) {
+      this.discardEdits = __bind(this.discardEdits, this);
+
       var _this = this;
       EditablePosition.__super__.constructor.call(this, null);
       this.value = ko.computed({
@@ -71,6 +73,10 @@
       });
     }
 
+    EditablePosition.prototype.discardEdits = function() {
+      return this._v(null);
+    };
+
     return EditablePosition;
 
   })(Position);
@@ -81,6 +87,8 @@
       this._updateCommentValues = __bind(this._updateCommentValues, this);
 
       this.saveEdits = __bind(this.saveEdits, this);
+
+      this.discardEdits = __bind(this.discardEdits, this);
 
       this.axis = __bind(this.axis, this);
 
@@ -121,6 +129,13 @@
         return this.editableValue;
       } else {
         return null;
+      }
+    };
+
+    Categorisation.prototype.discardEdits = function() {
+      if (this.hasEdits()) {
+        this.editableRisk.discardEdits();
+        return this.editableValue.discardEdits();
       }
     };
 

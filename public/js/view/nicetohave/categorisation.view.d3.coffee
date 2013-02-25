@@ -27,11 +27,15 @@ class D3CategorisationView
     self = @
 
     dragmove = (d) ->
-#      d3.select(this)
-#      .attr("cx", d.x = self._clampX(d3.event.x) )
-#      .attr("cy", d.y = self._clampY(d3.event.y) )
+      d3.select(this)
+      .attr("cx", d.x = self._clampX(d3.event.x) )
+      .attr("cy", d.y = self._clampY(d3.event.y) )
 
-    @drag = d3.behavior.drag().origin(Object).on("drag", dragmove)
+    dragend = (d) =>
+      d.cat.axis("value").value(@valueScale.invert(d.x))
+      d.cat.axis("risk").value(@riskScale.invert(d.y))
+
+    @drag = d3.behavior.drag().origin(Object).on("drag", dragmove).on("dragend", dragend)
 
   subscribeTo: (categorisations) =>
     @mapped = ko.computed(() =>
@@ -45,12 +49,12 @@ class D3CategorisationView
       id: c.card.id()
       x: @valueScale(c.axis("value").value())
       y: @riskScale(c.axis("risk").value())
-      card: c.card
+      cat: c
     else
       id: c.card.id()
       x: @valueScale(c.axis("value").value() or Math.random())
       y: @uncategorisedScale(Math.random())
-      card: c.card
+      cat: c
 
   _clampX: (x) =>
     Math.max(@maxRadius, Math.min(x, @width - @maxRadius))
@@ -59,8 +63,6 @@ class D3CategorisationView
     Math.max(@maxRadius, Math.min(y, @height - @maxRadius))
 
   _updateDisplay: (mapped) =>
-    console.dir(mapped)
-
     existingCategorisations = @root.selectAll("circle.card").data(mapped, (d) => d.id)
 
     existingCategorisations
@@ -69,7 +71,7 @@ class D3CategorisationView
     .attr("cx", (d) => d.x)
     .attr("cy", (d) => d.y)
     .select("title")
-    .text((d) -> return d.card.name())
+    .text((d) -> return d.cat.card.name())
 
     newCategorisations = existingCategorisations.enter()
 
@@ -81,7 +83,7 @@ class D3CategorisationView
 
     newCategorisationCircles
     .append("title")
-    .text((d) -> return d.card.name())
+    .text((d) -> return d.cat.card.name())
 
     newCategorisationCircles
     .attr("cx", (d) => d.x)

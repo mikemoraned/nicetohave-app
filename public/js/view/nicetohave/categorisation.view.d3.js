@@ -30,14 +30,21 @@
     }
 
     D3CategorisationView.prototype._setup = function() {
-      var dragmove, self;
+      var dragend, dragmove, self,
+        _this = this;
       this.root = d3.select(this.rootSelector);
       this.valueScale = d3.scale.linear().domain([0, 1]).range([this.maxRadius, this.width - this.maxRadius]).clamp(true);
       this.riskScale = d3.scale.linear().domain([0, 1]).range([this.maxRadius, 0.75 * (this.height - this.maxRadius)]).clamp(true);
       this.uncategorisedScale = d3.scale.linear().domain([0, 1]).range([0.75 * (this.height - this.maxRadius), this.height - this.maxRadius]).clamp(true);
       self = this;
-      dragmove = function(d) {};
-      return this.drag = d3.behavior.drag().origin(Object).on("drag", dragmove);
+      dragmove = function(d) {
+        return d3.select(this).attr("cx", d.x = self._clampX(d3.event.x)).attr("cy", d.y = self._clampY(d3.event.y));
+      };
+      dragend = function(d) {
+        d.cat.axis("value").value(_this.valueScale.invert(d.x));
+        return d.cat.axis("risk").value(_this.riskScale.invert(d.y));
+      };
+      return this.drag = d3.behavior.drag().origin(Object).on("drag", dragmove).on("dragend", dragend);
     };
 
     D3CategorisationView.prototype.subscribeTo = function(categorisations) {
@@ -55,14 +62,14 @@
           id: c.card.id(),
           x: this.valueScale(c.axis("value").value()),
           y: this.riskScale(c.axis("risk").value()),
-          card: c.card
+          cat: c
         };
       } else {
         return {
           id: c.card.id(),
           x: this.valueScale(c.axis("value").value() || Math.random()),
           y: this.uncategorisedScale(Math.random()),
-          card: c.card
+          cat: c
         };
       }
     };
@@ -78,7 +85,6 @@
     D3CategorisationView.prototype._updateDisplay = function(mapped) {
       var existingCategorisations, newCategorisationCircles, newCategorisations,
         _this = this;
-      console.dir(mapped);
       existingCategorisations = this.root.selectAll("circle.card").data(mapped, function(d) {
         return d.id;
       });
@@ -87,12 +93,12 @@
       }).attr("cy", function(d) {
         return d.y;
       }).select("title").text(function(d) {
-        return d.card.name();
+        return d.cat.card.name();
       });
       newCategorisations = existingCategorisations.enter();
       newCategorisationCircles = newCategorisations.append("circle").attr("class", "card").attr("r", this.maxRadius).call(this.drag);
       newCategorisationCircles.append("title").text(function(d) {
-        return d.card.name();
+        return d.cat.card.name();
       });
       newCategorisationCircles.attr("cx", function(d) {
         return d.x;

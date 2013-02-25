@@ -14,6 +14,8 @@
       this.privilege = privilege;
       this.saveEdits = __bind(this.saveEdits, this);
 
+      this.discardEdits = __bind(this.discardEdits, this);
+
       this.load = __bind(this.load, this);
 
       this.board = ko.observable(new nicetohave.Board("50f5c98fe0314ccd5500a51b", this.privilege));
@@ -50,6 +52,12 @@
 
     WorkingArea.prototype.load = function() {
       return this.board().load();
+    };
+
+    WorkingArea.prototype.discardEdits = function() {
+      return this.haveEdits().forEach(function(h) {
+        return h.discardEdits();
+      });
     };
 
     WorkingArea.prototype.saveEdits = function() {

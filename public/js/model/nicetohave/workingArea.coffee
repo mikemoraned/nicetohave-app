@@ -33,6 +33,9 @@ class WorkingArea
   load: =>
     @board().load()
 
+  discardEdits: =>
+    @haveEdits().forEach((h) -> h.discardEdits())
+
   saveEdits: =>
     @haveEdits().forEach((h) -> h.saveEdits())
 

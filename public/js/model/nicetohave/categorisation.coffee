@@ -36,6 +36,9 @@ class EditablePosition extends Position
     )
     @hasEdits = ko.computed(() => @value() != commentPos.value())
 
+  discardEdits: () =>
+    @_v(null)
+
 class Categorisation
 
   constructor: (card) ->
@@ -71,6 +74,11 @@ class Categorisation
       @editableValue
     else
       null
+
+  discardEdits: () =>
+    if @hasEdits()
+      @editableRisk.discardEdits()
+      @editableValue.discardEdits()
 
   saveEdits: () =>
     if @hasEdits()
