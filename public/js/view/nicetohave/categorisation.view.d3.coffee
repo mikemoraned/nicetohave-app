@@ -11,17 +11,17 @@ class D3CategorisationView
 
     @valueScale = d3.scale.linear()
     .domain([0, 1])
-    .range([0, @width])
+    .range([@maxRadius, @width - @maxRadius])
     .clamp(true)
 
     @riskScale = d3.scale.linear()
     .domain([0, 1])
-    .range([0, 0.75 * @height])
+    .range([@maxRadius, 0.75 * (@height - @maxRadius)])
     .clamp(true)
 
     @uncategorisedScale = d3.scale.linear()
     .domain([0, 1])
-    .range([0.75 * @height, @height])
+    .range([0.75 * (@height - @maxRadius), @height - @maxRadius])
     .clamp(true)
 
     self = @
@@ -42,13 +42,11 @@ class D3CategorisationView
 
   _mappingForCategorisation: (c) =>
     if c.fullyDefined()
-      console.log("Fully defined")
       id: c.card.id()
       x: @valueScale(c.axis("value").value())
       y: @riskScale(c.axis("risk").value())
       card: c.card
     else
-      console.log("Not defined")
       id: c.card.id()
       x: @valueScale(c.axis("value").value() or Math.random())
       y: @uncategorisedScale(Math.random())

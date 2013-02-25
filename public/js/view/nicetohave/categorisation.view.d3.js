@@ -32,9 +32,9 @@
     D3CategorisationView.prototype._setup = function() {
       var dragmove, self;
       this.root = d3.select(this.rootSelector);
-      this.valueScale = d3.scale.linear().domain([0, 1]).range([0, this.width]).clamp(true);
-      this.riskScale = d3.scale.linear().domain([0, 1]).range([0, 0.75 * this.height]).clamp(true);
-      this.uncategorisedScale = d3.scale.linear().domain([0, 1]).range([0.75 * this.height, this.height]).clamp(true);
+      this.valueScale = d3.scale.linear().domain([0, 1]).range([this.maxRadius, this.width - this.maxRadius]).clamp(true);
+      this.riskScale = d3.scale.linear().domain([0, 1]).range([this.maxRadius, 0.75 * (this.height - this.maxRadius)]).clamp(true);
+      this.uncategorisedScale = d3.scale.linear().domain([0, 1]).range([0.75 * (this.height - this.maxRadius), this.height - this.maxRadius]).clamp(true);
       self = this;
       dragmove = function(d) {};
       return this.drag = d3.behavior.drag().origin(Object).on("drag", dragmove);
@@ -51,7 +51,6 @@
 
     D3CategorisationView.prototype._mappingForCategorisation = function(c) {
       if (c.fullyDefined()) {
-        console.log("Fully defined");
         return {
           id: c.card.id(),
           x: this.valueScale(c.axis("value").value()),
@@ -59,7 +58,6 @@
           card: c.card
         };
       } else {
-        console.log("Not defined");
         return {
           id: c.card.id(),
           x: this.valueScale(c.axis("value").value() || Math.random()),
