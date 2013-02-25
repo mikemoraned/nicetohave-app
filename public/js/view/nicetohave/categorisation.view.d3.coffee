@@ -5,6 +5,7 @@ class D3CategorisationView
   constructor: (@rootSelector, @width, @height) ->
     @maxRadius = 7
     @_setup()
+    @_existingMappingForCategorisation = {}
 
   _setup: () =>
     @root = d3.select(@rootSelector)
@@ -32,8 +33,10 @@ class D3CategorisationView
       .attr("cy", d.y = self._clampY(d3.event.y) )
 
     dragend = (d) =>
-      d.cat.axis("value").value(@valueScale.invert(d.x))
-      d.cat.axis("risk").value(@riskScale.invert(d.y))
+      newValue = @valueScale.invert(d.x)
+      newRisk = @riskScale.invert(d.y)
+      d.cat.axis("value").value(newValue)
+      d.cat.axis("risk").value(newRisk)
 
     @drag = d3.behavior.drag().origin(Object).on("drag", dragmove).on("dragend", dragend)
 
@@ -45,16 +48,23 @@ class D3CategorisationView
     @_updateDisplay(@mapped())
 
   _mappingForCategorisation: (c) =>
+    id = c.card.id()
+
+    mapping = @_existingMappingForCategorisation[id]
+    if not mapping?
+      mapping = { id: id, cat: c }
+      @_existingMappingForCategorisation[id] = mapping
+
     if c.fullyDefined()
-      id: c.card.id()
-      x: @valueScale(c.axis("value").value())
-      y: @riskScale(c.axis("risk").value())
-      cat: c
+      mapping.x = @valueScale(c.axis("value").value())
+      mapping.y = @riskScale(c.axis("risk").value())
     else
-      id: c.card.id()
-      x: @valueScale(c.axis("value").value() or Math.random())
-      y: @uncategorisedScale(Math.random())
-      cat: c
+      if not mapping.x?
+        mapping.x = @valueScale(c.axis("value").value() or Math.random())
+      if not mapping.y?
+        mapping.y = @uncategorisedScale(Math.random())
+
+    mapping
 
   _clampX: (x) =>
     Math.max(@maxRadius, Math.min(x, @width - @maxRadius))

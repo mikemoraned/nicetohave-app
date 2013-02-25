@@ -27,6 +27,7 @@
 
       this.maxRadius = 7;
       this._setup();
+      this._existingMappingForCategorisation = {};
     }
 
     D3CategorisationView.prototype._setup = function() {
@@ -41,8 +42,11 @@
         return d3.select(this).attr("cx", d.x = self._clampX(d3.event.x)).attr("cy", d.y = self._clampY(d3.event.y));
       };
       dragend = function(d) {
-        d.cat.axis("value").value(_this.valueScale.invert(d.x));
-        return d.cat.axis("risk").value(_this.riskScale.invert(d.y));
+        var newRisk, newValue;
+        newValue = _this.valueScale.invert(d.x);
+        newRisk = _this.riskScale.invert(d.y);
+        d.cat.axis("value").value(newValue);
+        return d.cat.axis("risk").value(newRisk);
       };
       return this.drag = d3.behavior.drag().origin(Object).on("drag", dragmove).on("dragend", dragend);
     };
@@ -57,21 +61,28 @@
     };
 
     D3CategorisationView.prototype._mappingForCategorisation = function(c) {
-      if (c.fullyDefined()) {
-        return {
-          id: c.card.id(),
-          x: this.valueScale(c.axis("value").value()),
-          y: this.riskScale(c.axis("risk").value()),
+      var id, mapping;
+      id = c.card.id();
+      mapping = this._existingMappingForCategorisation[id];
+      if (!(mapping != null)) {
+        mapping = {
+          id: id,
           cat: c
         };
-      } else {
-        return {
-          id: c.card.id(),
-          x: this.valueScale(c.axis("value").value() || Math.random()),
-          y: this.uncategorisedScale(Math.random()),
-          cat: c
-        };
+        this._existingMappingForCategorisation[id] = mapping;
       }
+      if (c.fullyDefined()) {
+        mapping.x = this.valueScale(c.axis("value").value());
+        mapping.y = this.riskScale(c.axis("risk").value());
+      } else {
+        if (!(mapping.x != null)) {
+          mapping.x = this.valueScale(c.axis("value").value() || Math.random());
+        }
+        if (!(mapping.y != null)) {
+          mapping.y = this.uncategorisedScale(Math.random());
+        }
+      }
+      return mapping;
     };
 
     D3CategorisationView.prototype._clampX = function(x) {
