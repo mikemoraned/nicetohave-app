@@ -11,7 +11,7 @@
     function AppViewModel() {
       this.privilege = new nicetohave.Privilege(Trello);
       this.workingArea = ko.observable(new nicetohave.WorkingArea(this.privilege));
-      this.categoriseView = new nicetohave.D3CategorisationView(600, 600);
+      this.categoriseView = new nicetohave.D3CategorisationView("svg", 600, 600);
       this.categoriseView.subscribeTo(this.workingArea().categorisations);
     }
 

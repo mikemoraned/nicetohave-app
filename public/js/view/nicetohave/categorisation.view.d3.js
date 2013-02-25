@@ -9,13 +9,22 @@
 
   D3CategorisationView = (function() {
 
-    function D3CategorisationView(width, height) {
+    function D3CategorisationView(rootSelector, width, height) {
+      this.rootSelector = rootSelector;
       this.width = width;
       this.height = height;
       this._update = __bind(this._update, this);
 
+      this._clampY = __bind(this._clampY, this);
+
+      this._clampX = __bind(this._clampX, this);
+
+      this._setup = __bind(this._setup, this);
+
       this.subscribeTo = __bind(this.subscribeTo, this);
 
+      this.maxRadius = 7;
+      this._setup();
     }
 
     D3CategorisationView.prototype.subscribeTo = function(categorisations) {
@@ -23,8 +32,49 @@
       return this._update(categorisations());
     };
 
+    D3CategorisationView.prototype._setup = function() {
+      var dragmove, self;
+      this.root = d3.select(this.rootSelector);
+      this.valueScale = d3.scale.linear().domain([0, 3]).range([0, this.width]).clamp(true);
+      this.riskScale = d3.scale.linear().domain([0, 4]).range([0, this.height]).clamp(true);
+      self = this;
+      dragmove = function(d) {
+        return d3.select(this).attr("cx", d.x = self._clampX(d3.event.x)).attr("cy", d.y = self._clampY(d3.event.y));
+      };
+      return this.drag = d3.behavior.drag().origin(Object).on("drag", dragmove);
+    };
+
+    D3CategorisationView.prototype._clampX = function(x) {
+      return Math.max(this.maxRadius, Math.min(x, this.width - this.maxRadius));
+    };
+
+    D3CategorisationView.prototype._clampY = function(y) {
+      return Math.max(this.maxRadius, Math.min(y, this.height - this.maxRadius));
+    };
+
     D3CategorisationView.prototype._update = function(categorisations) {
-      return console.dir(categorisations);
+      var existingCategorisations, identity, newCategorisationCircles, newCategorisations,
+        _this = this;
+      console.dir(categorisations);
+      identity = function(d) {
+        return d.card.id();
+      };
+      existingCategorisations = this.root.selectAll("circle.card").data(categorisations, identity);
+      newCategorisations = existingCategorisations.enter();
+      newCategorisationCircles = newCategorisations.append("circle").attr("class", "card").attr("r", this.maxRadius).call(this.drag);
+      newCategorisationCircles.append("title").text(function(d) {
+        return d.card.name();
+      });
+      newCategorisationCircles.attr("cx", function(d) {
+        return _this._clampX(_this.valueScale(3));
+      }).attr("cy", function(d) {
+        return d.y = d.y || _this._clampY(_this.riskScale(Math.random()));
+      }).transition().duration(500).attr("cx", function(d) {
+        return d.x = d.x || _this._clampX(_this.valueScale(Math.random()));
+      });
+      return existingCategorisations.exit().transition().duration(200).style("opacity", 0).duration(250).attr("cy", function(d) {
+        return _this.riskScale(4);
+      }).remove();
     };
 
     return D3CategorisationView;
