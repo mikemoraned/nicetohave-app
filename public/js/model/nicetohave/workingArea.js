@@ -19,15 +19,13 @@
       this.load = __bind(this.load, this);
 
       this.board = ko.observable(new nicetohave.Board("50f5c98fe0314ccd5500a51b", this.privilege));
+      this.selectedList = ko.observable();
       this.cards = ko.computed(function() {
-        var cards, list, _i, _len, _ref1;
-        cards = [];
-        _ref1 = _this.board().lists();
-        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-          list = _ref1[_i];
-          cards = cards.concat(list.cards());
+        if (_this.selectedList() != null) {
+          return _this.selectedList().cards();
+        } else {
+          return [];
         }
-        return cards;
       });
       this._cachedCategorisations = {};
       this.categorisations = ko.computed(function() {
