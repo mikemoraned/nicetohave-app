@@ -43,7 +43,8 @@
     D3CategorisationView.prototype._setupScales = function() {
       this.valueScale = d3.scale.linear().domain([0, 1]).range([this.maxRadius, this.width - this.maxRadius]).clamp(true);
       this.riskScale = d3.scale.linear().domain([0, 1]).range([this.maxRadius, 0.75 * (this.height - this.maxRadius)]).clamp(true);
-      return this.uncategorisedScale = d3.scale.linear().domain([0, 1]).range([0.75 * (this.height - this.maxRadius), this.height - this.maxRadius]).clamp(true);
+      this.uncategorisedValueScale = this.valueScale;
+      return this.uncategorisedRiskScale = d3.scale.linear().domain([0, 1]).range([0.75 * (this.height - this.maxRadius), this.height - this.maxRadius]).clamp(true);
     };
 
     D3CategorisationView.prototype._setupDragBehaviour = function() {
@@ -87,12 +88,14 @@
         mapping.x = this.valueScale(c.axis("value").value());
         mapping.y = this.riskScale(c.axis("risk").value());
       } else {
-        if (!(mapping.x != null)) {
-          mapping.x = this.valueScale(c.axis("value").value() || Math.random());
+        if (!(mapping.uncategorisedX != null)) {
+          mapping.uncategorisedX = this.uncategorisedValueScale(Math.random());
         }
-        if (!(mapping.y != null)) {
-          mapping.y = this.uncategorisedScale(Math.random());
+        if (!(mapping.uncategorisedY != null)) {
+          mapping.uncategorisedY = this.uncategorisedRiskScale(Math.random());
         }
+        mapping.x = mapping.uncategorisedX;
+        mapping.y = mapping.uncategorisedY;
       }
       return mapping;
     };

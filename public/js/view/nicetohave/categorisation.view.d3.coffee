@@ -23,7 +23,9 @@ class D3CategorisationView
     .range([@maxRadius, 0.75 * (@height - @maxRadius)])
     .clamp(true)
 
-    @uncategorisedScale = d3.scale.linear()
+    @uncategorisedValueScale = @valueScale
+
+    @uncategorisedRiskScale = d3.scale.linear()
     .domain([0, 1])
     .range([0.75 * (@height - @maxRadius), @height - @maxRadius])
     .clamp(true)
@@ -63,10 +65,12 @@ class D3CategorisationView
       mapping.x = @valueScale(c.axis("value").value())
       mapping.y = @riskScale(c.axis("risk").value())
     else
-      if not mapping.x?
-        mapping.x = @valueScale(c.axis("value").value() or Math.random())
-      if not mapping.y?
-        mapping.y = @uncategorisedScale(Math.random())
+      if not mapping.uncategorisedX?
+        mapping.uncategorisedX = @uncategorisedValueScale(Math.random())
+      if not mapping.uncategorisedY?
+        mapping.uncategorisedY = @uncategorisedRiskScale(Math.random())
+      mapping.x = mapping.uncategorisedX
+      mapping.y = mapping.uncategorisedY
 
     mapping
 
