@@ -13,7 +13,7 @@
 
     function Position(v) {
       this.hasValue = __bind(this.hasValue, this);
-      this._v = ko.observable(v != null ? this.clamp(v) : null);
+      this._v = ko.observable(v != null ? this.normalize(v) : null);
     }
 
     Position.prototype.hasValue = function() {
@@ -22,6 +22,10 @@
 
     Position.prototype.clamp = function(v) {
       return Math.min(1.0, Math.max(0.0, v));
+    };
+
+    Position.prototype.normalize = function(v) {
+      return parseFloat(this.clamp(v).toFixed(3));
     };
 
     return Position;
@@ -38,7 +42,7 @@
       this.value = ko.computed({
         read: this._v,
         write: function(v) {
-          return _this._v(_this.clamp(v));
+          return _this._v(_this.normalize(v));
         }
       });
     }
@@ -65,7 +69,7 @@
           }
         },
         write: function(v) {
-          return _this._v(_this.clamp(v));
+          return _this._v(_this.normalize(v));
         }
       });
       this.hasEdits = ko.computed(function() {

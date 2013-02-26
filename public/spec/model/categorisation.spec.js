@@ -192,16 +192,16 @@
         categorisation.saveEdits();
         return expect(card.comments().length).toEqual(1);
       });
-      return it('when local edits made, and value is different, and save requested, then a comment is saved containing changes', function() {
+      it('when local edits made, and value is different, and save requested, then a comment is saved containing changes', function() {
         var card, categorisation;
         card = new nicetohave.DummyCard();
         card.comments([new nicetohave.Comment("risk:0.6 value:0.7")]);
         categorisation = new nicetohave.Categorisation(card);
         expect(categorisation.axis("risk").hasValue()).toEqual(true);
-        expect(categorisation.axis("risk").value()).toEqual(0.6);
+        expect(categorisation.axis("risk").value()).toEqual(0.60);
         expect(categorisation.axis("risk").hasEdits()).toEqual(false);
         expect(categorisation.axis("value").hasValue()).toEqual(true);
-        expect(categorisation.axis("value").value()).toEqual(0.7);
+        expect(categorisation.axis("value").value()).toEqual(0.70);
         expect(categorisation.axis("value").hasEdits()).toEqual(false);
         expect(categorisation.hasEdits()).toEqual(false);
         categorisation.axis("value").value(0.8);
@@ -217,6 +217,24 @@
         expect(card.comments().length).toEqual(2);
         expect(card.comments()[0].text()).toEqual("value:0.8");
         return expect(categorisation.hasEdits()).toEqual(false);
+      });
+      it('when accepting edit, round to reasonable accuracy to stop knock-on serialised form being too verbose', function() {
+        var card, categorisation;
+        card = new nicetohave.DummyCard();
+        card.comments([new nicetohave.Comment("risk:0.6 value:0.7")]);
+        categorisation = new nicetohave.Categorisation(card);
+        categorisation.axis("value").value(0.711111);
+        categorisation.axis("risk").value(0.666666666);
+        expect(categorisation.axis("risk").value()).toEqual(0.667);
+        return expect(categorisation.axis("value").value()).toEqual(0.711);
+      });
+      return it('when reading comment, round to reasonable accuracy to be consistent with what we accept on edits', function() {
+        var card, categorisation;
+        card = new nicetohave.DummyCard();
+        card.comments([new nicetohave.Comment("risk:0.666666666 value:0.711111")]);
+        categorisation = new nicetohave.Categorisation(card);
+        expect(categorisation.axis("risk").value()).toEqual(0.667);
+        return expect(categorisation.axis("value").value()).toEqual(0.711);
       });
     });
   });

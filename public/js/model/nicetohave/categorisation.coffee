@@ -3,12 +3,15 @@ window.nicetohave ?= {}
 class Position
 
   constructor: (v) ->
-    @_v = ko.observable(if v? then @clamp(v) else null)
+    @_v = ko.observable(if v? then @normalize(v) else null)
 
   hasValue: () => @value()?
 
   clamp: (v) ->
     Math.min(1.0, Math.max(0.0, v))
+
+  normalize: (v) ->
+    parseFloat(@clamp(v).toFixed(3))
 
 
 class CommentPosition extends Position
@@ -18,7 +21,7 @@ class CommentPosition extends Position
     @value = ko.computed(
       read: @_v
       write: (v) =>
-        @_v(@clamp(v))
+        @_v(@normalize(v))
     )
 
 class EditablePosition extends Position
@@ -32,7 +35,7 @@ class EditablePosition extends Position
         else
           commentPos.value()
       write: (v) =>
-        @_v(@clamp(v))
+        @_v(@normalize(v))
     )
     @hasEdits = ko.computed(() => @value() != commentPos.value())
 
