@@ -9,10 +9,11 @@
 
   D3CategorisationView = (function() {
 
-    function D3CategorisationView(rootSelector, width, height) {
+    function D3CategorisationView(rootSelector, width, height, maxRadius) {
       this.rootSelector = rootSelector;
       this.width = width;
       this.height = height;
+      this.maxRadius = maxRadius != null ? maxRadius : 7;
       this._updateDisplay = __bind(this._updateDisplay, this);
 
       this._clampY = __bind(this._clampY, this);
@@ -23,20 +24,31 @@
 
       this.subscribeTo = __bind(this.subscribeTo, this);
 
+      this._setupDragBehaviour = __bind(this._setupDragBehaviour, this);
+
+      this._setupScales = __bind(this._setupScales, this);
+
       this._setup = __bind(this._setup, this);
 
-      this.maxRadius = 7;
       this._setup();
       this._existingMappingForCategorisation = {};
     }
 
     D3CategorisationView.prototype._setup = function() {
-      var dragend, dragmove, self,
-        _this = this;
       this.root = d3.select(this.rootSelector);
+      this._setupScales();
+      return this._setupDragBehaviour();
+    };
+
+    D3CategorisationView.prototype._setupScales = function() {
       this.valueScale = d3.scale.linear().domain([0, 1]).range([this.maxRadius, this.width - this.maxRadius]).clamp(true);
       this.riskScale = d3.scale.linear().domain([0, 1]).range([this.maxRadius, 0.75 * (this.height - this.maxRadius)]).clamp(true);
-      this.uncategorisedScale = d3.scale.linear().domain([0, 1]).range([0.75 * (this.height - this.maxRadius), this.height - this.maxRadius]).clamp(true);
+      return this.uncategorisedScale = d3.scale.linear().domain([0, 1]).range([0.75 * (this.height - this.maxRadius), this.height - this.maxRadius]).clamp(true);
+    };
+
+    D3CategorisationView.prototype._setupDragBehaviour = function() {
+      var dragend, dragmove, self,
+        _this = this;
       self = this;
       dragmove = function(d) {
         return d3.select(this).attr("cx", d.x = self._clampX(d3.event.x)).attr("cy", d.y = self._clampY(d3.event.y));

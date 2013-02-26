@@ -2,14 +2,17 @@ window.nicetohave ?= {}
 
 class D3CategorisationView
 
-  constructor: (@rootSelector, @width, @height) ->
-    @maxRadius = 7
+  constructor: (@rootSelector, @width, @height, @maxRadius = 7) ->
     @_setup()
     @_existingMappingForCategorisation = {}
 
   _setup: () =>
     @root = d3.select(@rootSelector)
 
+    @_setupScales()
+    @_setupDragBehaviour()
+
+  _setupScales: () =>
     @valueScale = d3.scale.linear()
     .domain([0, 1])
     .range([@maxRadius, @width - @maxRadius])
@@ -25,6 +28,7 @@ class D3CategorisationView
     .range([0.75 * (@height - @maxRadius), @height - @maxRadius])
     .clamp(true)
 
+  _setupDragBehaviour: () =>
     self = @
 
     dragmove = (d) ->
