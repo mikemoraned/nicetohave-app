@@ -2,21 +2,17 @@ window.nicetohave ?= {}
 
 class WorkingArea
 
-  constructor: (@privilege) ->
+  constructor: (board, @privilege) ->
 
-    @board = ko.observable(new nicetohave.Board("50f5c98fe0314ccd5500a51b", @privilege))
+#    @board = ko.observable(new nicetohave.Board("50f5c98fe0314ccd5500a51b", @privilege))
 
-    @selectedList = ko.observable()
+    @board = ko.observable(board)
 
     @cards = ko.computed(() =>
-#      cards = []
-#      for list in @board().lists()
-#        cards = cards.concat(list.cards())
-#      cards
-      if @selectedList()?
-        @selectedList().cards()
-      else
-        []
+      cards = []
+      for list in @board().lists()
+        cards = cards.concat(list.cards())
+      cards
     )
 
     @_cachedCategorisations = {};

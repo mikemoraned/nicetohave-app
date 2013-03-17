@@ -110,10 +110,6 @@
                 <h1 data-bind="text: board().name">  </h1>
             </div>
 
-            <div>
-                <select data-bind="options: board().lists, value: selectedList, optionsText: 'name', enable: board().lists().length > 0"></select>
-            </div>
-
             <div class="row">
                 <div id="categorisations" data-bind="foreach: categorisations">
                     <h2 data-bind="text: card.name"></span></h2>
@@ -137,6 +133,8 @@ $(function($) {
     var model = new nicetohave.AppViewModel();
 
     ko.applyBindings(model);
+
+    model.run();
 });
 
 </script>
