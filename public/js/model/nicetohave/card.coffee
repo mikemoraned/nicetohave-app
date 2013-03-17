@@ -47,8 +47,6 @@ class Card
     @name(data.name)
 
   _parseComments: (data) =>
-#    console.log("name: #{@name()}:")
-#    console.dir(data)
     @comments(data.map((d)->
       texts = (e.text for e in d.entities when e.type == 'comment')
       new nicetohave.Comment(texts[0])

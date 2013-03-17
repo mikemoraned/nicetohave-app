@@ -30,4 +30,5 @@ class Privilege
       scope: level.trelloScope
     })
 
+
 window.nicetohave.Privilege = Privilege

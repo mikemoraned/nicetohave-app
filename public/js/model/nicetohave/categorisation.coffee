@@ -21,10 +21,7 @@ class CommentPosition extends Position
     @value = ko.computed(
       read: @_v
       write: (v) =>
-        if v?
-          @_v(@normalize(v))
-        else
-          @_v(null)
+        @_v(@normalize(v))
     )
 
 class EditablePosition extends Position
@@ -38,15 +35,9 @@ class EditablePosition extends Position
         else
           commentPos.value()
       write: (v) =>
-        if v?
-          @_v(@normalize(v))
-        else
-          @_v(null)
+        @_v(@normalize(v))
     )
-    @hasEdits = ko.computed(() =>
-      console.log("my: #{@value()}, comment: #{commentPos.value()}")
-      @value() != commentPos.value()
-    )
+    @hasEdits = ko.computed(() => @value() != commentPos.value())
 
   discardEdits: () =>
     @_v(null)
@@ -101,19 +92,11 @@ class Categorisation
         formatted.push("value:#{@editableValue.value()}")
       @card.addComment(new nicetohave.Comment(formatted.join(" ")))
 
-      @editableRisk.discardEdits()
-      @editableValue.discardEdits()
-
   _updateCommentValues: (comments) =>
-    console.log("Updating based on comments for #{@card.name()}")
-    console.dir(comments)
     foundValue = { "risk" : false, "value" : false }
     axes = { "risk": @commentRisk, "value": @commentValue }
     for comment in comments
       @_parseComment(comment.text(), axes, foundValue)
-    for name in ["risk","value"]
-      if !foundValue[name]
-        axes[name].value(null)
 
   _parseComment: (text, axes, foundValue) ->
     re = /(risk|value):([\d.]+)/g

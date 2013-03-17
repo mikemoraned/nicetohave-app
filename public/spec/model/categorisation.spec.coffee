@@ -295,26 +295,3 @@ describe 'Categorisation', ->
 
       expect(categorisation.axis("risk").value()).toEqual(0.667)
       expect(categorisation.axis("value").value()).toEqual(0.711)
-
-  describe 'local edits followed by subsequent deletes', ->
-
-    it 'when local edits are saved, but subsequently deleted, we see the card as uncategorised again', ->
-      card = new nicetohave.DummyCard()
-      card.comments([])
-      categorisation = new nicetohave.Categorisation(card)
-      expect(categorisation.hasEdits()).toEqual(false)
-
-      categorisation.axis("value").value(0.7)
-      expect(categorisation.hasEdits()).toEqual(true)
-
-      expect(card.comments().length).toEqual(0)
-      categorisation.saveEdits()
-      expect(card.comments().length).toEqual(1)
-      expect(categorisation.hasEdits()).toEqual(false)
-
-      console.log("Do reset:")
-      card.comments([])
-
-      expect(categorisation.hasEdits()).toEqual(false)
-      expect(categorisation.axis("risk").hasValue()).toEqual(false)
-      expect(categorisation.axis("value").hasValue()).toEqual(false)
