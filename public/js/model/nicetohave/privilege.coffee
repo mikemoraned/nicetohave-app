@@ -28,7 +28,7 @@ class Privilege
         console.log("Error: #{m}")
       ,
       scope: level.trelloScope
-    });
+    })
 
 
 window.nicetohave.Privilege = Privilege
