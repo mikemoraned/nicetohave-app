@@ -58,9 +58,10 @@
     };
 
     WorkingArea.prototype.discardEdits = function() {
-      return this.haveEdits().forEach(function(h) {
+      this.haveEdits().forEach(function(h) {
         return h.discardEdits();
       });
+      return this.load();
     };
 
     WorkingArea.prototype.saveEdits = function() {

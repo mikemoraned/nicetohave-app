@@ -35,6 +35,7 @@ class WorkingArea
 
   discardEdits: =>
     @haveEdits().forEach((h) -> h.discardEdits())
+    @load()
 
   saveEdits: =>
     @haveEdits().forEach((h) -> h.saveEdits())
