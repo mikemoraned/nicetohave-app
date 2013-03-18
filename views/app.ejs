@@ -44,17 +44,23 @@
 
     <div class="container">
 
+        <div data-bind="with: workingArea">
+            <div class="row">
+                <h2 class="span9" data-bind="text: board().name">  </h2>
+                <form class="span12 well well-small form-actions form-inline">
+                    <fieldset>
+                        <div class="pull-right">
+                            <button type="submit" class="btn btn-primary" data-bind="click: saveEdits, enable: hasEdits">Save changes</button>
+                            <button type="button" class="btn" data-bind="click: discardEdits, enable: hasEdits">Cancel</button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+
         <div class="row">
             <div class="span12">
-                <svg viewBox="0 0 1200 600">
-
-                    <line x1="0" y1="150" x2="600" y2="150" class="divider horizontal print"/>
-                    <line x1="0" y1="300" x2="600" y2="300" class="divider horizontal print"/>
-                    <line x1="0" y1="450" x2="600" y2="450" class="divider horizontal print"/>
-
-                    <line x1="200" y1="0" x2="200" y2="600" class="divider vertical print"/>
-                    <line x1="400" y1="0" x2="400" y2="600" class="divider vertical print"/>
-
+                <svg viewBox="0 0 1200 600" width="100%" height="100%" preserveAspectRatio="xMinYMin meet">
                     <rect x="0"   y="0"   width="400" height="150" class="patch" />
                     <rect x="800" y="0"   width="400" height="150" class="patch" />
                     <rect x="400" y="150" width="400" height="150" class="patch" />
@@ -91,37 +97,6 @@
                         Uncategorized
                     </text>
                 </svg>
-            </div>
-        </div>
-
-        <div class="row">
-            <div data-bind="text: privilege.level().name"></div>
-        </div>
-
-        <div data-bind="with: workingArea">
-            <div class="row">
-                <button data-bind="click: saveEdits, enable: hasEdits">Save changes</button>
-                <button data-bind="click: discardEdits, enable: hasEdits">Discard changes</button>
-                <button data-bind="click: load">Load</button>
-            </div>
-
-            <div class="row">
-                <h1 data-bind="text: board().name">  </h1>
-            </div>
-
-            <div class="row">
-                <div id="categorisations" data-bind="foreach: categorisations">
-                    <h2 data-bind="text: card.name"></span></h2>
-                    <button data-bind="click: card.load">Load</button>
-                    <div id="comments" data-bind="foreach: card.comments">
-                        <li><span data-bind="text: text"></span></li>
-                    </div>
-                    <div id="axes" data-bind="foreach: axes">
-                        <div data-bind="style: { 'background-color': position.hasEdits() ? 'red' : 'blue'}">
-                            <span data-bind="text: name"></span>:<input data-bind="value: position.value">
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
