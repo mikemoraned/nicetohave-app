@@ -1,7 +1,7 @@
 {
   "name": "nice-to-have",
   "description": "Nice to have",
-  "version": "0.1beta",
+  "version": "0.1.0beta",
   "private": true,
   "dependencies": {
     "express": "3.x",
