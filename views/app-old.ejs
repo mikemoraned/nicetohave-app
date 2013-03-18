@@ -1,0 +1,263 @@
+<% layout('layout') -%>
+<% stylesheet('/css/app.css') -%>
+
+<% script('/js/d3.v3.min.js') -%>
+<% script('/Kickstrap/js/jquery-1.8.3.min.js') -%>
+<% script('/js/jquery.blockUI.js') -%>
+<% script('https://api.trello.com/1/client.js?key=afaec27e30009b0b1cfb14d85f384ee1') -%>
+<% script('/js/knockout-2.2.0.js') -%>
+<% script('/js/sammy-0.7.2.min.js') -%>
+<% script('/js/underscore-min.js') -%>
+
+<% script('/js/model/card.js') -%>
+<% script('/js/model/list.js') -%>
+<% script('/js/model/board.js') -%>
+<% script('/js/model/persistence.js') -%>
+
+<% script('/js/ko.binding-handlers.js') -%>
+<% script('/js/view/d3.categorise.view.js') -%>
+
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <a class="brand" href="/">Nice to have</a>
+                <div class="nav-collapse">
+                    <ul class="nav">
+                        <li><a href="/">Home</a></li>
+                        <li class="active"><a href="/app">The App</a></li>
+                    </ul>
+
+                    <ul class="nav pull-right">
+                        <li><a href="https://github.com/mikemoraned/nicetohave-app">v<%= settings.version %></a></li>
+                    </ul>
+                </div><!--/.nav-collapse -->
+            </div>
+        </div>
+    </div>
+
+    <h1 class="print" data-bind="text: board.name"></h1>
+    <div class="print" data-bind="visible: selectedList, with: selectedList">
+        <h2 data-bind="text: $data.name()"></h2>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="row noprint">
+                <div class="span12">
+                    <h2 data-bind="text: board.name">&nbsp;</h2>
+                </div>
+            </div>
+            <div class="row noprint">
+                <div class="span7">
+                    <form class="well well-small form-inline">
+                        <label for="board-id">Board Id</label>
+                        <input id="board-id" type="text" class="span3" data-bind="value: board.id, valueUpdate: 'afterkeydown'" placeholder="Your Board Id">
+                        <button type="submit" class="btn" data-bind="click: goToBoardId"><i class="icon-refresh"></i> <span data-bind="text: goToBoardIdActionName"></span></button>
+                    </form>
+                </div>
+                <div class="span5">
+                    <form class="well well-small form-inline">
+                        <label for="lists">List</label>
+                        <select id="lists" data-bind="options: board.lists, value: selectedList, optionsText: 'name', enable: board.lists().length > 0"></select>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <section data-bind="css: persistence.saveState">
+
+        <div class="row">
+            <div class="span7">
+                <table id="area" cellspacing="0" cellpadding="0">
+                    <col width="10%"/>
+                    <col width="30%"/>
+                    <col width="30%"/>
+                    <col width="30%"/>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th scope="col">Nice to Have</th>
+                            <th scope="col">Significant Business Value</th>
+                            <th scope="col">Critical</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">Low risk</th>
+                            <td colspan="3" rowspan="4">
+                                <svg viewBox="0 0 600 600">
+                                    <line x1="0" y1="150" x2="600" y2="150" class="divider horizontal print"/>
+                                    <line x1="0" y1="300" x2="600" y2="300" class="divider horizontal print"/>
+                                    <line x1="0" y1="450" x2="600" y2="450" class="divider horizontal print"/>
+
+                                    <line x1="200" y1="0" x2="200" y2="600" class="divider vertical print"/>
+                                    <line x1="400" y1="0" x2="400" y2="600" class="divider vertical print"/>
+
+                                    <rect x="0"   y="0"   width="200" height="150" class="patch" />
+                                    <rect x="400" y="0"   width="200" height="150" class="patch" />
+                                    <rect x="200" y="150" width="200" height="150" class="patch" />
+                                    <rect x="0"   y="300" width="200" height="150" class="patch" />
+                                    <rect x="400" y="300" width="200" height="150" class="patch" />
+
+                                    <rect x="0" y="450" width="600" height="150" class="patch uncategorized" />
+                                </svg>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Medium risk</th>
+                        </tr>
+                        <tr>
+                            <th scope="row">High risk</th>
+                        </tr>
+                        <tr>
+                            <th scope="row">Uncategorized</th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="span5 noprint" data-bind="visible: selectedList, with: selectedList">
+                <button class="btn btn-primary" type="button" data-bind="click: moveSelectedToTop, enable: hasSelected">
+                    <i class="icon-arrow-up"></i> move to top
+                </button>
+
+                <button class="btn btn-primary" type="button" data-bind="click: persistence.saveAll, enable: persistence.canSaveAll">
+                    <i class="icon-arrow-right"></i> save to trello
+                </button>
+
+                <div id="cards" data-bind="foreach: cards">
+                    <button class="btn card" type="button"
+                            data-bind="click: addToArea, event: { mouseover: highlight, mouseout: unHighlight }, css: { selected: selected, highlighted: highlighted }">
+                        <span data-bind="text: shortId"></span>:
+                        <span data-bind="text: name"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row noprint">
+            <div id="errors" class="span12" data-bind="foreach: persistence.errors, css: { found : persistence.errors().length > 0 }">
+                <div class="alert alert-error">
+                    <strong>Error</strong> <span data-bind="text: code"></span> <span data-bind="text: text"></span> Try again?
+                </div>
+            </div>
+        </div>
+
+        </section>
+    </div>
+
+<div class="print" data-bind="visible: selectedList, with: selectedList">
+    <div data-bind="foreach: cardsSortedByShortId">
+        <span class="card">
+            <span class="shortId" data-bind="text: shortId"></span>:
+            <span class="name" data-bind="text: name"></span>
+        </span>
+    </div>
+</div>
+
+<script type="application/javascript">
+
+$(function($) {
+    function NiceToHaveAppViewModel() {
+        // Data
+        var self = this;
+        self.persistence = new Persistence();
+        self.board = new Board(self.persistence);
+        self.selectedList = ko.observable();
+
+        self.goToBoardIdAction = ko.computed(function(){
+            var newHash = "#" + self.board.id();
+            if (location.hash === newHash) {
+                return "reload";
+            }
+            else {
+                return "goto";
+            }
+        });
+
+        self.goToBoardIdActionName = ko.computed(function(){
+            if (self.goToBoardIdAction() === 'reload') {
+                return "Reload";
+            }
+            else {
+                return "Go to";
+            }
+        });
+
+        self.cardsInArea = ko.computed(function() {
+            if (self.selectedList()) {
+                return self.selectedList().cards().filter(function(c) {
+                    return c.inArea();
+                });
+            } else {
+                return [];
+            }
+        });
+
+        self.cardsHighlightedInArea = ko.computed(function() {
+            if (self.selectedList()) {
+                return self.cardsInArea().filter(function(c) {
+                    return c.highlighted();
+                });
+            } else {
+                return [];
+            }
+        });
+
+        self.selectedList.subscribe(function(list){
+            console.log("Selected list changed");
+            list.refresh();
+        });
+
+        self.persistence.saveState.subscribe(function(state) {
+            if (self.selectedList() && state === 'saved') {
+                self.selectedList().refresh();
+            }
+        });
+
+        self.goToBoardId = function() {
+            if (self.goToBoardIdAction() === 'reload') {
+                location.reload();
+            }
+            else {
+                location.hash = "#" + self.board.id();
+            }
+        };
+
+        Sammy(function () {
+            this.get('#:boardId', function () {
+                self.board.goToBoardId(this.params.boardId);
+            });
+        }).run();
+    }
+
+    var model = new NiceToHaveAppViewModel();
+
+    ko.applyBindings(model);
+
+    var categoriseView = new D3CategoriseView(0, 0, 600, 600);
+    model.cardsInArea.subscribe(function(cards) {
+        categoriseView.update(cards);
+    });
+
+    model.persistence.saveState.subscribe(function(state) {
+        if (state === 'saving') {
+            $.blockUI();
+        }
+        else {
+            $.unblockUI();
+        }
+    });
+
+    Trello.authorize({
+        interactive:false,
+        success: model.updateLoggedIn
+    });
+});
+
+</script>

@@ -4,8 +4,6 @@ class WorkingArea
 
   constructor: (board, @privilege) ->
 
-#    @board = ko.observable(new nicetohave.Board("50f5c98fe0314ccd5500a51b", @privilege))
-
     @board = ko.observable(board)
 
     @cards = ko.computed(() =>

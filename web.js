@@ -38,12 +38,12 @@ app.get('/', function(req, res){
     res.render("index");
 });
 
-app.get('/app', function(req, res){
-    res.render("app");
+app.get('/app-old', function(req, res){
+    res.render("app-old");
 });
 
-app.get('/app2', function(req, res){
-    res.render("app2");
+app.get('/app', function(req, res){
+    res.render("app");
 });
 
 //Heroku
