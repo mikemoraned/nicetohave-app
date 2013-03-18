@@ -129,9 +129,7 @@ class D3CategorisationView
     .duration(200)
     .style("opacity", 0)
     .duration(250)
-    .attr("cy", (d) =>
-      @riskScale(4)
-    )
+    .attr("r", 0)
     .remove()
 
 window.nicetohave.D3CategorisationView = D3CategorisationView

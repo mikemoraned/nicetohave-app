@@ -22,15 +22,13 @@
         return WorkingArea.prototype.load.apply(_this, arguments);
       };
       this.board = ko.observable(board);
+      this.selectedList = ko.observable();
       this.cards = ko.computed(function() {
-        var cards, list, _i, _len, _ref1;
-        cards = [];
-        _ref1 = _this.board().lists();
-        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-          list = _ref1[_i];
-          cards = cards.concat(list.cards());
+        if (_this.selectedList() != null) {
+          return _this.selectedList().cards();
+        } else {
+          return [];
         }
-        return cards;
       });
       this._cachedCategorisations = {};
       this.categorisations = ko.computed(function() {

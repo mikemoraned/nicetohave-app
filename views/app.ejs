@@ -49,6 +49,7 @@
                 <h2 class="span9" data-bind="text: board().name">  </h2>
                 <form class="span12 well well-small form-actions form-inline">
                     <fieldset>
+                        <select data-bind="options: board().lists, value: selectedList, optionsText: 'name', enable: board().lists().length > 0"></select>
                         <div class="pull-right">
                             <button type="submit" class="btn btn-primary" data-bind="click: saveEdits, enable: hasEdits">Save changes</button>
                             <button type="button" class="btn" data-bind="click: discardEdits, enable: hasEdits">Cancel</button>

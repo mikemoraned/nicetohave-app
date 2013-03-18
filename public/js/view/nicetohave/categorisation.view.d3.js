@@ -163,9 +163,7 @@
       }).attr("cy", function(d) {
         return d.y;
       });
-      return existingCategorisations.exit().transition().duration(200).style("opacity", 0).duration(250).attr("cy", function(d) {
-        return _this.riskScale(4);
-      }).remove();
+      return existingCategorisations.exit().transition().duration(200).style("opacity", 0).duration(250).attr("r", 0).remove();
     };
 
     return D3CategorisationView;
