@@ -44,7 +44,6 @@ class EditablePosition extends Position
           @_v(null)
     )
     @hasEdits = ko.computed(() =>
-      console.log("my: #{@value()}, comment: #{commentPos.value()}")
       @value() != commentPos.value()
     )
 
@@ -105,8 +104,6 @@ class Categorisation
       @editableValue.discardEdits()
 
   _updateCommentValues: (comments) =>
-    console.log("Updating based on comments for #{@card.name()}")
-    console.dir(comments)
     foundValue = { "risk" : false, "value" : false }
     axes = { "risk": @commentRisk, "value": @commentValue }
     for comment in comments

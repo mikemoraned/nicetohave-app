@@ -2,7 +2,7 @@ window.nicetohave ?= {}
 
 class D3CategorisationView
 
-  constructor: (@rootSelector, @width, @height, @maxRadius = 7) ->
+  constructor: (@rootSelector, @width, @height, @maxRadius = 10) ->
     @_setup()
     @_existingMappingForCategorisation = {}
 
@@ -11,6 +11,7 @@ class D3CategorisationView
 
     @_setupScales()
     @_setupDragBehaviour()
+    @_resetUncategorisedArea()
 
   _setupScales: () =>
     @valueScale = d3.scale.linear()
@@ -46,12 +47,24 @@ class D3CategorisationView
 
     @drag = d3.behavior.drag().origin(Object).on("drag", dragmove).on("dragend", dragend)
 
+  _resetUncategorisedArea: () =>
+    @_nextFreeSlot = 0
+
+    @_nextFreeSlotXSpacing = @maxRadius * 2.5
+    @_nextFreeSlotYSpacing = @_nextFreeSlotXSpacing
+    @_nextFreeSlotXOffset = @maxRadius * 1.5
+    @_nextFreeSlotYOffset = (0.75 * @height) + @_nextFreeSlotYSpacing
+
+    freeX = (@width - (@_nextFreeSlotXOffset * 2))
+    @_cardsPerX = freeX / @_nextFreeSlotXSpacing
+
   subscribeTo: (categorisations) =>
     @mapped = ko.computed(() =>
       categorisations().map(@_mappingForCategorisation)
     )
     @mapped.subscribe(@_updateDisplay)
     @_updateDisplay(@mapped())
+    @_resetUncategorisedArea()
 
   _mappingForCategorisation: (c) =>
     id = c.card.id()
@@ -65,14 +78,18 @@ class D3CategorisationView
       mapping.x = @valueScale(c.axis("value").value())
       mapping.y = @riskScale(c.axis("risk").value())
     else
-      if not mapping.uncategorisedX?
-        mapping.uncategorisedX = @uncategorisedValueScale(Math.random())
-      if not mapping.uncategorisedY?
-        mapping.uncategorisedY = @uncategorisedRiskScale(Math.random())
+      @_assignToUncategorisedSlot(mapping)
       mapping.x = mapping.uncategorisedX
       mapping.y = mapping.uncategorisedY
 
     mapping
+
+  _assignToUncategorisedSlot: (mapping) =>
+    if not mapping.uncategorisedSlot?
+      mapping.uncategorisedSlot = @_nextFreeSlot
+      mapping.uncategorisedX = ((@_nextFreeSlot % @_cardsPerX) * @_nextFreeSlotXSpacing) + @_nextFreeSlotXOffset
+      mapping.uncategorisedY = (Math.floor(@_nextFreeSlot / @_cardsPerX) * @_nextFreeSlotYSpacing) + @_nextFreeSlotYOffset
+      @_nextFreeSlot++
 
   _clampX: (x) =>
     Math.max(@maxRadius, Math.min(x, @width - @maxRadius))

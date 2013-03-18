@@ -85,7 +85,6 @@
         }
       });
       this.hasEdits = ko.computed(function() {
-        console.log("my: " + (_this.value()) + ", comment: " + (commentPos.value()));
         return _this.value() !== commentPos.value();
       });
     }
@@ -179,8 +178,6 @@
 
     Categorisation.prototype._updateCommentValues = function(comments) {
       var axes, comment, foundValue, name, _i, _j, _len, _len1, _ref1, _results;
-      console.log("Updating based on comments for " + (this.card.name()));
-      console.dir(comments);
       foundValue = {
         "risk": false,
         "value": false

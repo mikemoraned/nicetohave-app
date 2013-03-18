@@ -14,7 +14,7 @@
       this.rootSelector = rootSelector;
       this.width = width;
       this.height = height;
-      this.maxRadius = maxRadius != null ? maxRadius : 7;
+      this.maxRadius = maxRadius != null ? maxRadius : 10;
       this._updateDisplay = function(mapped) {
         return D3CategorisationView.prototype._updateDisplay.apply(_this, arguments);
       };
@@ -24,11 +24,17 @@
       this._clampX = function(x) {
         return D3CategorisationView.prototype._clampX.apply(_this, arguments);
       };
+      this._assignToUncategorisedSlot = function(mapping) {
+        return D3CategorisationView.prototype._assignToUncategorisedSlot.apply(_this, arguments);
+      };
       this._mappingForCategorisation = function(c) {
         return D3CategorisationView.prototype._mappingForCategorisation.apply(_this, arguments);
       };
       this.subscribeTo = function(categorisations) {
         return D3CategorisationView.prototype.subscribeTo.apply(_this, arguments);
+      };
+      this._resetUncategorisedArea = function() {
+        return D3CategorisationView.prototype._resetUncategorisedArea.apply(_this, arguments);
       };
       this._setupDragBehaviour = function() {
         return D3CategorisationView.prototype._setupDragBehaviour.apply(_this, arguments);
@@ -46,7 +52,8 @@
     D3CategorisationView.prototype._setup = function() {
       this.root = d3.select(this.rootSelector);
       this._setupScales();
-      return this._setupDragBehaviour();
+      this._setupDragBehaviour();
+      return this._resetUncategorisedArea();
     };
 
     D3CategorisationView.prototype._setupScales = function() {
@@ -73,13 +80,25 @@
       return this.drag = d3.behavior.drag().origin(Object).on("drag", dragmove).on("dragend", dragend);
     };
 
+    D3CategorisationView.prototype._resetUncategorisedArea = function() {
+      var freeX;
+      this._nextFreeSlot = 0;
+      this._nextFreeSlotXSpacing = this.maxRadius * 2.5;
+      this._nextFreeSlotYSpacing = this._nextFreeSlotXSpacing;
+      this._nextFreeSlotXOffset = this.maxRadius * 1.5;
+      this._nextFreeSlotYOffset = (0.75 * this.height) + this._nextFreeSlotYSpacing;
+      freeX = this.width - (this._nextFreeSlotXOffset * 2);
+      return this._cardsPerX = freeX / this._nextFreeSlotXSpacing;
+    };
+
     D3CategorisationView.prototype.subscribeTo = function(categorisations) {
       var _this = this;
       this.mapped = ko.computed(function() {
         return categorisations().map(_this._mappingForCategorisation);
       });
       this.mapped.subscribe(this._updateDisplay);
-      return this._updateDisplay(this.mapped());
+      this._updateDisplay(this.mapped());
+      return this._resetUncategorisedArea();
     };
 
     D3CategorisationView.prototype._mappingForCategorisation = function(c) {
@@ -97,16 +116,20 @@
         mapping.x = this.valueScale(c.axis("value").value());
         mapping.y = this.riskScale(c.axis("risk").value());
       } else {
-        if (mapping.uncategorisedX == null) {
-          mapping.uncategorisedX = this.uncategorisedValueScale(Math.random());
-        }
-        if (mapping.uncategorisedY == null) {
-          mapping.uncategorisedY = this.uncategorisedRiskScale(Math.random());
-        }
+        this._assignToUncategorisedSlot(mapping);
         mapping.x = mapping.uncategorisedX;
         mapping.y = mapping.uncategorisedY;
       }
       return mapping;
+    };
+
+    D3CategorisationView.prototype._assignToUncategorisedSlot = function(mapping) {
+      if (mapping.uncategorisedSlot == null) {
+        mapping.uncategorisedSlot = this._nextFreeSlot;
+        mapping.uncategorisedX = ((this._nextFreeSlot % this._cardsPerX) * this._nextFreeSlotXSpacing) + this._nextFreeSlotXOffset;
+        mapping.uncategorisedY = (Math.floor(this._nextFreeSlot / this._cardsPerX) * this._nextFreeSlotYSpacing) + this._nextFreeSlotYOffset;
+        return this._nextFreeSlot++;
+      }
     };
 
     D3CategorisationView.prototype._clampX = function(x) {
