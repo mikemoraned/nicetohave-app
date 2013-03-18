@@ -5,7 +5,7 @@ class AppViewModel
   constructor: ->
     @privilege = new nicetohave.Privilege(Trello)
     @workingArea = ko.observable()
-    @categoriseView = new nicetohave.D3CategorisationView("svg", 600, 600)
+    @categoriseView = new nicetohave.D3CategorisationView("svg", 800, 600)
 
   run: =>
     Sammy((sammy) =>
@@ -18,5 +18,6 @@ class AppViewModel
     board = new nicetohave.Board(id, @privilege)
     @workingArea(new nicetohave.WorkingArea(board, @privilege))
     @categoriseView.subscribeTo(@workingArea().categorisations)
+    @workingArea().load()
 
 window.nicetohave.AppViewModel = AppViewModel

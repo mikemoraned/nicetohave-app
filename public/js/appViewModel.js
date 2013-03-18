@@ -19,7 +19,7 @@
       };
       this.privilege = new nicetohave.Privilege(Trello);
       this.workingArea = ko.observable();
-      this.categoriseView = new nicetohave.D3CategorisationView("svg", 600, 600);
+      this.categoriseView = new nicetohave.D3CategorisationView("svg", 800, 600);
     }
 
     AppViewModel.prototype.run = function() {
@@ -35,7 +35,8 @@
       var board;
       board = new nicetohave.Board(id, this.privilege);
       this.workingArea(new nicetohave.WorkingArea(board, this.privilege));
-      return this.categoriseView.subscribeTo(this.workingArea().categorisations);
+      this.categoriseView.subscribeTo(this.workingArea().categorisations);
+      return this.workingArea().load();
     };
 
     return AppViewModel;

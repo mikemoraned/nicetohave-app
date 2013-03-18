@@ -45,7 +45,7 @@
     <div class="container">
 
         <div class="row">
-            <div class="span7">
+            <div class="span12">
                 <table id="area" cellspacing="0" cellpadding="0">
                     <col width="10%"/>
                     <col width="30%"/>
@@ -63,7 +63,8 @@
                     <tr>
                         <th scope="row">Low risk</th>
                         <td colspan="3" rowspan="4">
-                            <svg viewBox="0 0 600 600">
+                            <svg viewBox="0 0 1200 600">
+
                                 <line x1="0" y1="150" x2="600" y2="150" class="divider horizontal print"/>
                                 <line x1="0" y1="300" x2="600" y2="300" class="divider horizontal print"/>
                                 <line x1="0" y1="450" x2="600" y2="450" class="divider horizontal print"/>
@@ -78,6 +79,22 @@
                                 <rect x="400" y="300" width="200" height="150" class="patch" />
 
                                 <rect x="0" y="450" width="600" height="150" class="patch uncategorized" />
+
+                                <text x="15" y="145" style="font-size: 20px" class="risk" transform="rotate(-90 15 145)">
+                                    High Risk
+                                </text>
+
+                                <text x="15" y="295" style="font-size: 20px" class="risk" transform="rotate(-90 15 295)">
+                                    Medium Risk
+                                </text>
+
+                                <text x="15" y="445" style="font-size: 20px" class="risk" transform="rotate(-90 15 445)">
+                                    Low Risk
+                                </text>
+
+                                <text x="0" y="595" style="font-size: 20px">
+                                    Uncategorized
+                                </text>
                             </svg>
                         </td>
                     </tr>
@@ -132,9 +149,9 @@
 $(function($) {
     var model = new nicetohave.AppViewModel();
 
-    ko.applyBindings(model);
-
-    model.run();
+//    ko.applyBindings(model);
+//
+//    model.run();
 });
 
 </script>
