@@ -46,81 +46,51 @@
 
         <div class="row">
             <div class="span12">
-                <table id="area" cellspacing="0" cellpadding="0">
-                    <col width="10%"/>
-                    <col width="30%"/>
-                    <col width="30%"/>
-                    <col width="30%"/>
-                    <thead>
-                    <tr>
-                        <th></th>
-                        <th scope="col">Nice to Have</th>
-                        <th scope="col">Significant Business Value</th>
-                        <th scope="col">Critical</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <th scope="row">Low risk</th>
-                        <td colspan="3" rowspan="4">
-                            <svg viewBox="0 0 1200 600">
+                <svg viewBox="0 0 1200 600">
 
-                                <line x1="0" y1="150" x2="600" y2="150" class="divider horizontal print"/>
-                                <line x1="0" y1="300" x2="600" y2="300" class="divider horizontal print"/>
-                                <line x1="0" y1="450" x2="600" y2="450" class="divider horizontal print"/>
+                    <line x1="0" y1="150" x2="600" y2="150" class="divider horizontal print"/>
+                    <line x1="0" y1="300" x2="600" y2="300" class="divider horizontal print"/>
+                    <line x1="0" y1="450" x2="600" y2="450" class="divider horizontal print"/>
 
-                                <line x1="200" y1="0" x2="200" y2="600" class="divider vertical print"/>
-                                <line x1="400" y1="0" x2="400" y2="600" class="divider vertical print"/>
+                    <line x1="200" y1="0" x2="200" y2="600" class="divider vertical print"/>
+                    <line x1="400" y1="0" x2="400" y2="600" class="divider vertical print"/>
 
-                                <rect x="0"   y="0"   width="400" height="150" class="patch" />
-                                <rect x="800" y="0"   width="400" height="150" class="patch" />
-                                <rect x="400" y="150" width="400" height="150" class="patch" />
-                                <rect x="0"   y="300" width="400" height="150" class="patch" />
-                                <rect x="800" y="300" width="400" height="150" class="patch" />
+                    <rect x="0"   y="0"   width="400" height="150" class="patch" />
+                    <rect x="800" y="0"   width="400" height="150" class="patch" />
+                    <rect x="400" y="150" width="400" height="150" class="patch" />
+                    <rect x="0"   y="300" width="400" height="150" class="patch" />
+                    <rect x="800" y="300" width="400" height="150" class="patch" />
 
-                                <rect x="0" y="450" width="1200" height="150" class="patch uncategorized" />
+                    <rect x="0" y="450" width="1200" height="150" class="patch uncategorized" />
 
-                                <text x="15" y="145" style="font-size: 20px" class="risk" transform="rotate(-90 15 145)">
-                                    High Risk
-                                </text>
+                    <text x="15" y="145" style="font-size: 20px" class="risk" transform="rotate(-90 15 145)">
+                        High Risk
+                    </text>
 
-                                <text x="15" y="295" style="font-size: 20px" class="risk" transform="rotate(-90 15 295)">
-                                    Medium Risk
-                                </text>
+                    <text x="15" y="295" style="font-size: 20px" class="risk" transform="rotate(-90 15 295)">
+                        Medium Risk
+                    </text>
 
-                                <text x="15" y="445" style="font-size: 20px" class="risk" transform="rotate(-90 15 445)">
-                                    Low Risk
-                                </text>
+                    <text x="15" y="445" style="font-size: 20px" class="risk" transform="rotate(-90 15 445)">
+                        Low Risk
+                    </text>
 
-                                <text x="0" y="15" style="font-size: 20px" class="value">
-                                    Nice to Have
-                                </text>
+                    <text x="0" y="15" style="font-size: 20px" class="value">
+                        Nice to Have
+                    </text>
 
-                                <text x="400" y="15" style="font-size: 20px" class="value">
-                                    Significant Business Value
-                                </text>
+                    <text x="400" y="15" style="font-size: 20px" class="value">
+                        Significant Business Value
+                    </text>
 
-                                <text x="800" y="15" style="font-size: 20px" class="value">
-                                    Critical
-                                </text>
+                    <text x="800" y="15" style="font-size: 20px" class="value">
+                        Critical
+                    </text>
 
-                                <text x="0" y="595" style="font-size: 20px">
-                                    Uncategorized
-                                </text>
-                            </svg>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Medium risk</th>
-                    </tr>
-                    <tr>
-                        <th scope="row">High risk</th>
-                    </tr>
-                    <tr>
-                        <th scope="row">Uncategorized</th>
-                    </tr>
-                    </tbody>
-                </table>
+                    <text x="0" y="595" style="font-size: 20px">
+                        Uncategorized
+                    </text>
+                </svg>
             </div>
         </div>
 
@@ -161,9 +131,9 @@
 $(function($) {
     var model = new nicetohave.AppViewModel();
 
-//    ko.applyBindings(model);
-//
-//    model.run();
+    ko.applyBindings(model);
+
+    model.run();
 });
 
 </script>
