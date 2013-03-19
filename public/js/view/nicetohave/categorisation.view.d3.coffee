@@ -110,7 +110,7 @@ class D3CategorisationView
 #    existing.select("text").text((d) -> d.cat.card.name())
 
     existing.select("*").select("body").select("div")
-    .text((d) -> "Feep #{d.cat.card.name()}")
+    .text((d) -> d.cat.card.name() )
 
     theNew = existing.enter()
     .append("g")
@@ -122,7 +122,7 @@ class D3CategorisationView
     .attr('width', 300)
     .attr('height', 100)
     .append("xhtml:body")
-    .html((d) -> "<div style='width: 300px;' class='mini-card'>...</div>")
+    .html((d) -> "<div style='width: 300px;' class='mini-card'>#{d.cat.card.name()}</div>")
 
     theNew.append("circle")
     .attr("r", @maxRadius)
