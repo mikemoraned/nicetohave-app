@@ -34,10 +34,16 @@ class D3CategorisationView
   _setupDragBehaviour: () =>
     self = @
 
+#    dragmove = (d) ->
+#      d3.select(this)
+#      .attr("cx", d.x = self._clampX(d3.event.x) )
+#      .attr("cy", d.y = self._clampY(d3.event.y) )
+
     dragmove = (d) ->
+      d.x = self._clampX(d3.event.x)
+      d.y = self._clampY(d3.event.y)
       d3.select(this)
-      .attr("cx", d.x = self._clampX(d3.event.x) )
-      .attr("cy", d.y = self._clampY(d3.event.y) )
+        .attr("transform", "translate(#{d.x},#{d.y})" )
 
     dragend = (d) =>
       newValue = @valueScale.invert(d.x)
@@ -98,15 +104,17 @@ class D3CategorisationView
     Math.max(@maxRadius, Math.min(y, @height - @maxRadius))
 
   _updateDisplay: (mapped) =>
-    existingCategorisations = @root.selectAll("circle.card").data(mapped, (d) => d.id)
+    existingCategorisations = @root.selectAll("circle.card")
+                                   .data(mapped, (d) => d.id)
 
     existingCategorisations
     .transition()
-    .duration(200)
-    .attr("cx", (d) => d.x)
-    .attr("cy", (d) => d.y)
-    .select("title")
-    .text((d) -> return d.cat.card.name())
+      .duration(200)
+      .attr("transform", (d) => "translate(#{d.x},#{d.y})" )
+#      .attr("cx", (d) => d.x)
+#      .attr("cy", (d) => d.y)
+      .select("title")
+      .text((d) -> return d.cat.card.name())
 
     newCategorisations = existingCategorisations.enter()
 
@@ -121,8 +129,9 @@ class D3CategorisationView
     .text((d) -> return d.cat.card.name())
 
     newCategorisationCircles
-    .attr("cx", (d) => d.x)
-    .attr("cy", (d) => d.y)
+    .attr("transform", (d) => "translate(#{d.x},#{d.y})" )
+#    .attr("cx", (d) => d.x)
+#    .attr("cy", (d) => d.y)
 
     existingCategorisations.exit()
     .transition()

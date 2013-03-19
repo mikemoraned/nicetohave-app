@@ -68,7 +68,9 @@
         _this = this;
       self = this;
       dragmove = function(d) {
-        return d3.select(this).attr("cx", d.x = self._clampX(d3.event.x)).attr("cy", d.y = self._clampY(d3.event.y));
+        d.x = self._clampX(d3.event.x);
+        d.y = self._clampY(d3.event.y);
+        return d3.select(this).attr("transform", "translate(" + d.x + "," + d.y + ")");
       };
       dragend = function(d) {
         var newRisk, newValue;
@@ -146,10 +148,8 @@
       existingCategorisations = this.root.selectAll("circle.card").data(mapped, function(d) {
         return d.id;
       });
-      existingCategorisations.transition().duration(200).attr("cx", function(d) {
-        return d.x;
-      }).attr("cy", function(d) {
-        return d.y;
+      existingCategorisations.transition().duration(200).attr("transform", function(d) {
+        return "translate(" + d.x + "," + d.y + ")";
       }).select("title").text(function(d) {
         return d.cat.card.name();
       });
@@ -158,10 +158,8 @@
       newCategorisationCircles.append("title").text(function(d) {
         return d.cat.card.name();
       });
-      newCategorisationCircles.attr("cx", function(d) {
-        return d.x;
-      }).attr("cy", function(d) {
-        return d.y;
+      newCategorisationCircles.attr("transform", function(d) {
+        return "translate(" + d.x + "," + d.y + ")";
       });
       return existingCategorisations.exit().transition().duration(200).style("opacity", 0).duration(250).attr("r", 0).remove();
     };
