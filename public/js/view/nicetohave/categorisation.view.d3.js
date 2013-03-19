@@ -68,7 +68,9 @@
         _this = this;
       self = this;
       dragmove = function(d) {
-        return d3.select(this).attr("cx", d.x = self._clampX(d3.event.x)).attr("cy", d.y = self._clampY(d3.event.y));
+        d.x = self._clampX(d3.event.x);
+        d.y = self._clampY(d3.event.y);
+        return d3.select(this).attr("transform", "translate(" + d.x + "," + d.y + ")");
       };
       dragend = function(d) {
         var newRisk, newValue;
@@ -141,29 +143,25 @@
     };
 
     D3CategorisationView.prototype._updateDisplay = function(mapped) {
-      var existingCategorisations, newCategorisationCircles, newCategorisations,
+      var existing, theNew,
         _this = this;
-      existingCategorisations = this.root.selectAll("circle.card").data(mapped, function(d) {
+      existing = this.root.selectAll("g.card").data(mapped, function(d) {
         return d.id;
       });
-      existingCategorisations.transition().duration(200).attr("cx", function(d) {
-        return d.x;
-      }).attr("cy", function(d) {
-        return d.y;
-      }).select("title").text(function(d) {
+      existing.transition().duration(200).attr("transform", function(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+      });
+      existing.select("*").select("body").select("div").text(function(d) {
         return d.cat.card.name();
       });
-      newCategorisations = existingCategorisations.enter();
-      newCategorisationCircles = newCategorisations.append("circle").attr("class", "card").attr("r", this.maxRadius).call(this.drag);
-      newCategorisationCircles.append("title").text(function(d) {
-        return d.cat.card.name();
+      theNew = existing.enter().append("g").attr("class", "card").attr("transform", function(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+      }).call(this.drag);
+      theNew.append('foreignObject').attr('width', 300).attr('height', 100).append("xhtml:body").html(function(d) {
+        return "<div style='width: 300px;' class='mini-card'>" + (d.cat.card.name()) + "</div>";
       });
-      newCategorisationCircles.attr("cx", function(d) {
-        return d.x;
-      }).attr("cy", function(d) {
-        return d.y;
-      });
-      return existingCategorisations.exit().transition().duration(200).style("opacity", 0).duration(250).attr("r", 0).remove();
+      theNew.append("circle").attr("r", this.maxRadius);
+      return existing.exit().transition().duration(200).style("opacity", 0).remove();
     };
 
     return D3CategorisationView;

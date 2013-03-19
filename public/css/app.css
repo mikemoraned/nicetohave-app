@@ -5,6 +5,10 @@
         /*height: 100%;*/
     }
 
+    div.mini-card {
+        border: 1px solid red;
+    }
+
     line.divider {
         stroke: #eee;
         stroke-width: 1px;

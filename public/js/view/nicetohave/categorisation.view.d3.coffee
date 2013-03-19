@@ -35,9 +35,10 @@ class D3CategorisationView
     self = @
 
     dragmove = (d) ->
+      d.x = self._clampX(d3.event.x)
+      d.y = self._clampY(d3.event.y)
       d3.select(this)
-      .attr("cx", d.x = self._clampX(d3.event.x) )
-      .attr("cy", d.y = self._clampY(d3.event.y) )
+        .attr("transform", "translate(#{d.x},#{d.y})" )
 
     dragend = (d) =>
       newValue = @valueScale.invert(d.x)
@@ -98,38 +99,40 @@ class D3CategorisationView
     Math.max(@maxRadius, Math.min(y, @height - @maxRadius))
 
   _updateDisplay: (mapped) =>
-    existingCategorisations = @root.selectAll("circle.card").data(mapped, (d) => d.id)
+    existing = @root.selectAll("g.card")
+                    .data(mapped, (d) => d.id)
 
-    existingCategorisations
+    existing
     .transition()
-    .duration(200)
-    .attr("cx", (d) => d.x)
-    .attr("cy", (d) => d.y)
-    .select("title")
-    .text((d) -> return d.cat.card.name())
+      .duration(200)
+      .attr("transform", (d) => "translate(#{d.x},#{d.y})" )
 
-    newCategorisations = existingCategorisations.enter()
+#    existing.select("text").text((d) -> d.cat.card.name())
 
-    newCategorisationCircles = newCategorisations
-    .append("circle")
+    existing.select("*").select("body").select("div")
+    .text((d) -> d.cat.card.name() )
+
+    theNew = existing.enter()
+    .append("g")
     .attr("class", "card")
-    .attr("r", @maxRadius)
+    .attr("transform", (d) => "translate(#{d.x},#{d.y})" )
     .call(@drag)
 
-    newCategorisationCircles
-    .append("title")
-    .text((d) -> return d.cat.card.name())
+    theNew.append('foreignObject')
+    .attr('width', 300)
+    .attr('height', 100)
+    .append("xhtml:body")
+    .html((d) -> "<div style='width: 300px;' class='mini-card'>#{d.cat.card.name()}</div>")
 
-    newCategorisationCircles
-    .attr("cx", (d) => d.x)
-    .attr("cy", (d) => d.y)
+    theNew.append("circle")
+    .attr("r", @maxRadius)
 
-    existingCategorisations.exit()
+    #    theNew.append("text").text((d) -> d.cat.card.name())
+
+    existing.exit()
     .transition()
     .duration(200)
     .style("opacity", 0)
-    .duration(250)
-    .attr("r", 0)
     .remove()
 
 window.nicetohave.D3CategorisationView = D3CategorisationView
