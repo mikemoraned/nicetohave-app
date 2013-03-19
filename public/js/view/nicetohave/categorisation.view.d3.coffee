@@ -106,10 +106,11 @@ class D3CategorisationView
     .transition()
       .duration(200)
       .attr("transform", (d) => "translate(#{d.x},#{d.y})" )
-#      .select("title")
-#      .text((d) -> return d.cat.card.name())
 
-    existing.select("text").text((d) -> d.cat.card.name())
+#    existing.select("text").text((d) -> d.cat.card.name())
+
+    existing.select("*").select("body").select("div")
+    .text((d) -> "Feep #{d.cat.card.name()}")
 
     theNew = existing.enter()
     .append("g")
@@ -117,24 +118,21 @@ class D3CategorisationView
     .attr("transform", (d) => "translate(#{d.x},#{d.y})" )
     .call(@drag)
 
+    theNew.append('foreignObject')
+    .attr('width', 300)
+    .attr('height', 100)
+    .append("xhtml:body")
+    .html((d) -> "<div style='width: 300px;' class='mini-card'>...</div>")
+
     theNew.append("circle")
     .attr("r", @maxRadius)
 
-    theNew.append("text").text((d) -> d.cat.card.name())
-
-#    newCategorisationCircles
-#    .append("title")
-#    .text((d) -> return d.cat.card.name())
-
-#    newCategorisationCircles
-#    .attr("transform", (d) => "translate(#{d.x},#{d.y})" )
+    #    theNew.append("text").text((d) -> d.cat.card.name())
 
     existing.exit()
     .transition()
     .duration(200)
     .style("opacity", 0)
-#    .duration(250)
-#    .attr("r", 0)
     .remove()
 
 window.nicetohave.D3CategorisationView = D3CategorisationView

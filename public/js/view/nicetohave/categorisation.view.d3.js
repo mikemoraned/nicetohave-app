@@ -151,16 +151,16 @@
       existing.transition().duration(200).attr("transform", function(d) {
         return "translate(" + d.x + "," + d.y + ")";
       });
-      existing.select("text").text(function(d) {
-        return d.cat.card.name();
+      existing.select("*").select("body").select("div").text(function(d) {
+        return "Feep " + (d.cat.card.name());
       });
       theNew = existing.enter().append("g").attr("class", "card").attr("transform", function(d) {
         return "translate(" + d.x + "," + d.y + ")";
       }).call(this.drag);
-      theNew.append("circle").attr("r", this.maxRadius);
-      theNew.append("text").text(function(d) {
-        return d.cat.card.name();
+      theNew.append('foreignObject').attr('width', 300).attr('height', 100).append("xhtml:body").html(function(d) {
+        return "<div style='width: 300px;' class='mini-card'>...</div>";
       });
+      theNew.append("circle").attr("r", this.maxRadius);
       return existing.exit().transition().duration(200).style("opacity", 0).remove();
     };
 
