@@ -143,25 +143,25 @@
     };
 
     D3CategorisationView.prototype._updateDisplay = function(mapped) {
-      var existingCategorisations, newCategorisationCircles, newCategorisations,
+      var existing, theNew,
         _this = this;
-      existingCategorisations = this.root.selectAll("circle.card").data(mapped, function(d) {
+      existing = this.root.selectAll("g.card").data(mapped, function(d) {
         return d.id;
       });
-      existingCategorisations.transition().duration(200).attr("transform", function(d) {
-        return "translate(" + d.x + "," + d.y + ")";
-      }).select("title").text(function(d) {
-        return d.cat.card.name();
-      });
-      newCategorisations = existingCategorisations.enter();
-      newCategorisationCircles = newCategorisations.append("circle").attr("class", "card").attr("r", this.maxRadius).call(this.drag);
-      newCategorisationCircles.append("title").text(function(d) {
-        return d.cat.card.name();
-      });
-      newCategorisationCircles.attr("transform", function(d) {
+      existing.transition().duration(200).attr("transform", function(d) {
         return "translate(" + d.x + "," + d.y + ")";
       });
-      return existingCategorisations.exit().transition().duration(200).style("opacity", 0).duration(250).attr("r", 0).remove();
+      existing.select("text").text(function(d) {
+        return d.cat.card.name();
+      });
+      theNew = existing.enter().append("g").attr("class", "card").attr("transform", function(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+      }).call(this.drag);
+      theNew.append("circle").attr("r", this.maxRadius);
+      theNew.append("text").text(function(d) {
+        return d.cat.card.name();
+      });
+      return existing.exit().transition().duration(200).style("opacity", 0).remove();
     };
 
     return D3CategorisationView;
