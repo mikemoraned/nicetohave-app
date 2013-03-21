@@ -95,6 +95,10 @@
     };
 
     Card.prototype._parseFields = function(data) {
+      if (data == null) {
+        console.log("Something wierd happening, stop on debugger");
+        debugger;
+      }
       return this.name(data.name);
     };
 

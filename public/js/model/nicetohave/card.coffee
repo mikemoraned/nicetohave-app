@@ -44,6 +44,9 @@ class Card
     )
 
   _parseFields: (data) =>
+    if not data?
+      console.log("Something wierd happening, stop on debugger")
+      debugger
     @name(data.name)
 
   _parseComments: (data) =>
