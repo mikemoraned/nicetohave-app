@@ -11,6 +11,7 @@ class D3CategorisationView
 
     @_setupScales()
     @_setupDragBehaviour()
+    @_setupTitleArea()
     @_resetUncategorisedArea()
 
   _setupScales: () =>
@@ -48,13 +49,18 @@ class D3CategorisationView
 
     @drag = d3.behavior.drag().origin(Object).on("drag", dragmove).on("dragend", dragend)
 
+  _setupTitleArea: () =>
+    @_titleAreaX = 0
+    @_titleAreaY = (0.75 * @height)
+    @_titleAreaHeight = 30
+
   _resetUncategorisedArea: () =>
     @_nextFreeSlot = 0
 
     @_nextFreeSlotXSpacing = @maxRadius * 2.5
     @_nextFreeSlotYSpacing = @_nextFreeSlotXSpacing
     @_nextFreeSlotXOffset = @maxRadius * 1.5
-    @_nextFreeSlotYOffset = (0.75 * @height) + @_nextFreeSlotYSpacing
+    @_nextFreeSlotYOffset = (0.75 * @height) + @_titleAreaHeight + @_nextFreeSlotYSpacing
 
     freeX = (@width - (@_nextFreeSlotXOffset * 2))
     @_cardsPerX = freeX / @_nextFreeSlotXSpacing
@@ -99,7 +105,7 @@ class D3CategorisationView
     Math.max(@maxRadius, Math.min(y, @height - @maxRadius))
 
   _updateDisplay: (mapped) =>
-    existing = @root.selectAll("g.card")
+    existing = @root.selectAll("g.mini-card")
                     .data(mapped, (d) => d.id)
 
     existing
@@ -107,32 +113,36 @@ class D3CategorisationView
       .duration(200)
       .attr("transform", (d) => "translate(#{d.x},#{d.y})" )
 
-#    existing.select("text").text((d) -> d.cat.card.name())
-
-    existing.select("*").select("body").select("div")
-    .text((d) -> d.cat.card.name() )
-
     theNew = existing.enter()
     .append("g")
-    .attr("class", "card")
+    .classed("mini-card", true)
     .attr("transform", (d) => "translate(#{d.x},#{d.y})" )
     .call(@drag)
 
-    theNew.append('foreignObject')
-    .attr('width', 300)
-    .attr('height', 100)
-    .append("xhtml:body")
-    .html((d) -> "<div style='width: 300px;' class='mini-card'>#{d.cat.card.name()}</div>")
-
     theNew.append("circle")
     .attr("r", @maxRadius)
-
-    #    theNew.append("text").text((d) -> d.cat.card.name())
 
     existing.exit()
     .transition()
     .duration(200)
     .style("opacity", 0)
     .remove()
+
+    existingTitles = @root.selectAll("text.title")
+                          .data(mapped, (d) => d.id)
+    existingTitles.text((d) -> d.cat.card.name())
+
+    newTitles = existingTitles.enter()
+
+    newTitles.append("text")
+             .attr("x", @_titleAreaX)
+             .attr("y", @_titleAreaY)
+             .attr("transform", "translate(0,#{0.85 * @_titleAreaHeight})")
+             .classed("title", true)
+             .text((d) -> d.cat.card.name())
+
+    existingTitles.exit()
+    .remove()
+
 
 window.nicetohave.D3CategorisationView = D3CategorisationView
