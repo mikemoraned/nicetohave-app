@@ -36,7 +36,7 @@
         };
       }
       curr = this.count();
-      next = this.count() + inc;
+      next = curr + inc;
       return this.count(next);
     };
 
@@ -49,7 +49,7 @@
         };
       }
       curr = this.count();
-      next = this.count() - dec;
+      next = curr - dec;
       if (dec > curr) {
         throw {
           message: "Completed is more than outstanding: " + dec + " > " + curr

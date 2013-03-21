@@ -80,15 +80,17 @@
 
     Board.prototype._loadAllLists = function() {
       var list, _i, _len, _ref1, _results;
-      this.outstanding.started(this.lists().length);
-      _ref1 = this.lists();
-      _results = [];
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        list = _ref1[_i];
-        list.load();
-        _results.push(this.outstanding.completed());
+      if (this.lists().length > 0) {
+        this.outstanding.started(this.lists().length);
+        _ref1 = this.lists();
+        _results = [];
+        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+          list = _ref1[_i];
+          list.load();
+          _results.push(this.outstanding.completed());
+        }
+        return _results;
       }
-      return _results;
     };
 
     Board.prototype._getList = function(id) {

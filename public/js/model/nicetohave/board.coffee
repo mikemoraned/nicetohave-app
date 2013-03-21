@@ -40,10 +40,11 @@ class Board
     @lists(@_getList(c.id) for c in data)
 
   _loadAllLists: =>
-    @outstanding.started(@lists().length)
-    for list in @lists()
-      list.load()
-      @outstanding.completed()
+    if @lists().length > 0
+      @outstanding.started(@lists().length)
+      for list in @lists()
+        list.load()
+        @outstanding.completed()
 
   _getList: (id) =>
     if not @_existingLists[id]?

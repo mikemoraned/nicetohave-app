@@ -42,10 +42,11 @@ class List
     @cards(@_getCard(c.id) for c in data)
 
   _loadAllCards: =>
-    @outstanding.started(@cards().length)
-    for card in @cards()
-      card.load()
-      @outstanding.completed()
+    if @cards().length > 0
+      @outstanding.started(@cards().length)
+      for card in @cards()
+        card.load()
+        @outstanding.completed()
 
   _getCard: (id) =>
     if not @_existingCards[id]?

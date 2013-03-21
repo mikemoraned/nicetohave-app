@@ -14,7 +14,7 @@ class Outstanding
     if inc <= 0
       throw { message: "Started is not >= 0: #{inc}" }
     curr = @count()
-    next = @count() + inc
+    next = curr + inc
     @count(next)
 
   completed: (c) =>
@@ -22,7 +22,7 @@ class Outstanding
     if dec <= 0
       throw { message: "Completed is not >= 0: #{dec}" }
     curr = @count()
-    next = @count() - dec
+    next = curr - dec
     if dec > curr
       throw { message: "Completed is more than outstanding: #{dec} > #{curr}"}
     @count(next)

@@ -84,15 +84,17 @@
 
     List.prototype._loadAllCards = function() {
       var card, _i, _len, _ref1, _results;
-      this.outstanding.started(this.cards().length);
-      _ref1 = this.cards();
-      _results = [];
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        card = _ref1[_i];
-        card.load();
-        _results.push(this.outstanding.completed());
+      if (this.cards().length > 0) {
+        this.outstanding.started(this.cards().length);
+        _ref1 = this.cards();
+        _results = [];
+        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+          card = _ref1[_i];
+          card.load();
+          _results.push(this.outstanding.completed());
+        }
+        return _results;
       }
-      return _results;
     };
 
     List.prototype._getCard = function(id) {

@@ -52,7 +52,7 @@
                     <fieldset>
                         <select data-bind="options: board().lists, value: selectedList, optionsText: 'name', enable: board().lists().length > 0"></select>
                         <div class="pull-right">
-                            <span data-bind="text: $root.outstanding.count, visible: $root.outstanding.count() > 0"></span>
+                            <img src="img/ajax-loader.gif" data-bind="visible: $root.outstanding.count() > 0" />
                             <button type="submit" class="btn btn-primary" data-bind="click: saveEdits, enable: hasEdits">Save changes</button>
                             <button type="button" class="btn" data-bind="click: discardEdits, enable: hasEdits">Cancel</button>
                         </div>
