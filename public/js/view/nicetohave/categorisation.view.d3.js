@@ -15,6 +15,9 @@
       this.width = width;
       this.height = height;
       this.maxRadius = maxRadius != null ? maxRadius : 10;
+      this._updateTitleArea = function() {
+        return D3CategorisationView.prototype._updateTitleArea.apply(_this, arguments);
+      };
       this._updateDisplay = function(mapped) {
         return D3CategorisationView.prototype._updateDisplay.apply(_this, arguments);
       };
@@ -87,9 +90,15 @@
     };
 
     D3CategorisationView.prototype._setupTitleArea = function() {
+      var _this = this;
       this._titleAreaX = 0;
       this._titleAreaY = 0.75 * this.height;
-      return this._titleAreaHeight = 30;
+      this._titleAreaHeight = 30;
+      this._inspected = ko.observable();
+      return this._inspected.subscribe(function(i) {
+        console.log("Inspected");
+        return console.dir(i);
+      });
     };
 
     D3CategorisationView.prototype._resetUncategorisedArea = function() {
@@ -110,6 +119,8 @@
       });
       this.mapped.subscribe(this._updateDisplay);
       this._updateDisplay(this.mapped());
+      this._inspected.subscribe(this._updateTitleArea);
+      this._updateTitleArea(this._inspected());
       return this._resetUncategorisedArea();
     };
 
@@ -153,7 +164,7 @@
     };
 
     D3CategorisationView.prototype._updateDisplay = function(mapped) {
-      var existing, existingTitles, newTitles, theNew,
+      var existing, theNew,
         _this = this;
       existing = this.root.selectAll("g.mini-card").data(mapped, function(d) {
         return d.id;
@@ -163,18 +174,33 @@
       });
       theNew = existing.enter().append("g").classed("mini-card", true).attr("transform", function(d) {
         return "translate(" + d.x + "," + d.y + ")";
-      }).call(this.drag);
+      }).call(this.drag).on("mouseover", function(d) {
+        console.log("mouseover");
+        return _this._inspected(d.cat.card);
+      }).on("mouseout", function(d) {
+        console.log("mouseout");
+        return _this._inspected(null);
+      });
       theNew.append("circle").attr("r", this.maxRadius);
-      existing.exit().transition().duration(200).style("opacity", 0).remove();
-      existingTitles = this.root.selectAll("text.title").data(mapped, function(d) {
+      return existing.exit().transition().duration(200).style("opacity", 0).remove();
+    };
+
+    D3CategorisationView.prototype._updateTitleArea = function() {
+      var data, existingTitles, inspected, newTitles,
+        _this = this;
+      inspected = this._inspected();
+      data = inspected != null ? [inspected] : [];
+      console.log("Data:");
+      console.dir(data);
+      existingTitles = this.root.selectAll("text.title").data(data, function(d) {
         return d.id;
       });
       existingTitles.text(function(d) {
-        return d.cat.card.name();
+        return d.name();
       });
       newTitles = existingTitles.enter();
       newTitles.append("text").attr("x", this._titleAreaX).attr("y", this._titleAreaY).attr("transform", "translate(0," + (0.85 * this._titleAreaHeight) + ")").classed("title", true).text(function(d) {
-        return d.cat.card.name();
+        return d.name();
       });
       return existingTitles.exit().remove();
     };

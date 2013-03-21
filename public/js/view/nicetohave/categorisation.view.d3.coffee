@@ -53,6 +53,8 @@ class D3CategorisationView
     @_titleAreaX = 0
     @_titleAreaY = (0.75 * @height)
     @_titleAreaHeight = 30
+    @_inspected = ko.observable()
+    @_inspected.subscribe((i) => console.log("Inspected"); console.dir(i))
 
   _resetUncategorisedArea: () =>
     @_nextFreeSlot = 0
@@ -71,6 +73,10 @@ class D3CategorisationView
     )
     @mapped.subscribe(@_updateDisplay)
     @_updateDisplay(@mapped())
+
+    @_inspected.subscribe(@_updateTitleArea)
+    @_updateTitleArea(@_inspected())
+
     @_resetUncategorisedArea()
 
   _mappingForCategorisation: (c) =>
@@ -118,6 +124,8 @@ class D3CategorisationView
     .classed("mini-card", true)
     .attr("transform", (d) => "translate(#{d.x},#{d.y})" )
     .call(@drag)
+    .on("mouseover", (d) => console.log("mouseover"); @_inspected(d.cat.card))
+    .on("mouseout", (d) => console.log("mouseout"); @_inspected(null))
 
     theNew.append("circle")
     .attr("r", @maxRadius)
@@ -128,21 +136,25 @@ class D3CategorisationView
     .style("opacity", 0)
     .remove()
 
+  _updateTitleArea: () =>
+    inspected = @_inspected()
+    data = if inspected? then [inspected] else []
+    console.log("Data:")
+    console.dir(data)
     existingTitles = @root.selectAll("text.title")
-                          .data(mapped, (d) => d.id)
-    existingTitles.text((d) -> d.cat.card.name())
+                          .data(data, (d) => d.id)
+    existingTitles.text((d) -> d.name())
 
     newTitles = existingTitles.enter()
 
     newTitles.append("text")
-             .attr("x", @_titleAreaX)
-             .attr("y", @_titleAreaY)
-             .attr("transform", "translate(0,#{0.85 * @_titleAreaHeight})")
-             .classed("title", true)
-             .text((d) -> d.cat.card.name())
+    .attr("x", @_titleAreaX)
+    .attr("y", @_titleAreaY)
+    .attr("transform", "translate(0,#{0.85 * @_titleAreaHeight})")
+    .classed("title", true)
+    .text((d) -> d.name())
 
     existingTitles.exit()
     .remove()
-
 
 window.nicetohave.D3CategorisationView = D3CategorisationView

@@ -5,6 +5,14 @@
         /*height: 100%;*/
     }
 
+    /*text.title {*/
+        /*visibility: hidden;*/
+    /*}*/
+
+    /*text.title.inspected {*/
+        /*visibility: visible;*/
+    /*}*/
+
     line.divider {
         stroke: #eee;
         stroke-width: 1px;
