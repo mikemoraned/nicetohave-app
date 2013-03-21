@@ -54,7 +54,6 @@ class D3CategorisationView
     @_titleAreaY = (0.75 * @height)
     @_titleAreaHeight = 30
     @_inspected = ko.observable()
-    @_inspected.subscribe((i) => console.log("Inspected"); console.dir(i))
 
   _resetUncategorisedArea: () =>
     @_nextFreeSlot = 0
@@ -124,8 +123,8 @@ class D3CategorisationView
     .classed("mini-card", true)
     .attr("transform", (d) => "translate(#{d.x},#{d.y})" )
     .call(@drag)
-    .on("mouseover", (d) => console.log("mouseover"); @_inspected(d.cat.card))
-    .on("mouseout", (d) => console.log("mouseout"); @_inspected(null))
+    .on("mouseover", (d) => @_inspected(d.cat.card))
+    .on("mouseout", (d) => @_inspected(null))
 
     theNew.append("circle")
     .attr("r", @maxRadius)
@@ -136,11 +135,8 @@ class D3CategorisationView
     .style("opacity", 0)
     .remove()
 
-  _updateTitleArea: () =>
-    inspected = @_inspected()
+  _updateTitleArea: (inspected) =>
     data = if inspected? then [inspected] else []
-    console.log("Data:")
-    console.dir(data)
     existingTitles = @root.selectAll("text.title")
                           .data(data, (d) => d.id)
     existingTitles.text((d) -> d.name())

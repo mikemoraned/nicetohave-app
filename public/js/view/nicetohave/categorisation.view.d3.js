@@ -15,7 +15,7 @@
       this.width = width;
       this.height = height;
       this.maxRadius = maxRadius != null ? maxRadius : 10;
-      this._updateTitleArea = function() {
+      this._updateTitleArea = function(inspected) {
         return D3CategorisationView.prototype._updateTitleArea.apply(_this, arguments);
       };
       this._updateDisplay = function(mapped) {
@@ -90,15 +90,10 @@
     };
 
     D3CategorisationView.prototype._setupTitleArea = function() {
-      var _this = this;
       this._titleAreaX = 0;
       this._titleAreaY = 0.75 * this.height;
       this._titleAreaHeight = 30;
-      this._inspected = ko.observable();
-      return this._inspected.subscribe(function(i) {
-        console.log("Inspected");
-        return console.dir(i);
-      });
+      return this._inspected = ko.observable();
     };
 
     D3CategorisationView.prototype._resetUncategorisedArea = function() {
@@ -175,23 +170,18 @@
       theNew = existing.enter().append("g").classed("mini-card", true).attr("transform", function(d) {
         return "translate(" + d.x + "," + d.y + ")";
       }).call(this.drag).on("mouseover", function(d) {
-        console.log("mouseover");
         return _this._inspected(d.cat.card);
       }).on("mouseout", function(d) {
-        console.log("mouseout");
         return _this._inspected(null);
       });
       theNew.append("circle").attr("r", this.maxRadius);
       return existing.exit().transition().duration(200).style("opacity", 0).remove();
     };
 
-    D3CategorisationView.prototype._updateTitleArea = function() {
-      var data, existingTitles, inspected, newTitles,
+    D3CategorisationView.prototype._updateTitleArea = function(inspected) {
+      var data, existingTitles, newTitles,
         _this = this;
-      inspected = this._inspected();
       data = inspected != null ? [inspected] : [];
-      console.log("Data:");
-      console.dir(data);
       existingTitles = this.root.selectAll("text.title").data(data, function(d) {
         return d.id;
       });
