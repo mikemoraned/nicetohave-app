@@ -1,5 +1,11 @@
 describe 'Card', ->
 
+  outstanding = null
+
+  beforeEach(() =>
+    outstanding = new nicetohave.Outstanding()
+  )
+
   describe 'initial state', ->
 
     it 'cannot be created without an id', ->
@@ -41,10 +47,10 @@ describe 'Card', ->
       )
 
     it 'when asked to load, loads name', ->
-      privilige = new nicetohave.Privilege(trello)
-      privilige.level(nicetohave.PrivilegeLevel.READ_ONLY)
+      privilege = new nicetohave.Privilege(trello)
+      privilege.level(nicetohave.PrivilegeLevel.READ_ONLY)
 
-      card = new nicetohave.Card("4eea503d91e31d174600008f", privilige)
+      card = new nicetohave.Card("4eea503d91e31d174600008f", privilege, outstanding)
 
       card.load()
 
@@ -52,10 +58,10 @@ describe 'Card', ->
       expect(card.name()).toEqual("A dummy name")
 
     it 'when asked to load, loads comments', ->
-      privilige = new nicetohave.Privilege(trello)
-      privilige.level(nicetohave.PrivilegeLevel.READ_ONLY)
+      privilege = new nicetohave.Privilege(trello)
+      privilege.level(nicetohave.PrivilegeLevel.READ_ONLY)
 
-      card = new nicetohave.Card("4eea503d91e31d174600008f", privilige)
+      card = new nicetohave.Card("4eea503d91e31d174600008f", privilege, outstanding)
 
       card.load()
 

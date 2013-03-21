@@ -9,8 +9,9 @@
 
   Card = (function() {
 
-    function Card(id, privilege) {
+    function Card(id, privilege, outstanding) {
       var _this = this;
+      this.outstanding = outstanding;
       this._parseComments = function(data) {
         return Card.prototype._parseComments.apply(_this, arguments);
       };
@@ -45,9 +46,11 @@
       var onFailure, onSuccess,
         _this = this;
       this.loadStatus("in-progress");
+      this.outstanding.started();
       onSuccess = function(data) {
         _this._parseFields(data);
-        return _this._loadComments();
+        _this._loadComments();
+        return _this.outstanding.completed();
       };
       onFailure = function() {
         return _this.loadStatus("load-failed");
@@ -62,9 +65,11 @@
     Card.prototype.addComment = function(comment) {
       var onFailure, onSuccess,
         _this = this;
+      this.outstanding.started();
       onSuccess = function() {
         _this.loadStatus("saved");
-        return _this.load();
+        _this.load();
+        return _this.outstanding.completed();
       };
       onFailure = function() {
         return _this.loadStatus("save-failed");
@@ -79,9 +84,11 @@
     Card.prototype._loadComments = function() {
       var onFailure, onSuccess,
         _this = this;
+      this.outstanding.started();
       onSuccess = function(data) {
         _this._parseComments(data);
-        return _this.loadStatus("loaded");
+        _this.loadStatus("loaded");
+        return _this.outstanding.completed();
       };
       onFailure = function() {
         return _this.loadStatus("load-failed");

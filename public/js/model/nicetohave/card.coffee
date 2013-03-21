@@ -2,7 +2,7 @@ window.nicetohave ?= {}
 
 class Card
 
-  constructor: (id, privilege) ->
+  constructor: (id, privilege, @outstanding) ->
     if not /[a-z0-9]{24}/.test(id)
       throw { message: "Not a valid card id: '#{id}'" }
     @id = ko.observable(id)
@@ -17,27 +17,33 @@ class Card
 
   load: =>
     @loadStatus("in-progress")
+    @outstanding.started()
     onSuccess = (data) =>
       @_parseFields(data)
       @_loadComments()
+      @outstanding.completed()
     onFailure = => @loadStatus("load-failed")
     @privilege.using(nicetohave.PrivilegeLevel.READ_ONLY, (trello) =>
       trello.cards.get(@id(), { fields: "name" }, onSuccess, onFailure)
     )
 
   addComment: (comment) =>
+    @outstanding.started()
     onSuccess = () =>
       @loadStatus("saved")
       @load()
+      @outstanding.completed()
     onFailure = => @loadStatus("save-failed")
     @privilege.using(nicetohave.PrivilegeLevel.READ_WRITE, (trello) =>
       trello.post("/cards/" + @id() + "/actions/comments", { text: comment.text() }, onSuccess, onFailure)
     )
 
   _loadComments: =>
+    @outstanding.started()
     onSuccess = (data) =>
       @_parseComments(data)
       @loadStatus("loaded")
+      @outstanding.completed()
     onFailure = => @loadStatus("load-failed")
     @privilege.using(nicetohave.PrivilegeLevel.READ_ONLY, (trello) =>
       trello.cards.get(@id() + "/actions", { entities: true, filter: "commentCard" }, onSuccess, onFailure)
@@ -50,8 +56,6 @@ class Card
     @name(data.name)
 
   _parseComments: (data) =>
-#    console.log("name: #{@name()}:")
-#    console.dir(data)
     @comments(data.map((d)->
       texts = (e.text for e in d.entities when e.type == 'comment')
       new nicetohave.Comment(texts[0])

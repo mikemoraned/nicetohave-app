@@ -11,15 +11,23 @@
     function Privilege(trello) {
       this.trello = trello;
       this.level = ko.observable(nicetohave.PrivilegeLevel.NONE);
+      this.callDepth = ko.observable(0);
     }
 
-    Privilege.prototype.using = function(expectedLevel, success) {
+    Privilege.prototype.using = function(expectedLevel, fn) {
+      var tracked,
+        _this = this;
+      tracked = function(trello) {
+        _this.callDepth(_this.callDepth() + 1);
+        fn(trello);
+        return _this.callDepth(_this.callDepth() - 1);
+      };
       if (this.level().satisfies(expectedLevel)) {
-        return success(this.trello);
+        return tracked(this.trello);
       } else {
         console.log("Raising level to");
         console.dir(expectedLevel);
-        return this.raiseTo(expectedLevel, success);
+        return this.raiseTo(expectedLevel, tracked);
       }
     };
 

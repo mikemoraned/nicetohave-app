@@ -2,11 +2,12 @@ window.nicetohave ?= {}
 
 class Board
 
-  constructor: (id, privilege) ->
+  constructor: (id, privilege, outstanding) ->
     if not /[a-z0-9]{24}/.test(id)
       throw { message: "Not a valid board id: '#{id}'" }
     @id = ko.observable(id)
     @privilege = privilege
+    @outstanding = outstanding
     @loadStatus = ko.observable("created")
 
     @_existingLists = {}
@@ -15,6 +16,7 @@ class Board
     @lists = ko.observableArray()
 
   load: =>
+    @outstanding.started()
     @loadStatus("in-progress")
     onFailure = => @loadStatus("load-failed")
     @privilege.using(nicetohave.PrivilegeLevel.READ_ONLY, (trello) =>
@@ -26,6 +28,7 @@ class Board
           @_parseLists(data)
           @_loadAllLists()
           @loadStatus("load-success")
+          @outstanding.completed()
         , onFailure)
       , onFailure)
     )
@@ -37,12 +40,14 @@ class Board
     @lists(@_getList(c.id) for c in data)
 
   _loadAllLists: =>
+    @outstanding.started(@lists().length)
     for list in @lists()
       list.load()
+      @outstanding.completed()
 
   _getList: (id) =>
     if not @_existingLists[id]?
-      @_existingLists[id] = new nicetohave.List(id, @privilege)
+      @_existingLists[id] = new nicetohave.List(id, @privilege, @outstanding)
     @_existingLists[id]
 
 window.nicetohave.Board = Board

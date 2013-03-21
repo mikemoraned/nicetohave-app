@@ -2,6 +2,12 @@
 (function() {
 
   describe('Board', function() {
+    var outstanding,
+      _this = this;
+    outstanding = null;
+    beforeEach(function() {
+      return outstanding = new nicetohave.Outstanding();
+    });
     describe('initial state', function() {
       it('cannot be created without an id', function() {
         return expect(function() {
@@ -64,7 +70,7 @@
         var board, privilige;
         privilige = new nicetohave.Privilege(trello);
         privilige.level(nicetohave.PrivilegeLevel.READ_ONLY);
-        board = new nicetohave.Board("50f5c98fe0314ccd5500a51b", privilige);
+        board = new nicetohave.Board("50f5c98fe0314ccd5500a51b", privilige, outstanding);
         board.load();
         expect(trello.boards.get).toHaveBeenCalled();
         return expect(board.name()).toEqual("NiceToHaveTestBoard");
@@ -73,7 +79,7 @@
         var board, privilige;
         privilige = new nicetohave.Privilege(trello);
         privilige.level(nicetohave.PrivilegeLevel.READ_ONLY);
-        board = new nicetohave.Board("50f5c98fe0314ccd5500a51b", privilige);
+        board = new nicetohave.Board("50f5c98fe0314ccd5500a51b", privilige, outstanding);
         expect(board.loadStatus()).toEqual("created");
         board.load();
         expect(board.loadStatus()).toEqual("load-success");
@@ -87,7 +93,7 @@
         var board, list1, list2, list3, privilige, _ref;
         privilige = new nicetohave.Privilege(trello);
         privilige.level(nicetohave.PrivilegeLevel.READ_ONLY);
-        board = new nicetohave.Board("50f5c98fe0314ccd5500a51b", privilige);
+        board = new nicetohave.Board("50f5c98fe0314ccd5500a51b", privilige, outstanding);
         expect(board.loadStatus()).toEqual("created");
         board.load();
         expect(board.loadStatus()).toEqual("load-success");
@@ -107,7 +113,7 @@
         var board, privilige;
         privilige = new nicetohave.Privilege(trello);
         privilige.level(nicetohave.PrivilegeLevel.READ_ONLY);
-        board = new nicetohave.Board("50f5c98fe0314ccd5500a51b", privilige);
+        board = new nicetohave.Board("50f5c98fe0314ccd5500a51b", privilige, outstanding);
         expect(board.loadStatus()).toEqual("created");
         board.load();
         expect(board.loadStatus()).toEqual("load-success");

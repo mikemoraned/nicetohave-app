@@ -9,7 +9,7 @@
 
   Board = (function() {
 
-    function Board(id, privilege) {
+    function Board(id, privilege, outstanding) {
       var _this = this;
       this._getList = function(id) {
         return Board.prototype._getList.apply(_this, arguments);
@@ -33,6 +33,7 @@
       }
       this.id = ko.observable(id);
       this.privilege = privilege;
+      this.outstanding = outstanding;
       this.loadStatus = ko.observable("created");
       this._existingLists = {};
       this.name = ko.observable("");
@@ -42,6 +43,7 @@
     Board.prototype.load = function() {
       var onFailure,
         _this = this;
+      this.outstanding.started();
       this.loadStatus("in-progress");
       onFailure = function() {
         return _this.loadStatus("load-failed");
@@ -52,7 +54,8 @@
           return trello.boards.get(_this.id() + "/lists", {}, function(data) {
             _this._parseLists(data);
             _this._loadAllLists();
-            return _this.loadStatus("load-success");
+            _this.loadStatus("load-success");
+            return _this.outstanding.completed();
           }, onFailure);
         }, onFailure);
       });
@@ -77,18 +80,20 @@
 
     Board.prototype._loadAllLists = function() {
       var list, _i, _len, _ref1, _results;
+      this.outstanding.started(this.lists().length);
       _ref1 = this.lists();
       _results = [];
       for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
         list = _ref1[_i];
-        _results.push(list.load());
+        list.load();
+        _results.push(this.outstanding.completed());
       }
       return _results;
     };
 
     Board.prototype._getList = function(id) {
       if (this._existingLists[id] == null) {
-        this._existingLists[id] = new nicetohave.List(id, this.privilege);
+        this._existingLists[id] = new nicetohave.List(id, this.privilege, this.outstanding);
       }
       return this._existingLists[id];
     };

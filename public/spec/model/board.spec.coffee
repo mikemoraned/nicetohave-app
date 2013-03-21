@@ -1,5 +1,11 @@
 describe 'Board', ->
 
+  outstanding = null
+
+  beforeEach(() =>
+    outstanding = new nicetohave.Outstanding()
+  )
+
   describe 'initial state', ->
 
     it 'cannot be created without an id', ->
@@ -47,7 +53,7 @@ describe 'Board', ->
       privilige = new nicetohave.Privilege(trello)
       privilige.level(nicetohave.PrivilegeLevel.READ_ONLY)
 
-      board = new nicetohave.Board("50f5c98fe0314ccd5500a51b", privilige)
+      board = new nicetohave.Board("50f5c98fe0314ccd5500a51b", privilige, outstanding)
 
       board.load()
 
@@ -58,7 +64,7 @@ describe 'Board', ->
       privilige = new nicetohave.Privilege(trello)
       privilige.level(nicetohave.PrivilegeLevel.READ_ONLY)
 
-      board = new nicetohave.Board("50f5c98fe0314ccd5500a51b", privilige)
+      board = new nicetohave.Board("50f5c98fe0314ccd5500a51b", privilige, outstanding)
 
       expect(board.loadStatus()).toEqual("created")
       
@@ -76,7 +82,7 @@ describe 'Board', ->
       privilige = new nicetohave.Privilege(trello)
       privilige.level(nicetohave.PrivilegeLevel.READ_ONLY)
 
-      board = new nicetohave.Board("50f5c98fe0314ccd5500a51b", privilige)
+      board = new nicetohave.Board("50f5c98fe0314ccd5500a51b", privilige, outstanding)
 
       expect(board.loadStatus()).toEqual("created")
 
@@ -104,7 +110,7 @@ describe 'Board', ->
       privilige = new nicetohave.Privilege(trello)
       privilige.level(nicetohave.PrivilegeLevel.READ_ONLY)
 
-      board = new nicetohave.Board("50f5c98fe0314ccd5500a51b", privilige)
+      board = new nicetohave.Board("50f5c98fe0314ccd5500a51b", privilige, outstanding)
 
       expect(board.loadStatus()).toEqual("created")
 

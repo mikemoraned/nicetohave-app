@@ -2,6 +2,12 @@
 (function() {
 
   describe('Card', function() {
+    var outstanding,
+      _this = this;
+    outstanding = null;
+    beforeEach(function() {
+      return outstanding = new nicetohave.Outstanding();
+    });
     describe('initial state', function() {
       it('cannot be created without an id', function() {
         return expect(function() {
@@ -60,19 +66,19 @@
         });
       });
       it('when asked to load, loads name', function() {
-        var card, privilige;
-        privilige = new nicetohave.Privilege(trello);
-        privilige.level(nicetohave.PrivilegeLevel.READ_ONLY);
-        card = new nicetohave.Card("4eea503d91e31d174600008f", privilige);
+        var card, privilege;
+        privilege = new nicetohave.Privilege(trello);
+        privilege.level(nicetohave.PrivilegeLevel.READ_ONLY);
+        card = new nicetohave.Card("4eea503d91e31d174600008f", privilege, outstanding);
         card.load();
         expect(trello.cards.get).toHaveBeenCalled();
         return expect(card.name()).toEqual("A dummy name");
       });
       it('when asked to load, loads comments', function() {
-        var card, privilige;
-        privilige = new nicetohave.Privilege(trello);
-        privilige.level(nicetohave.PrivilegeLevel.READ_ONLY);
-        card = new nicetohave.Card("4eea503d91e31d174600008f", privilige);
+        var card, privilege;
+        privilege = new nicetohave.Privilege(trello);
+        privilege.level(nicetohave.PrivilegeLevel.READ_ONLY);
+        card = new nicetohave.Card("4eea503d91e31d174600008f", privilege, outstanding);
         card.load();
         expect(card.comments().length).toEqual(1);
         return expect(card.comments()[0].text()).toEqual("This is a comment");

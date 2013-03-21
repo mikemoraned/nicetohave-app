@@ -2,6 +2,12 @@
 (function() {
 
   describe('List', function() {
+    var outstanding,
+      _this = this;
+    outstanding = null;
+    beforeEach(function() {
+      return outstanding = new nicetohave.Outstanding();
+    });
     describe('initial state', function() {
       it('cannot be created without an id', function() {
         return expect(function() {
@@ -61,19 +67,19 @@
         return spyOn(nicetohave.Card.prototype, "load");
       });
       it('when asked to load, loads name', function() {
-        var list, privilige;
-        privilige = new nicetohave.Privilege(trello);
-        privilige.level(nicetohave.PrivilegeLevel.READ_ONLY);
-        list = new nicetohave.List("50f5c98fe0314ccd5500a51d", privilige);
+        var list, privilege;
+        privilege = new nicetohave.Privilege(trello);
+        privilege.level(nicetohave.PrivilegeLevel.READ_ONLY);
+        list = new nicetohave.List("50f5c98fe0314ccd5500a51d", privilege, outstanding);
         list.load();
         expect(trello.lists.get).toHaveBeenCalled();
         return expect(list.name()).toEqual("Doing");
       });
       it('when asked to load, loads cards with ids', function() {
-        var list, privilige;
-        privilige = new nicetohave.Privilege(trello);
-        privilige.level(nicetohave.PrivilegeLevel.READ_ONLY);
-        list = new nicetohave.List("50f5c98fe0314ccd5500a51d", privilige);
+        var list, privilege;
+        privilege = new nicetohave.Privilege(trello);
+        privilege.level(nicetohave.PrivilegeLevel.READ_ONLY);
+        list = new nicetohave.List("50f5c98fe0314ccd5500a51d", privilege, outstanding);
         expect(list.loadStatus()).toEqual("created");
         list.load();
         expect(list.loadStatus()).toEqual("load-success");
@@ -84,10 +90,10 @@
         return expect(list.cards()[2].id()).toEqual("5122b28d00e3df314d005722");
       });
       it('when asked to load twice, re-use existing card objects for same id', function() {
-        var card1, card2, card3, list, privilige, _ref;
-        privilige = new nicetohave.Privilege(trello);
-        privilige.level(nicetohave.PrivilegeLevel.READ_ONLY);
-        list = new nicetohave.List("50f5c98fe0314ccd5500a51d", privilige);
+        var card1, card2, card3, list, privilege, _ref;
+        privilege = new nicetohave.Privilege(trello);
+        privilege.level(nicetohave.PrivilegeLevel.READ_ONLY);
+        list = new nicetohave.List("50f5c98fe0314ccd5500a51d", privilege, outstanding);
         expect(list.loadStatus()).toEqual("created");
         list.load();
         expect(list.loadStatus()).toEqual("load-success");
@@ -104,10 +110,10 @@
         return expect(list.cards()[2]).toBe(card3);
       });
       it('when asked to load, call load on Card', function() {
-        var list, privilige;
-        privilige = new nicetohave.Privilege(trello);
-        privilige.level(nicetohave.PrivilegeLevel.READ_ONLY);
-        list = new nicetohave.List("50f5c98fe0314ccd5500a51d", privilige);
+        var list, privilege;
+        privilege = new nicetohave.Privilege(trello);
+        privilege.level(nicetohave.PrivilegeLevel.READ_ONLY);
+        list = new nicetohave.List("50f5c98fe0314ccd5500a51d", privilege, outstanding);
         expect(nicetohave.Card.prototype.load).not.toHaveBeenCalled();
         expect(list.loadStatus()).toEqual("created");
         list.load();

@@ -9,8 +9,9 @@
 
   List = (function() {
 
-    function List(id, privilege) {
+    function List(id, privilege, outstanding) {
       var _this = this;
+      this.outstanding = outstanding;
       this._getCard = function(id) {
         return List.prototype._getCard.apply(_this, arguments);
       };
@@ -43,6 +44,7 @@
       var onFailure,
         _this = this;
       this.loadStatus("in-progress");
+      this.outstanding.started();
       onFailure = function() {
         return _this.loadStatus("load-failed");
       };
@@ -52,7 +54,8 @@
           return trello.lists.get(_this.id() + "/cards", {}, function(data) {
             _this._parseCards(data);
             _this._loadAllCards();
-            return _this.loadStatus("load-success");
+            _this.loadStatus("load-success");
+            return _this.outstanding.completed();
           }, onFailure);
         }, onFailure);
       });
@@ -81,18 +84,20 @@
 
     List.prototype._loadAllCards = function() {
       var card, _i, _len, _ref1, _results;
+      this.outstanding.started(this.cards().length);
       _ref1 = this.cards();
       _results = [];
       for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
         card = _ref1[_i];
-        _results.push(card.load());
+        card.load();
+        _results.push(this.outstanding.completed());
       }
       return _results;
     };
 
     List.prototype._getCard = function(id) {
       if (this._existingCards[id] == null) {
-        this._existingCards[id] = new nicetohave.Card(id, this.privilege);
+        this._existingCards[id] = new nicetohave.Card(id, this.privilege, this.outstanding);
       }
       return this._existingCards[id];
     };

@@ -1,5 +1,11 @@
 describe 'List', ->
 
+  outstanding = null
+
+  beforeEach(() =>
+    outstanding = new nicetohave.Outstanding()
+  )
+
   describe 'initial state', ->
 
     it 'cannot be created without an id', ->
@@ -44,10 +50,10 @@ describe 'List', ->
       spyOn(nicetohave.Card.prototype, "load")
 
     it 'when asked to load, loads name', ->
-      privilige = new nicetohave.Privilege(trello)
-      privilige.level(nicetohave.PrivilegeLevel.READ_ONLY)
+      privilege = new nicetohave.Privilege(trello)
+      privilege.level(nicetohave.PrivilegeLevel.READ_ONLY)
 
-      list = new nicetohave.List("50f5c98fe0314ccd5500a51d", privilige)
+      list = new nicetohave.List("50f5c98fe0314ccd5500a51d", privilege, outstanding)
 
       list.load()
 
@@ -55,10 +61,10 @@ describe 'List', ->
       expect(list.name()).toEqual("Doing")
 
     it 'when asked to load, loads cards with ids', ->
-      privilige = new nicetohave.Privilege(trello)
-      privilige.level(nicetohave.PrivilegeLevel.READ_ONLY)
+      privilege = new nicetohave.Privilege(trello)
+      privilege.level(nicetohave.PrivilegeLevel.READ_ONLY)
 
-      list = new nicetohave.List("50f5c98fe0314ccd5500a51d", privilige)
+      list = new nicetohave.List("50f5c98fe0314ccd5500a51d", privilege, outstanding)
 
       expect(list.loadStatus()).toEqual("created")
 
@@ -73,10 +79,10 @@ describe 'List', ->
       expect(list.cards()[2].id()).toEqual("5122b28d00e3df314d005722")
 
     it 'when asked to load twice, re-use existing card objects for same id', ->
-      privilige = new nicetohave.Privilege(trello)
-      privilige.level(nicetohave.PrivilegeLevel.READ_ONLY)
+      privilege = new nicetohave.Privilege(trello)
+      privilege.level(nicetohave.PrivilegeLevel.READ_ONLY)
 
-      list = new nicetohave.List("50f5c98fe0314ccd5500a51d", privilige)
+      list = new nicetohave.List("50f5c98fe0314ccd5500a51d", privilege, outstanding)
 
       expect(list.loadStatus()).toEqual("created")
 
@@ -101,10 +107,10 @@ describe 'List', ->
       expect(list.cards()[2]).toBe(card3)
 
     it 'when asked to load, call load on Card', ->
-      privilige = new nicetohave.Privilege(trello)
-      privilige.level(nicetohave.PrivilegeLevel.READ_ONLY)
+      privilege = new nicetohave.Privilege(trello)
+      privilege.level(nicetohave.PrivilegeLevel.READ_ONLY)
 
-      list = new nicetohave.List("50f5c98fe0314ccd5500a51d", privilige)
+      list = new nicetohave.List("50f5c98fe0314ccd5500a51d", privilege, outstanding)
 
       expect(nicetohave.Card.prototype.load).not.toHaveBeenCalled()
 

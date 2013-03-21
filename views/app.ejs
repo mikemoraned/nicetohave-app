@@ -10,6 +10,7 @@
 
 <% script('/js/model/nicetohave/privilegeLevel.js') -%>
 <% script('/js/model/nicetohave/privilege.js') -%>
+<% script('/js/model/nicetohave/outstanding.js') -%>
 <% script('/js/model/nicetohave/comment.js') -%>
 <% script('/js/model/nicetohave/card.js') -%>
 <% script('/js/model/nicetohave/list.js') -%>
@@ -51,6 +52,7 @@
                     <fieldset>
                         <select data-bind="options: board().lists, value: selectedList, optionsText: 'name', enable: board().lists().length > 0"></select>
                         <div class="pull-right">
+                            <span data-bind="text: $root.outstanding.count, visible: $root.outstanding.count() > 0"></span>
                             <button type="submit" class="btn btn-primary" data-bind="click: saveEdits, enable: hasEdits">Save changes</button>
                             <button type="button" class="btn" data-bind="click: discardEdits, enable: hasEdits">Cancel</button>
                         </div>

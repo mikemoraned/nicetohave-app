@@ -2,7 +2,7 @@ window.nicetohave ?= {}
 
 class List
 
-  constructor: (id, privilege) ->
+  constructor: (id, privilege, @outstanding) ->
     if not /[a-z0-9]{24}/.test(id)
       throw { message: "Not a valid list id: '#{id}'" }
     @id = ko.observable(id)
@@ -16,6 +16,7 @@ class List
 
   load: () =>
     @loadStatus("in-progress")
+    @outstanding.started()
     onFailure = => @loadStatus("load-failed")
     @privilege.using(nicetohave.PrivilegeLevel.READ_ONLY, (trello) =>
       trello.lists.get(@id(), {},
@@ -26,6 +27,7 @@ class List
             @_parseCards(data)
             @_loadAllCards()
             @loadStatus("load-success")
+            @outstanding.completed()
           , onFailure)
         , onFailure)
     )
@@ -40,12 +42,14 @@ class List
     @cards(@_getCard(c.id) for c in data)
 
   _loadAllCards: =>
+    @outstanding.started(@cards().length)
     for card in @cards()
       card.load()
+      @outstanding.completed()
 
   _getCard: (id) =>
     if not @_existingCards[id]?
-      @_existingCards[id] = new nicetohave.Card(id, @privilege)
+      @_existingCards[id] = new nicetohave.Card(id, @privilege, @outstanding)
     @_existingCards[id]
 
 window.nicetohave.List = List

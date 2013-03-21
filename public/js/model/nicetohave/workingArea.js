@@ -9,9 +9,10 @@
 
   WorkingArea = (function() {
 
-    function WorkingArea(board, privilege) {
+    function WorkingArea(board, privilege, outstanding) {
       var _this = this;
       this.privilege = privilege;
+      this.outstanding = outstanding;
       this.saveEdits = function() {
         return WorkingArea.prototype.saveEdits.apply(_this, arguments);
       };
@@ -52,20 +53,29 @@
     }
 
     WorkingArea.prototype.load = function() {
-      return this.board().load();
+      this.outstanding.reset();
+      this.outstanding.started();
+      this.board().load();
+      return this.outstanding.completed();
     };
 
     WorkingArea.prototype.discardEdits = function() {
+      this.outstanding.reset();
+      this.outstanding.started();
       this.haveEdits().forEach(function(h) {
         return h.discardEdits();
       });
-      return this.load();
+      this.board().load();
+      return this.outstanding.completed();
     };
 
     WorkingArea.prototype.saveEdits = function() {
-      return this.haveEdits().forEach(function(h) {
+      this.outstanding.reset();
+      this.outstanding.started();
+      this.haveEdits().forEach(function(h) {
         return h.saveEdits();
       });
+      return this.outstanding.completed();
     };
 
     return WorkingArea;

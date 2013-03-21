@@ -2,7 +2,7 @@ window.nicetohave ?= {}
 
 class WorkingArea
 
-  constructor: (board, @privilege) ->
+  constructor: (board, @privilege, @outstanding) ->
 
     @board = ko.observable(board)
 
@@ -37,13 +37,22 @@ class WorkingArea
     @hasEdits = ko.computed(() => @haveEdits().length > 0)
 
   load: =>
+    @outstanding.reset()
+    @outstanding.started()
     @board().load()
+    @outstanding.completed()
 
   discardEdits: =>
+    @outstanding.reset()
+    @outstanding.started()
     @haveEdits().forEach((h) -> h.discardEdits())
-    @load()
+    @board().load()
+    @outstanding.completed()
 
   saveEdits: =>
+    @outstanding.reset()
+    @outstanding.started()
     @haveEdits().forEach((h) -> h.saveEdits())
+    @outstanding.completed()
 
 window.nicetohave.WorkingArea = WorkingArea
