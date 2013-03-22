@@ -9,18 +9,18 @@ describe 'Categorisation View', ->
       categorisation.axis("value").value(0.1)
       categorisation.axis("risk").value(0.5)
 
-      view = new nicetohave.D3CategorisationView("svg", 200, 400, 1)
+      view = new nicetohave.D3CategorisationView("svg", 200, 400, 1, 1)
 
       mapped = view._mappingForCategorisation(categorisation)
 
       expect(mapped.x).toEqual(20.8)
-      expect(mapped.y).toEqual(150.125)
+      expect(mapped.y).toEqual(150.0625)
 
     it 'should map fully uncategorised card to x, y position in uncategorised area', ->
       card = new nicetohave.DummyCard("a-dummy-id")
       categorisation = new nicetohave.Categorisation(card)
 
-      view = new nicetohave.D3CategorisationView("svg", 200, 400, 1)
+      view = new nicetohave.D3CategorisationView("svg", 200, 400, 1, 1)
 
       mapped = view._mappingForCategorisation(categorisation)
 
@@ -38,7 +38,7 @@ describe 'Categorisation View', ->
       categorisation.axis("value").value(0.1)
       categorisation.axis("risk").value(0.5)
 
-      view = new nicetohave.D3CategorisationView("svg", 200, 400, 1)
+      view = new nicetohave.D3CategorisationView("svg", 200, 400, 1, 1)
 
       mapped = view._mappingForCategorisation(categorisation)
 

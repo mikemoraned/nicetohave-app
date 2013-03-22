@@ -102,7 +102,7 @@
     };
 
     Card.prototype._parseFields = function(data) {
-      if (data == null) {
+      if (data === null || typeof data === "undefined") {
         console.log("Something wierd happening, stop on debugger");
         debugger;
       }

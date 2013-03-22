@@ -9,12 +9,13 @@
 
   D3CategorisationView = (function() {
 
-    function D3CategorisationView(rootSelector, width, height, maxRadius) {
+    function D3CategorisationView(rootSelector, width, height, cardWidth, cardHeight) {
       var _this = this;
       this.rootSelector = rootSelector;
       this.width = width;
       this.height = height;
-      this.maxRadius = maxRadius != null ? maxRadius : 10;
+      this.cardWidth = cardWidth != null ? cardWidth : 40;
+      this.cardHeight = cardHeight != null ? cardHeight : 20;
       this._updateTitleArea = function(inspected) {
         return D3CategorisationView.prototype._updateTitleArea.apply(_this, arguments);
       };
@@ -51,6 +52,7 @@
       this._setup = function() {
         return D3CategorisationView.prototype._setup.apply(_this, arguments);
       };
+      this.maxRadius = Math.max(this.cardWidth, this.cardHeight) / 2.0;
       this._setup();
       this._existingMappingForCategorisation = {};
     }
@@ -64,10 +66,10 @@
     };
 
     D3CategorisationView.prototype._setupScales = function() {
-      this.valueScale = d3.scale.linear().domain([0, 1]).range([this.maxRadius, this.width - this.maxRadius]).clamp(true);
+      this.valueScale = d3.scale.linear().domain([0, 1]).range([this.cardWidth, this.width - this.cardWidth]).clamp(true);
       this.riskScale = d3.scale.linear().domain([0, 1]).range([this.maxRadius, 0.75 * (this.height - this.maxRadius)]).clamp(true);
       this.uncategorisedValueScale = this.valueScale;
-      return this.uncategorisedRiskScale = d3.scale.linear().domain([0, 1]).range([0.75 * (this.height - this.maxRadius), this.height - this.maxRadius]).clamp(true);
+      return this.uncategorisedRiskScale = d3.scale.linear().domain([0, 1]).range([0.75 * (this.height - this.cardHeight), this.height - this.cardHeight]).clamp(true);
     };
 
     D3CategorisationView.prototype._setupDragBehaviour = function() {
@@ -99,9 +101,9 @@
     D3CategorisationView.prototype._resetUncategorisedArea = function() {
       var freeX;
       this._nextFreeSlot = 0;
-      this._nextFreeSlotXSpacing = this.maxRadius * 2.5;
-      this._nextFreeSlotYSpacing = this._nextFreeSlotXSpacing;
-      this._nextFreeSlotXOffset = this.maxRadius * 1.5;
+      this._nextFreeSlotXSpacing = this.cardWidth * 1.1;
+      this._nextFreeSlotYSpacing = this.cardWidth * 1.1;
+      this._nextFreeSlotXOffset = this.cardWidth * 0.5;
       this._nextFreeSlotYOffset = (0.75 * this.height) + this._titleAreaHeight + this._nextFreeSlotYSpacing;
       freeX = this.width - (this._nextFreeSlotXOffset * 2);
       return this._cardsPerX = freeX / this._nextFreeSlotXSpacing;
@@ -174,7 +176,7 @@
       }).on("mouseout", function(d) {
         return _this._inspected(null);
       });
-      theNew.append("circle").attr("r", this.maxRadius);
+      theNew.append("rect").attr("width", this.cardWidth).attr("height", this.cardHeight).attr("rx", 5).attr("ry", 5);
       return existing.exit().transition().duration(200).style("opacity", 0).remove();
     };
 

@@ -50,7 +50,7 @@ class Card
     )
 
   _parseFields: (data) =>
-    if not data?
+    if data == null or typeof data == "undefined"
       console.log("Something wierd happening, stop on debugger")
       debugger
     @name(data.name)

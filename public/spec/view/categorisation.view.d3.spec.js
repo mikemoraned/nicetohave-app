@@ -9,16 +9,16 @@
         categorisation = new nicetohave.Categorisation(card);
         categorisation.axis("value").value(0.1);
         categorisation.axis("risk").value(0.5);
-        view = new nicetohave.D3CategorisationView("svg", 200, 400, 1);
+        view = new nicetohave.D3CategorisationView("svg", 200, 400, 1, 1);
         mapped = view._mappingForCategorisation(categorisation);
         expect(mapped.x).toEqual(20.8);
-        return expect(mapped.y).toEqual(150.125);
+        return expect(mapped.y).toEqual(150.0625);
       });
       return it('should map fully uncategorised card to x, y position in uncategorised area', function() {
         var card, categorisation, mapped, view;
         card = new nicetohave.DummyCard("a-dummy-id");
         categorisation = new nicetohave.Categorisation(card);
-        view = new nicetohave.D3CategorisationView("svg", 200, 400, 1);
+        view = new nicetohave.D3CategorisationView("svg", 200, 400, 1, 1);
         mapped = view._mappingForCategorisation(categorisation);
         expect(mapped.x).toBeGreaterThan(0);
         expect(mapped.x).toBeLessThan(200);
@@ -33,7 +33,7 @@
         categorisation = new nicetohave.Categorisation(card);
         categorisation.axis("value").value(0.1);
         categorisation.axis("risk").value(0.5);
-        view = new nicetohave.D3CategorisationView("svg", 200, 400, 1);
+        view = new nicetohave.D3CategorisationView("svg", 200, 400, 1, 1);
         mapped = view._mappingForCategorisation(categorisation);
         expect(mapped.x).toBeGreaterThan(0);
         expect(mapped.x).toBeLessThan(200);

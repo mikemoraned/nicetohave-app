@@ -2,7 +2,8 @@ window.nicetohave ?= {}
 
 class D3CategorisationView
 
-  constructor: (@rootSelector, @width, @height, @maxRadius = 10) ->
+  constructor: (@rootSelector, @width, @height, @cardWidth = 40, @cardHeight = 20) ->
+    @maxRadius = Math.max(@cardWidth, @cardHeight) / 2.0
     @_setup()
     @_existingMappingForCategorisation = {}
 
@@ -17,7 +18,7 @@ class D3CategorisationView
   _setupScales: () =>
     @valueScale = d3.scale.linear()
     .domain([0, 1])
-    .range([@maxRadius, @width - @maxRadius])
+    .range([@cardWidth, @width - @cardWidth])
     .clamp(true)
 
     @riskScale = d3.scale.linear()
@@ -29,7 +30,7 @@ class D3CategorisationView
 
     @uncategorisedRiskScale = d3.scale.linear()
     .domain([0, 1])
-    .range([0.75 * (@height - @maxRadius), @height - @maxRadius])
+    .range([0.75 * (@height - @cardHeight), @height - @cardHeight])
     .clamp(true)
 
   _setupDragBehaviour: () =>
@@ -58,9 +59,9 @@ class D3CategorisationView
   _resetUncategorisedArea: () =>
     @_nextFreeSlot = 0
 
-    @_nextFreeSlotXSpacing = @maxRadius * 2.5
-    @_nextFreeSlotYSpacing = @_nextFreeSlotXSpacing
-    @_nextFreeSlotXOffset = @maxRadius * 1.5
+    @_nextFreeSlotXSpacing = @cardWidth * 1.1
+    @_nextFreeSlotYSpacing = @cardWidth * 1.1
+    @_nextFreeSlotXOffset = @cardWidth * 0.5
     @_nextFreeSlotYOffset = (0.75 * @height) + @_titleAreaHeight + @_nextFreeSlotYSpacing
 
     freeX = (@width - (@_nextFreeSlotXOffset * 2))
@@ -126,8 +127,11 @@ class D3CategorisationView
     .on("mouseover", (d) => @_inspected(d.cat.card))
     .on("mouseout", (d) => @_inspected(null))
 
-    theNew.append("circle")
-    .attr("r", @maxRadius)
+    theNew.append("rect")
+    .attr("width", @cardWidth)
+    .attr("height", @cardHeight)
+    .attr("rx", 5)
+    .attr("ry", 5)
 
     existing.exit()
     .transition()

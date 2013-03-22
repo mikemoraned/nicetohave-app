@@ -14,13 +14,10 @@
         stroke-width: 1px;
     }
 
-    text.card {
-        display: none;
-    }
-
-    circle.card {
-        stroke: #fff;
-        stroke-width: 1.5px;
+    g.mini-card rect {
+        stroke: #aaa;
+        fill: #fff;
+        stroke-width: 1px;
     }
 
     circle.card.highlighted {
