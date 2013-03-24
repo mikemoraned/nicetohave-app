@@ -17,7 +17,7 @@
     g.mini-card rect {
         stroke: #aaa;
         fill: #fff;
-        stroke-width: 1px;
+        stroke-width: 3px;
     }
 
     circle.card.highlighted {

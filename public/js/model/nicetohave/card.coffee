@@ -51,9 +51,9 @@ class Card
 
   _parseFields: (data) =>
     if data == null or typeof data == "undefined"
-      console.log("Something wierd happening, stop on debugger")
-      debugger
-    @name(data.name)
+      console.log("Something wierd happening, ignoring for now")
+    else
+      @name(data.name)
 
   _parseComments: (data) =>
     @comments(data.map((d)->

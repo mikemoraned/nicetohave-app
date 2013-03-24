@@ -103,10 +103,10 @@
 
     Card.prototype._parseFields = function(data) {
       if (data === null || typeof data === "undefined") {
-        console.log("Something wierd happening, stop on debugger");
-        debugger;
+        return console.log("Something wierd happening, ignoring for now");
+      } else {
+        return this.name(data.name);
       }
-      return this.name(data.name);
     };
 
     Card.prototype._parseComments = function(data) {
