@@ -8,7 +8,11 @@ class Card
     @id = ko.observable(id)
     @privilege = privilege
     @name = ko.observable("")
-    @comments = ko.observableArray()
+    @localComments = ko.observableArray()
+    @remoteComments = ko.observableArray()
+    @comments = ko.computed(() =>
+      @localComments().concat(@remoteComments())
+    )
     @loadStatus = ko.observable("created")
 
     @hasComments = ko.computed(() =>
@@ -28,15 +32,37 @@ class Card
     )
 
   addComment: (comment) =>
+    @localComments.unshift(comment)
+    @_sendLocalComments()
+
+  _sendLocalComments: () =>
     @outstanding.started()
+
+    sendNextLocalComment = () =>
+      @outstanding.started()
+      comment = @_peek(@localComments)
+      @privilege.using(nicetohave.PrivilegeLevel.READ_WRITE, (trello) =>
+        trello.post("/cards/" + @id() + "/actions/comments", { text: comment.text() }, onSuccess, onFailure)
+      )
+
     onSuccess = () =>
-      @loadStatus("saved")
-      @load()
+      @localComments.pop()
       @outstanding.completed()
+      if @localComments().length == 0
+        @loadStatus("saved")
+        @load()
+        @outstanding.completed()
+      else
+        sendNextLocalComment()
+
     onFailure = => @loadStatus("save-failed")
-    @privilege.using(nicetohave.PrivilegeLevel.READ_WRITE, (trello) =>
-      trello.post("/cards/" + @id() + "/actions/comments", { text: comment.text() }, onSuccess, onFailure)
-    )
+
+    sendNextLocalComment()
+
+  _peek: (array) =>
+    val = array.pop()
+    array.push(val)
+    val
 
   _loadComments: =>
     @outstanding.started()
@@ -56,7 +82,7 @@ class Card
       @name(data.name)
 
   _parseComments: (data) =>
-    @comments(data.map((d)->
+    @remoteComments(data.map((d)->
       texts = (e.text for e in d.entities when e.type == 'comment')
       new nicetohave.Comment(texts[0])
     ))

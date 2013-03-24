@@ -21,6 +21,12 @@
       this._loadComments = function() {
         return Card.prototype._loadComments.apply(_this, arguments);
       };
+      this._peek = function(array) {
+        return Card.prototype._peek.apply(_this, arguments);
+      };
+      this._sendLocalComments = function() {
+        return Card.prototype._sendLocalComments.apply(_this, arguments);
+      };
       this.addComment = function(comment) {
         return Card.prototype.addComment.apply(_this, arguments);
       };
@@ -35,7 +41,11 @@
       this.id = ko.observable(id);
       this.privilege = privilege;
       this.name = ko.observable("");
-      this.comments = ko.observableArray();
+      this.localComments = ko.observableArray();
+      this.remoteComments = ko.observableArray();
+      this.comments = ko.computed(function() {
+        return _this.localComments().concat(_this.remoteComments());
+      });
       this.loadStatus = ko.observable("created");
       this.hasComments = ko.computed(function() {
         return _this.comments().length > 0;
@@ -63,22 +73,46 @@
     };
 
     Card.prototype.addComment = function(comment) {
-      var onFailure, onSuccess,
+      this.localComments.unshift(comment);
+      return this._sendLocalComments();
+    };
+
+    Card.prototype._sendLocalComments = function() {
+      var onFailure, onSuccess, sendNextLocalComment,
         _this = this;
       this.outstanding.started();
+      sendNextLocalComment = function() {
+        var comment;
+        _this.outstanding.started();
+        comment = _this._peek(_this.localComments);
+        return _this.privilege.using(nicetohave.PrivilegeLevel.READ_WRITE, function(trello) {
+          return trello.post("/cards/" + _this.id() + "/actions/comments", {
+            text: comment.text()
+          }, onSuccess, onFailure);
+        });
+      };
       onSuccess = function() {
-        _this.loadStatus("saved");
-        _this.load();
-        return _this.outstanding.completed();
+        _this.localComments.pop();
+        _this.outstanding.completed();
+        if (_this.localComments().length === 0) {
+          _this.loadStatus("saved");
+          _this.load();
+          return _this.outstanding.completed();
+        } else {
+          return sendNextLocalComment();
+        }
       };
       onFailure = function() {
         return _this.loadStatus("save-failed");
       };
-      return this.privilege.using(nicetohave.PrivilegeLevel.READ_WRITE, function(trello) {
-        return trello.post("/cards/" + _this.id() + "/actions/comments", {
-          text: comment.text()
-        }, onSuccess, onFailure);
-      });
+      return sendNextLocalComment();
+    };
+
+    Card.prototype._peek = function(array) {
+      var val;
+      val = array.pop();
+      array.push(val);
+      return val;
     };
 
     Card.prototype._loadComments = function() {
@@ -110,7 +144,7 @@
     };
 
     Card.prototype._parseComments = function(data) {
-      return this.comments(data.map(function(d) {
+      return this.remoteComments(data.map(function(d) {
         var e, texts;
         texts = (function() {
           var _i, _len, _ref1, _results;

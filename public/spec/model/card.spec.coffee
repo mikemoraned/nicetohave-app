@@ -122,3 +122,47 @@ describe 'Card', ->
                                      }
                                   ]
                                   """)
+
+  describe 'adding comments', ->
+
+    trello = null
+
+    aComment = new nicetohave.Comment("aComment")
+
+    beforeEach ->
+      trello = {
+        post: (path, params, successFn, errorFn) ->
+        cards: {
+          get: (path, params, successFn, errorFn) ->
+        }
+      }
+      spyOn(trello.cards, 'get').andCallFake((path, params, successFn, errorFn) ->
+        if (path == '4eea503d91e31d174600008f')
+          successFn({ name: "A dummy name"})
+        else
+          if (path == '4eea503d91e31d174600008f/actions' && params.filter == 'commentCard')
+            successFn([ { entities: [ { type: 'comment', text: aComment.text() } ] } ] )
+          else
+            errorFn()
+      )
+
+    it 'whilst new comment is being saved, it appears as part of the model', ->
+      privilege = new nicetohave.Privilege(trello)
+      privilege.level(nicetohave.PrivilegeLevel.READ_WRITE)
+
+      card = new nicetohave.Card("4eea503d91e31d174600008f", privilege, outstanding)
+
+      numCommentsDuringSave = 0
+      spyOn(trello, 'post').andCallFake((path, params, successFn, errorFn) ->
+        if (path == '/cards/4eea503d91e31d174600008f/actions/comments')
+          numCommentsDuringSave = card.comments().length
+          successFn()
+        else
+          errorFn()
+      )
+
+      expect(card.comments().length).toEqual(0)
+      card.addComment(aComment)
+      expect(numCommentsDuringSave).toEqual(1)
+      expect(card.comments().length).toEqual(1)
+

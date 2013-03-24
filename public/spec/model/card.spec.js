@@ -46,7 +46,7 @@
         return expect(card.loadStatus()).toBe("created");
       });
     });
-    return describe('loading', function() {
+    describe('loading', function() {
       var commentsResponse, trello;
       trello = null;
       beforeEach(function() {
@@ -84,6 +84,60 @@
         return expect(card.comments()[0].text()).toEqual("This is a comment");
       });
       return commentsResponse = JSON.parse("[\n   {\n      \"id\":\"51059bc37001c216210011b0\",\n      \"idMemberCreator\":\"506b41beead39f966c0ce110\",\n      \"data\":{\n         \"text\":\"This is a comment\",\n         \"board\":{\n            \"name\":\"NiceToHaveTestBoard\",\n            \"id\":\"50f5c98fe0314ccd5500a51b\"\n         },\n         \"card\":{\n            \"name\":\"Test card\",\n            \"idShort\":1,\n            \"id\":\"510557f3e002eb8d56002e04\"\n         },\n         \"dateLastEdited\":\"2013-01-27T21:52:51.575Z\"\n      },\n      \"type\":\"commentCard\",\n      \"date\":\"2013-01-27T21:27:31.934Z\",\n      \"memberCreator\":{\n         \"id\":\"506b41beead39f966c0ce110\",\n         \"avatarHash\":null,\n         \"fullName\":\"Mike Moran\",\n         \"initials\":\"MM\",\n         \"username\":\"lazysurefix\"\n      },\n      \"entities\":[\n         {\n            \"type\":\"member\",\n            \"id\":\"506b41beead39f966c0ce110\",\n            \"text\":\"Mike Moran\"\n         },\n         {\n            \"type\":\"text\",\n            \"text\":\"on\",\n            \"idContext\":\"510557f3e002eb8d56002e04\",\n            \"hideIfContext\":true\n         },\n         {\n            \"type\":\"card\",\n            \"id\":\"510557f3e002eb8d56002e04\",\n            \"text\":\"Test card\",\n            \"hideIfContext\":true\n         },\n         {\n            \"type\":\"comment\",\n            \"text\":\"This is a comment\",\n            \"textHtml\":\"This is a comment\"\n         }\n      ]\n   }\n]");
+    });
+    return describe('adding comments', function() {
+      var aComment, trello;
+      trello = null;
+      aComment = new nicetohave.Comment("aComment");
+      beforeEach(function() {
+        trello = {
+          post: function(path, params, successFn, errorFn) {},
+          cards: {
+            get: function(path, params, successFn, errorFn) {}
+          }
+        };
+        return spyOn(trello.cards, 'get').andCallFake(function(path, params, successFn, errorFn) {
+          if (path === '4eea503d91e31d174600008f') {
+            return successFn({
+              name: "A dummy name"
+            });
+          } else {
+            if (path === '4eea503d91e31d174600008f/actions' && params.filter === 'commentCard') {
+              return successFn([
+                {
+                  entities: [
+                    {
+                      type: 'comment',
+                      text: aComment.text()
+                    }
+                  ]
+                }
+              ]);
+            } else {
+              return errorFn();
+            }
+          }
+        });
+      });
+      return it('whilst new comment is being saved, it appears as part of the model', function() {
+        var card, numCommentsDuringSave, privilege;
+        privilege = new nicetohave.Privilege(trello);
+        privilege.level(nicetohave.PrivilegeLevel.READ_WRITE);
+        card = new nicetohave.Card("4eea503d91e31d174600008f", privilege, outstanding);
+        numCommentsDuringSave = 0;
+        spyOn(trello, 'post').andCallFake(function(path, params, successFn, errorFn) {
+          if (path === '/cards/4eea503d91e31d174600008f/actions/comments') {
+            numCommentsDuringSave = card.comments().length;
+            return successFn();
+          } else {
+            return errorFn();
+          }
+        });
+        expect(card.comments().length).toEqual(0);
+        card.addComment(aComment);
+        expect(numCommentsDuringSave).toEqual(1);
+        return expect(card.comments().length).toEqual(1);
+      });
     });
   });
 
