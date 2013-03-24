@@ -83,16 +83,16 @@
       this.outstanding.started();
       sendNextLocalComment = function() {
         var comment;
-        _this.outstanding.started();
-        comment = _this._peek(_this.localComments);
+        comment = _this._peek(_this.localComments());
         return _this.privilege.using(nicetohave.PrivilegeLevel.READ_WRITE, function(trello) {
+          _this.outstanding.started();
           return trello.post("/cards/" + _this.id() + "/actions/comments", {
             text: comment.text()
           }, onSuccess, onFailure);
         });
       };
       onSuccess = function() {
-        _this.localComments.pop();
+        _this.remoteComments.unshift(_this.localComments.pop());
         _this.outstanding.completed();
         if (_this.localComments().length === 0) {
           _this.loadStatus("saved");
@@ -109,10 +109,7 @@
     };
 
     Card.prototype._peek = function(array) {
-      var val;
-      val = array.pop();
-      array.push(val);
-      return val;
+      return array[array.length - 1];
     };
 
     Card.prototype._loadComments = function() {

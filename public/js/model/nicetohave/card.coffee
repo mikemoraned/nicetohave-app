@@ -19,7 +19,7 @@ class Card
       @comments().length > 0
     )
 
-  load: =>
+  load: () =>
     @loadStatus("in-progress")
     @outstanding.started()
     onSuccess = (data) =>
@@ -39,14 +39,14 @@ class Card
     @outstanding.started()
 
     sendNextLocalComment = () =>
-      @outstanding.started()
-      comment = @_peek(@localComments)
+      comment = @_peek(@localComments())
       @privilege.using(nicetohave.PrivilegeLevel.READ_WRITE, (trello) =>
+        @outstanding.started()
         trello.post("/cards/" + @id() + "/actions/comments", { text: comment.text() }, onSuccess, onFailure)
       )
 
     onSuccess = () =>
-      @localComments.pop()
+      @remoteComments.unshift(@localComments.pop())
       @outstanding.completed()
       if @localComments().length == 0
         @loadStatus("saved")
@@ -60,9 +60,7 @@ class Card
     sendNextLocalComment()
 
   _peek: (array) =>
-    val = array.pop()
-    array.push(val)
-    val
+    array[array.length - 1]
 
   _loadComments: =>
     @outstanding.started()
