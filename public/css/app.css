@@ -16,8 +16,12 @@
 
     g.mini-card rect {
         stroke: #aaa;
-        fill: #fff;
+        fill: #ccc;
         stroke-width: 3px;
+    }
+
+    g.mini-card.editable rect {
+        fill: #fff;
     }
 
     circle.card.highlighted {

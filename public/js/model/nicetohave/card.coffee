@@ -23,6 +23,10 @@ class Card
       @comments().length > 0
     )
 
+    @editable = ko.computed(() =>
+      not (@loadStatus() == 'in-progress' or @loadStatus().indexOf("failed") > 0)
+    )
+
   load: () =>
     @loadStatus("in-progress")
     @outstanding.started()

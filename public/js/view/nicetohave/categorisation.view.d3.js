@@ -77,9 +77,11 @@
         _this = this;
       self = this;
       dragmove = function(d) {
-        d.x = self._clampX(d3.event.x);
-        d.y = self._clampY(d3.event.y);
-        return d3.select(this).attr("transform", "translate(" + d.x + "," + d.y + ")");
+        if (d.cat.card.editable()) {
+          d.x = self._clampX(d3.event.x);
+          d.y = self._clampY(d3.event.y);
+          return d3.select(this).attr("transform", "translate(" + d.x + "," + d.y + ")");
+        }
       };
       dragend = function(d) {
         var newRisk, newValue;
@@ -132,6 +134,7 @@
         };
         this._existingMappingForCategorisation[id] = mapping;
       }
+      mapping.editable = c.card.editable();
       if (c.fullyDefined()) {
         mapping.x = this.valueScale(c.axis("value").value());
         mapping.y = this.riskScale(c.axis("risk").value());
@@ -166,10 +169,14 @@
       existing = this.root.selectAll("g.mini-card").data(mapped, function(d) {
         return d.id;
       });
-      existing.transition().duration(200).attr("transform", function(d) {
+      existing.classed("editable", function(d) {
+        return d.cat.card.editable();
+      }).transition().duration(200).attr("transform", function(d) {
         return "translate(" + d.x + "," + d.y + ")";
       });
-      theNew = existing.enter().append("g").classed("mini-card", true).attr("transform", function(d) {
+      theNew = existing.enter().append("g").classed("mini-card", true).classed("editable", function(d) {
+        return d.cat.card.editable();
+      }).attr("transform", function(d) {
         return "translate(" + d.x + "," + d.y + ")";
       }).call(this.drag).on("mouseover", function(d) {
         return _this._inspected(d.cat.card);

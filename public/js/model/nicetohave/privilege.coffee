@@ -6,7 +6,7 @@ class Privilege
     @level = ko.observable(nicetohave.PrivilegeLevel.NONE)
     @changingLevel = ko.observable(false)
     @callDepth = ko.observable(0)
-    @callDepth.subscribe((d) -> console.log("Depth: #{d}"))
+#    @callDepth.subscribe((d) -> console.log("Depth: #{d}"))
 
   using: (expectedLevel, fn) ->
     tracked = (trello) =>

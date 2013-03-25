@@ -13,9 +13,6 @@
       this.level = ko.observable(nicetohave.PrivilegeLevel.NONE);
       this.changingLevel = ko.observable(false);
       this.callDepth = ko.observable(0);
-      this.callDepth.subscribe(function(d) {
-        return console.log("Depth: " + d);
-      });
     }
 
     Privilege.prototype.using = function(expectedLevel, fn) {

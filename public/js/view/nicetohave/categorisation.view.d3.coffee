@@ -37,10 +37,11 @@ class D3CategorisationView
     self = @
 
     dragmove = (d) ->
-      d.x = self._clampX(d3.event.x)
-      d.y = self._clampY(d3.event.y)
-      d3.select(this)
-        .attr("transform", "translate(#{d.x},#{d.y})" )
+      if d.cat.card.editable()
+        d.x = self._clampX(d3.event.x)
+        d.y = self._clampY(d3.event.y)
+        d3.select(this)
+          .attr("transform", "translate(#{d.x},#{d.y})" )
 
     dragend = (d) =>
       newValue = @valueScale.invert(d.x)
@@ -87,6 +88,8 @@ class D3CategorisationView
       mapping = { id: id, cat: c }
       @_existingMappingForCategorisation[id] = mapping
 
+    mapping.editable = c.card.editable()
+
     if c.fullyDefined()
       mapping.x = @valueScale(c.axis("value").value())
       mapping.y = @riskScale(c.axis("risk").value())
@@ -115,6 +118,7 @@ class D3CategorisationView
                     .data(mapped, (d) => d.id)
 
     existing
+    .classed("editable", (d) => d.cat.card.editable())
     .transition()
       .duration(200)
       .attr("transform", (d) => "translate(#{d.x},#{d.y})" )
@@ -122,6 +126,7 @@ class D3CategorisationView
     theNew = existing.enter()
     .append("g")
     .classed("mini-card", true)
+    .classed("editable", (d) => d.cat.card.editable())
     .attr("transform", (d) => "translate(#{d.x},#{d.y})" )
     .call(@drag)
     .on("mouseover", (d) => @_inspected(d.cat.card))

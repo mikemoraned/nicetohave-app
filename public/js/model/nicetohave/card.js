@@ -54,6 +54,9 @@
       this.hasComments = ko.computed(function() {
         return _this.comments().length > 0;
       });
+      this.editable = ko.computed(function() {
+        return !(_this.loadStatus() === 'in-progress' || _this.loadStatus().indexOf("failed") > 0);
+      });
     }
 
     Card.prototype.load = function() {
