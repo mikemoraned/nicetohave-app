@@ -121,11 +121,7 @@
                         For instance, it doesn't remember the categorisations!
                         </p>
 
-                        <h3>v<%= settings.version %></h3>
-
-                        <p>
-                            You're looking at it!
-                        </p>
+                        <h3>v0.0.2</h3>
 
                         <ul>
                             <li>Added saving of categorisations within the page (will clear on full page refresh). Practically, this means
@@ -138,6 +134,18 @@
                             <li>Refactorathon in progress to support <a href="https://trello.com/card/persist-categorisations-as-comments-e-g-nice-to-have-and-low-risk-load-and-use-to-choose-initial-position-on-area/50d4b39f3d7039c91b001237/11">persisting of categorisations</a></li>
                         </ul>
 
+                        <h3>v0.1.0</h3>
+
+                        <ul>
+                            <li><a href="https://trello.com/card/persist-categorisations-as-comments-e-g-nice-to-have-and-low-risk-load-and-use-to-choose-initial-position-on-area/50d4b39f3d7039c91b001237/11">Save card positions as comments</a></li>
+                            <li>Removed ability to print out the board. This was previously added to support sharing, which is now supported by simply sharing a url of the board.</li>
+                        </ul>
+
+                        <!--<h3>v<%= settings.version %></h3>-->
+                        <!--<p>-->
+                            <!--You're looking at it!-->
+                        <!--</p>-->
+
                     </article>
 
                 </div>
@@ -146,7 +154,7 @@
                     <h4>Bookmarklet</h4>
 
                     <p>Drag <span class="bookmarklet">
-                        <a href='javascript:var match=location.href.match(".+/trello.com/board/[^/]+/([0-9a-f]+)");if(match){var redirect="http://nicetohave.houseofmoran.com/app#"+match[1];location.href=redirect};'>Nice to have!</a>
+                        <a href='javascript:var match=location.href.match(".+/trello.com/board/[^/]+/([0-9a-f]+)");if(match){var redirect="<%= settings.baseURL %>/app#"+match[1];location.href=redirect};'>Nice to have!</a>
                     </span> to your bookmarks and be redirected to <a href="/app">the app</a> when on <a href="http://trello.com/">trello.com</a>.
                     </p>
 

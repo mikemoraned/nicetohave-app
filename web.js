@@ -23,6 +23,7 @@ app.configure(function(){
     app.engine('ejs', engine);
 
     app.set('version', p.version);
+    app.set('baseURL', p.baseURL);
 
     //Error Handling
     app.use(express.logger());
