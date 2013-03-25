@@ -4,8 +4,9 @@ class Privilege
   constructor: (trello) ->
     @trello = trello
     @level = ko.observable(nicetohave.PrivilegeLevel.NONE)
+    @changingLevel = ko.observable(false)
     @callDepth = ko.observable(0)
-#    @callDepth.subscribe((d) -> console.log("Depth: #{d}"))
+    @callDepth.subscribe((d) -> console.log("Depth: #{d}"))
 
   using: (expectedLevel, fn) ->
     tracked = (trello) =>
@@ -20,6 +21,7 @@ class Privilege
       @raiseTo(expectedLevel, tracked)
 
   raiseTo: (level, success) ->
+    @changingLevel(true)
     @trello.deauthorize()
     @level(nicetohave.PrivilegeLevel.NONE)
     @trello.authorize({
@@ -28,9 +30,11 @@ class Privilege
       success: () =>
         console.log("Success!")
         @level(level)
+        @changingLevel(false)
         success(@trello)
       ,
       error: (m) =>
+        @changingLevel(false)
         console.log("Error: #{m}")
       ,
       scope: level.trelloScope

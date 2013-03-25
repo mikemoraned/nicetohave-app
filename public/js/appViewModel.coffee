@@ -4,6 +4,7 @@ class AppViewModel
 
   constructor: ->
     @privilege = new nicetohave.Privilege(Trello)
+    @notifications = new nicetohave.Notifications(@privilege)
     @outstanding = new nicetohave.Outstanding()
     @workingArea = ko.observable()
     @categoriseView = new nicetohave.D3CategorisationView("svg", 1200, 600)

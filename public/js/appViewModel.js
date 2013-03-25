@@ -18,6 +18,7 @@
         return AppViewModel.prototype.run.apply(_this, arguments);
       };
       this.privilege = new nicetohave.Privilege(Trello);
+      this.notifications = new nicetohave.Notifications(this.privilege);
       this.outstanding = new nicetohave.Outstanding();
       this.workingArea = ko.observable();
       this.categoriseView = new nicetohave.D3CategorisationView("svg", 1200, 600);

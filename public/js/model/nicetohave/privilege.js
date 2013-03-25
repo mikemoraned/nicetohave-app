@@ -11,7 +11,11 @@
     function Privilege(trello) {
       this.trello = trello;
       this.level = ko.observable(nicetohave.PrivilegeLevel.NONE);
+      this.changingLevel = ko.observable(false);
       this.callDepth = ko.observable(0);
+      this.callDepth.subscribe(function(d) {
+        return console.log("Depth: " + d);
+      });
     }
 
     Privilege.prototype.using = function(expectedLevel, fn) {
@@ -33,6 +37,7 @@
 
     Privilege.prototype.raiseTo = function(level, success) {
       var _this = this;
+      this.changingLevel(true);
       this.trello.deauthorize();
       this.level(nicetohave.PrivilegeLevel.NONE);
       return this.trello.authorize({
@@ -41,9 +46,11 @@
         success: function() {
           console.log("Success!");
           _this.level(level);
+          _this.changingLevel(false);
           return success(_this.trello);
         },
         error: function(m) {
+          _this.changingLevel(false);
           return console.log("Error: " + m);
         },
         scope: level.trelloScope

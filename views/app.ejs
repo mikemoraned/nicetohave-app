@@ -17,6 +17,7 @@
 <% script('/js/model/nicetohave/board.js') -%>
 <% script('/js/model/nicetohave/categorisation.js') -%>
 <% script('/js/model/nicetohave/workingArea.js') -%>
+<% script('/js/model/nicetohave/notifications.js') -%>
 <% script('/js/view/nicetohave/categorisation.view.d3.js') -%>
 <% script('/js/appViewModel.js') -%>
 
@@ -44,6 +45,15 @@
     </div>
 
     <div class="container">
+
+        <div class="notifications" data-bind="with: notifications">
+            <div data-bind="foreach: alerts">
+                <div class="alert alert-warn">
+                    <h4 data-bind="text: title"></h4>
+                    <span data-bind="text: message"></span>
+                </div>
+            </div>
+        </div>
 
         <div data-bind="with: workingArea">
             <div class="row">
