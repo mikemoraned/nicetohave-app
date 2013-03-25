@@ -44,6 +44,10 @@
       this.localComments = ko.observableArray();
       this.remoteComments = ko.observableArray();
       this.comments = ko.computed(function() {
+        console.log("local");
+        console.dir(_this.localComments());
+        console.log("remote");
+        console.dir(_this.remoteComments());
         return _this.localComments().concat(_this.remoteComments());
       });
       this.loadStatus = ko.observable("created");
@@ -81,8 +85,12 @@
       var onFailure, onSuccess, sendNextLocalComment,
         _this = this;
       this.outstanding.started();
+      console.log("_sendLocalComments");
+      console.dir(this.localComments());
       sendNextLocalComment = function() {
         var comment;
+        console.log("sendNextLocalComment");
+        console.dir(_this.localComments());
         comment = _this._peek(_this.localComments());
         return _this.privilege.using(nicetohave.PrivilegeLevel.READ_WRITE, function(trello) {
           _this.outstanding.started();
@@ -92,7 +100,13 @@
         });
       };
       onSuccess = function() {
-        _this.remoteComments.unshift(_this.localComments.pop());
+        var completed;
+        console.log("onSuccess");
+        console.dir(_this.localComments());
+        completed = _this.localComments.pop();
+        console.log("completed");
+        console.dir(completed.text());
+        _this.remoteComments.unshift(completed);
         _this.outstanding.completed();
         if (_this.localComments().length === 0) {
           _this.loadStatus("saved");
