@@ -21,8 +21,8 @@
         if (_this.privilege.changingLevel() && !_this.levelWentAboveNone()) {
           return [
             {
-              title: "Note",
-              message: "For this application to work, you will need to allow it to raise pop-ups "
+              type: 'popupWarning',
+              title: "Note"
             }
           ];
         } else {
@@ -30,6 +30,10 @@
         }
       });
     }
+
+    Notifications.prototype.templateName = function(alert) {
+      return "" + alert.type + "Template";
+    };
 
     return Notifications;
 

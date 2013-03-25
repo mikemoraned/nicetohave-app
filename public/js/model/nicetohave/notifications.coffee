@@ -9,9 +9,11 @@ class Notifications
     )
     @alerts = ko.computed(() =>
       if @privilege.changingLevel() and not @levelWentAboveNone()
-        [{ title: "Note", message: "For this application to work, you will need to allow it to raise pop-ups "}]
+        [{ type: 'popupWarning', title: "Note" }]
       else
         []
     )
+
+  templateName: (alert) -> "#{alert.type}Template"
 
 window.nicetohave.Notifications = Notifications

@@ -46,12 +46,24 @@
 
     <div class="container">
 
+        <script type="text/html" id="popupWarningTemplate">
+            <div class="alert alert-warn">
+                <h4 data-bind="text: title"></h4>
+                <p>
+                    For this application to work, you will need to allow it to raise pop-ups. You should see an icon
+                    in the address bar which looks something like one of these:
+                <span>
+                    <img src="/img/chrome_popup.png" />,
+                    <img src="/img/firefox_popup.png" />
+                </span>. Please click on the icon and allow popups from this website. Thanks!
+                </p>
+
+            </div>
+        </script>
+
         <div class="notifications" data-bind="with: notifications">
-            <div data-bind="foreach: alerts">
-                <div class="alert alert-warn">
-                    <h4 data-bind="text: title"></h4>
-                    <span data-bind="text: message"></span>
-                </div>
+            <div data-bind="template: { name: templateName, foreach: alerts }">
+
             </div>
         </div>
 
