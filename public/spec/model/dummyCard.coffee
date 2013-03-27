@@ -5,6 +5,7 @@ class DummyCard
     @name = ko.observable("A Dummy Card")
     @comments = ko.observableArray()
     @id = ko.observable(id)
+    @editable = ko.observable(true)
 
   addComment: (comment) =>
     @comments.unshift(comment)

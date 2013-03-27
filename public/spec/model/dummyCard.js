@@ -17,6 +17,7 @@
       this.name = ko.observable("A Dummy Card");
       this.comments = ko.observableArray();
       this.id = ko.observable(id);
+      this.editable = ko.observable(true);
     }
 
     DummyCard.prototype.addComment = function(comment) {
