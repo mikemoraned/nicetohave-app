@@ -3,7 +3,8 @@ window.nicetohave ?= {}
 class AppViewModel
 
   constructor: ->
-    @privilege = new nicetohave.Privilege(Trello)
+    @trello = new nicetohave.trello.TrelloQueue(Trello)
+    @privilege = new nicetohave.Privilege(@trello)
     @notifications = new nicetohave.Notifications(@privilege)
     @outstanding = new nicetohave.Outstanding()
     @workingArea = ko.observable()

@@ -88,12 +88,10 @@
       var onFailure, onSuccess, sendNextLocalComment,
         _this = this;
       this.outstanding.started();
-      console.log("_sendLocalComments");
-      console.dir(this.localComments());
+      console.log("" + (this.id()) + ": _sendLocalComments, outstanding: " + (this.outstanding.count()) + ", local: " + (this.localComments().length) + ", remote: " + (this.remoteComments().length));
       sendNextLocalComment = function() {
         var comment;
-        console.log("sendNextLocalComment");
-        console.dir(_this.localComments());
+        console.log("" + (_this.id()) + ": sendNextLocalComment, outstanding: " + (_this.outstanding.count()) + ", local: " + (_this.localComments().length) + ", remote: " + (_this.remoteComments().length));
         comment = _this._peek(_this.localComments());
         return _this.privilege.using(nicetohave.PrivilegeLevel.READ_WRITE, function(trello) {
           _this.outstanding.started();
@@ -104,13 +102,14 @@
       };
       onSuccess = function() {
         var completed;
+        console.log("" + (_this.id()) + ": onSuccess, outstanding: " + (_this.outstanding.count()) + ", local: " + (_this.localComments().length) + ", remote: " + (_this.remoteComments().length));
+        _this.outstanding.completed();
         console.log("onSuccess");
         console.dir(_this.localComments());
         completed = _this.localComments.pop();
         console.log("completed");
         console.dir(completed.text());
         _this.remoteComments.unshift(completed);
-        _this.outstanding.completed();
         if (_this.localComments().length === 0) {
           _this.loadStatus("saved");
           _this.load();
@@ -120,6 +119,7 @@
         }
       };
       onFailure = function() {
+        console.log("" + (_this.id()) + ": onFailure, outstanding: " + (_this.outstanding.count()) + ", local: " + (_this.localComments().length) + ", remote: " + (_this.remoteComments().length));
         return _this.loadStatus("save-failed");
       };
       return sendNextLocalComment();

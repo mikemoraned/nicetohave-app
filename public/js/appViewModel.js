@@ -17,7 +17,8 @@
       this.run = function() {
         return AppViewModel.prototype.run.apply(_this, arguments);
       };
-      this.privilege = new nicetohave.Privilege(Trello);
+      this.trello = new nicetohave.trello.TrelloQueue(Trello);
+      this.privilege = new nicetohave.Privilege(this.trello);
       this.notifications = new nicetohave.Notifications(this.privilege);
       this.outstanding = new nicetohave.Outstanding();
       this.workingArea = ko.observable();

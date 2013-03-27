@@ -46,12 +46,11 @@ class Card
   _sendLocalComments: () =>
     @outstanding.started()
 
-    console.log("_sendLocalComments")
-    console.dir(@localComments())
+    console.log("#{@id()}: _sendLocalComments, outstanding: #{@outstanding.count()}, local: #{@localComments().length}, remote: #{@remoteComments().length}")
 
     sendNextLocalComment = () =>
-      console.log("sendNextLocalComment")
-      console.dir(@localComments())
+      console.log("#{@id()}: sendNextLocalComment, outstanding: #{@outstanding.count()}, local: #{@localComments().length}, remote: #{@remoteComments().length}")
+
       comment = @_peek(@localComments())
       @privilege.using(nicetohave.PrivilegeLevel.READ_WRITE, (trello) =>
         @outstanding.started()
@@ -59,13 +58,14 @@ class Card
       )
 
     onSuccess = () =>
+      console.log("#{@id()}: onSuccess, outstanding: #{@outstanding.count()}, local: #{@localComments().length}, remote: #{@remoteComments().length}")
+      @outstanding.completed()
       console.log("onSuccess")
       console.dir(@localComments())
       completed = @localComments.pop()
       console.log("completed")
       console.dir(completed.text())
       @remoteComments.unshift(completed)
-      @outstanding.completed()
       if @localComments().length == 0
         @loadStatus("saved")
         @load()
@@ -73,7 +73,9 @@ class Card
       else
         sendNextLocalComment()
 
-    onFailure = => @loadStatus("save-failed")
+    onFailure = () =>
+      console.log("#{@id()}: onFailure, outstanding: #{@outstanding.count()}, local: #{@localComments().length}, remote: #{@remoteComments().length}")
+      @loadStatus("save-failed")
 
     sendNextLocalComment()
 
