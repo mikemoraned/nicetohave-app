@@ -14,8 +14,8 @@
       this.rootSelector = rootSelector;
       this.width = width;
       this.height = height;
-      this.cardWidth = cardWidth != null ? cardWidth : 40;
-      this.cardHeight = cardHeight != null ? cardHeight : 20;
+      this.cardWidth = cardWidth != null ? cardWidth : 30;
+      this.cardHeight = cardHeight != null ? cardHeight : 15;
       this._updateTitleArea = function(inspected) {
         return D3CategorisationView.prototype._updateTitleArea.apply(_this, arguments);
       };
@@ -115,6 +115,8 @@
       var _this = this;
       this.mapped = ko.computed(function() {
         return categorisations().map(_this._mappingForCategorisation);
+      }).extend({
+        throttle: 100
       });
       this.mapped.subscribe(this._updateDisplay);
       this._updateDisplay(this.mapped());

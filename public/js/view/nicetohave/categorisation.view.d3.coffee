@@ -2,7 +2,7 @@ window.nicetohave ?= {}
 
 class D3CategorisationView
 
-  constructor: (@rootSelector, @width, @height, @cardWidth = 40, @cardHeight = 20) ->
+  constructor: (@rootSelector, @width, @height, @cardWidth = 30, @cardHeight = 15) ->
     @maxRadius = Math.max(@cardWidth, @cardHeight) / 2.0
     @_setup()
     @_existingMappingForCategorisation = {}
@@ -71,7 +71,7 @@ class D3CategorisationView
   subscribeTo: (categorisations) =>
     @mapped = ko.computed(() =>
       categorisations().map(@_mappingForCategorisation)
-    )
+    ).extend({ throttle: 100 })
     @mapped.subscribe(@_updateDisplay)
     @_updateDisplay(@mapped())
 
