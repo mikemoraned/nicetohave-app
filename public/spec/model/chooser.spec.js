@@ -9,6 +9,13 @@
         chooser = new nicetohave.Chooser(navigator);
         return expect(chooser.boardId()).toBeNull();
       });
+      it('empty strings are not navigable', function() {
+        var chooser, navigator;
+        navigator = null;
+        chooser = new nicetohave.Chooser(navigator);
+        chooser.boardUrl("");
+        return expect(chooser.navigable()).toBeFalsy();
+      });
       it('invalid URLs are not navigable', function() {
         var chooser, navigator;
         navigator = null;
@@ -43,12 +50,19 @@
         chooser.boardUrl("https://trello.com/board/nicetohave/50d4b5faa5c6aadc4e001117   ");
         return expect(chooser.boardId()).toEqual("50d4b5faa5c6aadc4e001117");
       });
-      return it('will tolerate leading and trailing space', function() {
+      it('will tolerate leading and trailing space', function() {
         var chooser, navigator;
         navigator = null;
         chooser = new nicetohave.Chooser(navigator);
         chooser.boardUrl("   https://trello.com/board/nicetohave/50d4b5faa5c6aadc4e001117   ");
         return expect(chooser.boardId()).toEqual("50d4b5faa5c6aadc4e001117");
+      });
+      return it('space-only URLs are not navigable', function() {
+        var chooser, navigator;
+        navigator = null;
+        chooser = new nicetohave.Chooser(navigator);
+        chooser.boardUrl("    ");
+        return expect(chooser.navigable()).toBeFalsy();
       });
     });
   });

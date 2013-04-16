@@ -7,6 +7,12 @@ describe 'Chooser', ->
       chooser = new nicetohave.Chooser(navigator)
       expect(chooser.boardId()).toBeNull()
 
+    it 'empty strings are not navigable', ->
+      navigator = null
+      chooser = new nicetohave.Chooser(navigator)
+      chooser.boardUrl("")
+      expect(chooser.navigable()).toBeFalsy()
+
     it 'invalid URLs are not navigable', ->
       navigator = null
       chooser = new nicetohave.Chooser(navigator)
@@ -41,3 +47,9 @@ describe 'Chooser', ->
       chooser = new nicetohave.Chooser(navigator)
       chooser.boardUrl("   https://trello.com/board/nicetohave/50d4b5faa5c6aadc4e001117   ")
       expect(chooser.boardId()).toEqual("50d4b5faa5c6aadc4e001117")
+
+    it 'space-only URLs are not navigable', ->
+      navigator = null
+      chooser = new nicetohave.Chooser(navigator)
+      chooser.boardUrl("    ")
+      expect(chooser.navigable()).toBeFalsy()
