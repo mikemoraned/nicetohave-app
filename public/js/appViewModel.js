@@ -23,6 +23,8 @@
       this.outstanding = new nicetohave.Outstanding();
       this.workingArea = ko.observable();
       this.categoriseView = new nicetohave.D3CategorisationView("svg", 1200, 600);
+      this.navigator = new nicetohave.Navigator();
+      this.chooser = new nicetohave.Chooser(this.navigator);
     }
 
     AppViewModel.prototype.run = function() {
@@ -36,6 +38,7 @@
 
     AppViewModel.prototype._switchToBoard = function(id) {
       var board;
+      this.navigator.idSelected(id);
       board = new nicetohave.Board(id, this.privilege, this.outstanding);
       this.workingArea(new nicetohave.WorkingArea(board, this.privilege, this.outstanding));
       this.categoriseView.subscribeTo(this.workingArea().categorisations);

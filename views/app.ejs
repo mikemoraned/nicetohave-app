@@ -18,6 +18,8 @@
 <% script('/js/model/nicetohave/categorisation.js') -%>
 <% script('/js/model/nicetohave/workingArea.js') -%>
 <% script('/js/model/nicetohave/notifications.js') -%>
+<% script('/js/model/nicetohave/navigator.js') -%>
+<% script('/js/model/nicetohave/chooser.js') -%>
 <% script('/js/view/nicetohave/categorisation.view.d3.js') -%>
 <% script('/js/model/nicetohave/trello/trelloQueue.js') -%>
 <% script('/js/appViewModel.js') -%>
@@ -66,6 +68,13 @@
             <div data-bind="template: { name: templateName, foreach: alerts }">
 
             </div>
+        </div>
+
+        <div class="chooser row" data-bind="with: chooser">
+            <form>
+               <input class="push1 span10" data-bind="value: boardUrl" placeholder="Paste your the URL of your board here">
+               <button type="button" class="btn" data-bind="click: navigateTo, enable: navigable">Go</button>
+            </form>
         </div>
 
         <div data-bind="with: workingArea">
