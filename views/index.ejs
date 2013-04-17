@@ -154,7 +154,7 @@
                     <h4>Bookmarklet</h4>
 
                     <p>Drag <span class="bookmarklet">
-                        <a href='javascript:var match=location.href.match(".+/trello.com/board/[^/]+/([0-9a-f]+)");if(match){var redirect="<%= settings.baseURL %>/app#"+match[1];location.href=redirect};'>Nice to have!</a>
+                        <a href='javascript:var match=location.href.match(".+/trello.com/board/[^/]+/([0-9a-f]+)");if(match){var redirect="<%= settings.baseURL %>/app#"+match[1];window.open(redirect);};'>Nice to have!</a>
                     </span> to your bookmarks and be redirected to <a href="/app">the app</a> when on <a href="http://trello.com/">trello.com</a>.
                     </p>
 
