@@ -9,15 +9,25 @@ class AppViewModel
     @outstanding = new nicetohave.Outstanding()
     @workingArea = ko.observable()
     @categoriseView = new nicetohave.D3CategorisationView("svg", 1200, 600)
+    @navigator = new nicetohave.Navigator()
+    @chooser = new nicetohave.Chooser(@navigator)
 
   run: =>
     Sammy((sammy) =>
       sammy.get('#:boardId', (context) =>
         @_switchToBoard(context.params.boardId)
       )
+      sammy.notFound = (context) =>
+        @_reset()
     ).run()
 
+  _reset: () =>
+    @categoriseView.unsubscribeAll()
+    @workingArea(null)
+    @navigator.clear()
+
   _switchToBoard: (id) =>
+    @navigator.idSelected(id)
     board = new nicetohave.Board(id, @privilege, @outstanding)
     @workingArea(new nicetohave.WorkingArea(board, @privilege, @outstanding))
     @categoriseView.subscribeTo(@workingArea().categorisations)

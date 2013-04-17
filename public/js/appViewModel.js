@@ -14,6 +14,9 @@
       this._switchToBoard = function(id) {
         return AppViewModel.prototype._switchToBoard.apply(_this, arguments);
       };
+      this._reset = function() {
+        return AppViewModel.prototype._reset.apply(_this, arguments);
+      };
       this.run = function() {
         return AppViewModel.prototype.run.apply(_this, arguments);
       };
@@ -23,19 +26,31 @@
       this.outstanding = new nicetohave.Outstanding();
       this.workingArea = ko.observable();
       this.categoriseView = new nicetohave.D3CategorisationView("svg", 1200, 600);
+      this.navigator = new nicetohave.Navigator();
+      this.chooser = new nicetohave.Chooser(this.navigator);
     }
 
     AppViewModel.prototype.run = function() {
       var _this = this;
       return Sammy(function(sammy) {
-        return sammy.get('#:boardId', function(context) {
+        sammy.get('#:boardId', function(context) {
           return _this._switchToBoard(context.params.boardId);
         });
+        return sammy.notFound = function(context) {
+          return _this._reset();
+        };
       }).run();
+    };
+
+    AppViewModel.prototype._reset = function() {
+      this.categoriseView.unsubscribeAll();
+      this.workingArea(null);
+      return this.navigator.clear();
     };
 
     AppViewModel.prototype._switchToBoard = function(id) {
       var board;
+      this.navigator.idSelected(id);
       board = new nicetohave.Board(id, this.privilege, this.outstanding);
       this.workingArea(new nicetohave.WorkingArea(board, this.privilege, this.outstanding));
       this.categoriseView.subscribeTo(this.workingArea().categorisations);
