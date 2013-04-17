@@ -75,6 +75,18 @@
         expect(trello.boards.get).toHaveBeenCalled();
         return expect(board.name()).toEqual("NiceToHaveTestBoard");
       });
+      it('when asked to load, and callback provided, calls on success', function() {
+        var board, obj, privilige;
+        privilige = new nicetohave.Privilege(trello);
+        privilige.level(nicetohave.PrivilegeLevel.READ_ONLY);
+        board = new nicetohave.Board("50f5c98fe0314ccd5500a51b", privilige, outstanding);
+        obj = {
+          callback: function() {}
+        };
+        spyOn(obj, 'callback');
+        board.load(obj.callback);
+        return expect(obj.callback).toHaveBeenCalled();
+      });
       it('when asked to load, loads lists with ids', function() {
         var board, privilige;
         privilige = new nicetohave.Privilege(trello);

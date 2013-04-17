@@ -23,13 +23,16 @@
         return WorkingArea.prototype.load.apply(_this, arguments);
       };
       this.board = ko.observable(board);
-      this.selectedList = ko.observable();
+      this.selectedLists = ko.observableArray();
       this.cards = ko.computed(function() {
-        if (_this.selectedList() != null) {
-          return _this.selectedList().cards();
-        } else {
-          return [];
+        var cards, list, _i, _len, _ref1;
+        cards = [];
+        _ref1 = _this.selectedLists();
+        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+          list = _ref1[_i];
+          cards = cards.concat(list.cards());
         }
+        return cards;
       });
       this._cachedCategorisations = {};
       this.categorisations = ko.computed(function() {
@@ -53,9 +56,14 @@
     }
 
     WorkingArea.prototype.load = function() {
+      var _this = this;
       this.outstanding.reset();
       this.outstanding.started();
-      this.board().load();
+      this.board().load(function(board) {
+        if (board.lists().length > 0) {
+          return _this.selectedLists([board.lists()[0]]);
+        }
+      });
       return this.outstanding.completed();
     };
 

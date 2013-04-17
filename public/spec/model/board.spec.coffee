@@ -60,6 +60,21 @@ describe 'Board', ->
       expect(trello.boards.get).toHaveBeenCalled()
       expect(board.name()).toEqual("NiceToHaveTestBoard")
 
+    it 'when asked to load, and callback provided, calls on success', ->
+      privilige = new nicetohave.Privilege(trello)
+      privilige.level(nicetohave.PrivilegeLevel.READ_ONLY)
+
+      board = new nicetohave.Board("50f5c98fe0314ccd5500a51b", privilige, outstanding)
+
+      obj = {
+        callback : () ->
+      }
+
+      spyOn(obj, 'callback')
+      board.load(obj.callback)
+
+      expect(obj.callback).toHaveBeenCalled()
+
     it 'when asked to load, loads lists with ids', ->
       privilige = new nicetohave.Privilege(trello)
       privilige.level(nicetohave.PrivilegeLevel.READ_ONLY)

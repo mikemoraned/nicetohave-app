@@ -6,17 +6,13 @@ class WorkingArea
 
     @board = ko.observable(board)
 
-    @selectedList = ko.observable()
+    @selectedLists = ko.observableArray()
 
     @cards = ko.computed(() =>
-      #      cards = []
-      #      for list in @board().lists()
-      #        cards = cards.concat(list.cards())
-      #      cards
-      if @selectedList()?
-        @selectedList().cards()
-      else
-        []
+      cards = []
+      for list in @selectedLists()
+        cards = cards.concat(list.cards())
+      cards
     )
 
     @_cachedCategorisations = {};
@@ -39,7 +35,10 @@ class WorkingArea
   load: =>
     @outstanding.reset()
     @outstanding.started()
-    @board().load()
+    @board().load((board) =>
+      if board.lists().length > 0
+        @selectedLists([board.lists()[0]])
+    )
     @outstanding.completed()
 
   discardEdits: =>

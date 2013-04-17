@@ -15,7 +15,7 @@ class Board
     @name = ko.observable("")
     @lists = ko.observableArray()
 
-  load: =>
+  load: (onSuccessFn) =>
     @outstanding.started()
     @loadStatus("in-progress")
     onFailure = => @loadStatus("load-failed")
@@ -28,6 +28,8 @@ class Board
           @_parseLists(data)
           @_loadAllLists()
           @loadStatus("load-success")
+          if onSuccessFn?
+            onSuccessFn(this)
           @outstanding.completed()
         , onFailure)
       , onFailure)

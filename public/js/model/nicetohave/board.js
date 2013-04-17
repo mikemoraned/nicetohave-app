@@ -23,7 +23,7 @@
       this._parseFields = function(data) {
         return Board.prototype._parseFields.apply(_this, arguments);
       };
-      this.load = function() {
+      this.load = function(onSuccessFn) {
         return Board.prototype.load.apply(_this, arguments);
       };
       if (!/[a-z0-9]{24}/.test(id)) {
@@ -40,7 +40,7 @@
       this.lists = ko.observableArray();
     }
 
-    Board.prototype.load = function() {
+    Board.prototype.load = function(onSuccessFn) {
       var onFailure,
         _this = this;
       this.outstanding.started();
@@ -55,6 +55,9 @@
             _this._parseLists(data);
             _this._loadAllLists();
             _this.loadStatus("load-success");
+            if (onSuccessFn != null) {
+              onSuccessFn(_this);
+            }
             return _this.outstanding.completed();
           }, onFailure);
         }, onFailure);
