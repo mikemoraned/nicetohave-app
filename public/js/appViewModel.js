@@ -14,6 +14,9 @@
       this._switchToBoard = function(id) {
         return AppViewModel.prototype._switchToBoard.apply(_this, arguments);
       };
+      this._reset = function() {
+        return AppViewModel.prototype._reset.apply(_this, arguments);
+      };
       this.run = function() {
         return AppViewModel.prototype.run.apply(_this, arguments);
       };
@@ -30,10 +33,19 @@
     AppViewModel.prototype.run = function() {
       var _this = this;
       return Sammy(function(sammy) {
-        return sammy.get('#:boardId', function(context) {
+        sammy.get('#:boardId', function(context) {
           return _this._switchToBoard(context.params.boardId);
         });
+        return sammy.notFound = function(context) {
+          return _this._reset();
+        };
       }).run();
+    };
+
+    AppViewModel.prototype._reset = function() {
+      this.categoriseView.unsubscribeAll();
+      this.workingArea(null);
+      return this.navigator.clear();
     };
 
     AppViewModel.prototype._switchToBoard = function(id) {

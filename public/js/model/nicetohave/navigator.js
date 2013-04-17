@@ -14,11 +14,18 @@
       this.navigateTo = function(id) {
         return Navigator.prototype.navigateTo.apply(_this, arguments);
       };
+      this.clear = function() {
+        return Navigator.prototype.clear.apply(_this, arguments);
+      };
       this.idSelected = ko.observable();
       this.atBoardId = ko.computed(function() {
         return _this.idSelected() != null;
       });
     }
+
+    Navigator.prototype.clear = function() {
+      return this.idSelected(null);
+    };
 
     Navigator.prototype.navigateTo = function(id) {
       if (this.idSelected() !== id) {

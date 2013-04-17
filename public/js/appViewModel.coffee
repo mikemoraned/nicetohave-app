@@ -17,7 +17,14 @@ class AppViewModel
       sammy.get('#:boardId', (context) =>
         @_switchToBoard(context.params.boardId)
       )
+      sammy.notFound = (context) =>
+        @_reset()
     ).run()
+
+  _reset: () =>
+    @categoriseView.unsubscribeAll()
+    @workingArea(null)
+    @navigator.clear()
 
   _switchToBoard: (id) =>
     @navigator.idSelected(id)

@@ -80,6 +80,11 @@ class D3CategorisationView
 
     @_resetUncategorisedArea()
 
+  unsubscribeAll: () =>
+    @mapped = ko.observableArray()
+    @_updateDisplay(@mapped())
+    @_resetUncategorisedArea()
+
   _mappingForCategorisation: (c) =>
     id = c.card.id()
 

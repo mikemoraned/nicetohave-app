@@ -34,6 +34,9 @@
       this._mappingForCategorisation = function(c) {
         return D3CategorisationView.prototype._mappingForCategorisation.apply(_this, arguments);
       };
+      this.unsubscribeAll = function() {
+        return D3CategorisationView.prototype.unsubscribeAll.apply(_this, arguments);
+      };
       this.subscribeTo = function(categorisations) {
         return D3CategorisationView.prototype.subscribeTo.apply(_this, arguments);
       };
@@ -122,6 +125,12 @@
       this._updateDisplay(this.mapped());
       this._inspected.subscribe(this._updateTitleArea);
       this._updateTitleArea(this._inspected());
+      return this._resetUncategorisedArea();
+    };
+
+    D3CategorisationView.prototype.unsubscribeAll = function() {
+      this.mapped = ko.observableArray();
+      this._updateDisplay(this.mapped());
       return this._resetUncategorisedArea();
     };
 
