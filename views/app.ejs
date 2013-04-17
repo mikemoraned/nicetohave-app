@@ -70,10 +70,10 @@
             </div>
         </div>
 
-        <div class="chooser row" data-bind="with: chooser">
-            <form>
+        <div class="chooser row" data-bind="with: chooser, visible: !navigator.atBoardId()">
+            <form class="span12 form-inline">
                <input class="input-xxlarge" data-bind="value: boardUrl, valueUpdate:'afterkeydown'" placeholder="Paste your the URL of your board here">
-               <button type="button" class="btn btn-primary" data-bind="click: navigateTo, enable: navigable">Go</button>
+               <button type="button" class="btn btn-primary" data-bind="click: navigateTo, enable: navigable">Load board</button>
             </form>
         </div>
 

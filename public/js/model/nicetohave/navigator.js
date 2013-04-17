@@ -15,6 +15,9 @@
         return Navigator.prototype.navigateTo.apply(_this, arguments);
       };
       this.idSelected = ko.observable();
+      this.atBoardId = ko.computed(function() {
+        return _this.idSelected() != null;
+      });
     }
 
     Navigator.prototype.navigateTo = function(id) {

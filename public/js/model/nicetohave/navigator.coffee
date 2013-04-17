@@ -4,6 +4,7 @@ class Navigator
 
   constructor: () ->
     @idSelected = ko.observable()
+    @atBoardId = ko.computed(() => @idSelected()?)
 
   navigateTo: (id) =>
     if @idSelected() != id
