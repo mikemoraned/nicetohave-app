@@ -1,7 +1,7 @@
 {
   "name": "nice-to-have",
   "description": "Nice to have",
-  "version": "0.1.2beta",
+  "version": "0.1.3beta",
   "baseURL": "http://nicetohave-staging.houseofmoran.com",
   "private": true,
   "dependencies": {
