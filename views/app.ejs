@@ -72,7 +72,7 @@
 
         <div class="chooser row" data-bind="with: chooser">
             <form>
-               <input class="input-xxlarge" data-bind="value: boardUrl" placeholder="Paste your the URL of your board here">
+               <input class="input-xxlarge" data-bind="value: boardUrl, valueUpdate:'afterkeydown'" placeholder="Paste your the URL of your board here">
                <button type="button" class="btn btn-primary" data-bind="click: navigateTo, enable: navigable">Go</button>
             </form>
         </div>

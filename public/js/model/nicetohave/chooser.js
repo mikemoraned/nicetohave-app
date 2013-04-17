@@ -18,18 +18,14 @@
       this.navigateTo = function() {
         return Chooser.prototype.navigateTo.apply(_this, arguments);
       };
-      this.navigable = function() {
-        return Chooser.prototype.navigable.apply(_this, arguments);
-      };
       this.boardUrl = ko.observable();
       this.boardId = ko.computed(function() {
         return _this._parseBoardUrl(_this.boardUrl());
       });
+      this.navigable = ko.computed(function() {
+        return _this.boardId() != null;
+      });
     }
-
-    Chooser.prototype.navigable = function() {
-      return this.boardId() != null;
-    };
 
     Chooser.prototype.navigateTo = function() {
       if (this.navigable() != null) {

@@ -4,10 +4,12 @@ class Chooser
 
   constructor: (@navigator) ->
     @boardUrl = ko.observable()
-    @boardId = ko.computed(() => @_parseBoardUrl(@boardUrl()))
-
-  navigable: () =>
-    @boardId()?
+    @boardId = ko.computed(() =>
+      @_parseBoardUrl(@boardUrl())
+    )
+    @navigable = ko.computed(() =>
+      @boardId()?
+    )
 
   navigateTo: () =>
     if @navigable()?
