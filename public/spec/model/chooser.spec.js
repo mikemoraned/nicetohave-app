@@ -29,6 +29,20 @@
         chooser.boardUrl("https://foo.com/50d4b5faa5c6aadc4e001117");
         return expect(chooser.boardId()).toBeNull();
       });
+      it('will not parse a board id that is not long enough', function() {
+        var chooser, navigator;
+        navigator = null;
+        chooser = new nicetohave.Chooser(navigator);
+        chooser.boardUrl("https://trello.com/board/nicetohave/50d4b5faa5c6aad1117");
+        return expect(chooser.boardId()).toBeNull();
+      });
+      it('will not parse a board id that is too long', function() {
+        var chooser, navigator;
+        navigator = null;
+        chooser = new nicetohave.Chooser(navigator);
+        chooser.boardUrl("https://trello.com/board/nicetohave/50d4b5faa5c6aadc4e001117999");
+        return expect(chooser.boardId()).toBeNull();
+      });
       it('will parse a full correctly formed board URL as an id', function() {
         var chooser, navigator;
         navigator = null;

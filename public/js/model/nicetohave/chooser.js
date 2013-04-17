@@ -35,7 +35,7 @@
 
     Chooser.prototype._parseBoardUrl = function(url) {
       var boardPattern, match;
-      boardPattern = /\s*https:\/\/trello.com\/board\/.+?\/([a-z0-9]+)\s*/;
+      boardPattern = /^\s*https:\/\/trello.com\/board\/.+?\/([a-z0-9]{24})\s*$/;
       if (url != null) {
         match = url.match(boardPattern);
         if (match != null) {
