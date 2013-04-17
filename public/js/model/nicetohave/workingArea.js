@@ -56,9 +56,14 @@
     }
 
     WorkingArea.prototype.load = function() {
+      var _this = this;
       this.outstanding.reset();
       this.outstanding.started();
-      this.board().load();
+      this.board().load(function(board) {
+        if (board.lists().length > 0) {
+          return _this.selectedLists([board.lists()[0]]);
+        }
+      });
       return this.outstanding.completed();
     };
 

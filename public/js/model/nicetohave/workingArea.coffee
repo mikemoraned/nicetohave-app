@@ -35,7 +35,10 @@ class WorkingArea
   load: =>
     @outstanding.reset()
     @outstanding.started()
-    @board().load()
+    @board().load((board) =>
+      if board.lists().length > 0
+        @selectedLists([board.lists()[0]])
+    )
     @outstanding.completed()
 
   discardEdits: =>
