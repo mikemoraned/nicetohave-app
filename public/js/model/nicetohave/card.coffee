@@ -11,10 +11,6 @@ class Card
     @localComments = ko.observableArray()
     @remoteComments = ko.observableArray()
     @comments = ko.computed(() =>
-      console.log("local")
-      console.dir(@localComments())
-      console.log("remote")
-      console.dir(@remoteComments())
       @localComments().concat(@remoteComments())
     )
     @loadStatus = ko.observable("created")
@@ -46,11 +42,7 @@ class Card
   _sendLocalComments: () =>
     @outstanding.started()
 
-    console.log("#{@id()}: _sendLocalComments, outstanding: #{@outstanding.count()}, local: #{@localComments().length}, remote: #{@remoteComments().length}")
-
     sendNextLocalComment = () =>
-      console.log("#{@id()}: sendNextLocalComment, outstanding: #{@outstanding.count()}, local: #{@localComments().length}, remote: #{@remoteComments().length}")
-
       comment = @_peek(@localComments())
       @privilege.using(nicetohave.PrivilegeLevel.READ_WRITE, (trello) =>
         @outstanding.started()
@@ -58,13 +50,8 @@ class Card
       )
 
     onSuccess = () =>
-      console.log("#{@id()}: onSuccess, outstanding: #{@outstanding.count()}, local: #{@localComments().length}, remote: #{@remoteComments().length}")
       @outstanding.completed()
-      console.log("onSuccess")
-      console.dir(@localComments())
       completed = @localComments.pop()
-      console.log("completed")
-      console.dir(completed.text())
       @remoteComments.unshift(completed)
       if @localComments().length == 0
         @loadStatus("saved")
@@ -74,7 +61,6 @@ class Card
         sendNextLocalComment()
 
     onFailure = () =>
-      console.log("#{@id()}: onFailure, outstanding: #{@outstanding.count()}, local: #{@localComments().length}, remote: #{@remoteComments().length}")
       @loadStatus("save-failed")
 
     sendNextLocalComment()

@@ -44,10 +44,6 @@
       this.localComments = ko.observableArray();
       this.remoteComments = ko.observableArray();
       this.comments = ko.computed(function() {
-        console.log("local");
-        console.dir(_this.localComments());
-        console.log("remote");
-        console.dir(_this.remoteComments());
         return _this.localComments().concat(_this.remoteComments());
       });
       this.loadStatus = ko.observable("created");
@@ -88,10 +84,8 @@
       var onFailure, onSuccess, sendNextLocalComment,
         _this = this;
       this.outstanding.started();
-      console.log("" + (this.id()) + ": _sendLocalComments, outstanding: " + (this.outstanding.count()) + ", local: " + (this.localComments().length) + ", remote: " + (this.remoteComments().length));
       sendNextLocalComment = function() {
         var comment;
-        console.log("" + (_this.id()) + ": sendNextLocalComment, outstanding: " + (_this.outstanding.count()) + ", local: " + (_this.localComments().length) + ", remote: " + (_this.remoteComments().length));
         comment = _this._peek(_this.localComments());
         return _this.privilege.using(nicetohave.PrivilegeLevel.READ_WRITE, function(trello) {
           _this.outstanding.started();
@@ -102,13 +96,8 @@
       };
       onSuccess = function() {
         var completed;
-        console.log("" + (_this.id()) + ": onSuccess, outstanding: " + (_this.outstanding.count()) + ", local: " + (_this.localComments().length) + ", remote: " + (_this.remoteComments().length));
         _this.outstanding.completed();
-        console.log("onSuccess");
-        console.dir(_this.localComments());
         completed = _this.localComments.pop();
-        console.log("completed");
-        console.dir(completed.text());
         _this.remoteComments.unshift(completed);
         if (_this.localComments().length === 0) {
           _this.loadStatus("saved");
@@ -119,7 +108,6 @@
         }
       };
       onFailure = function() {
-        console.log("" + (_this.id()) + ": onFailure, outstanding: " + (_this.outstanding.count()) + ", local: " + (_this.localComments().length) + ", remote: " + (_this.remoteComments().length));
         return _this.loadStatus("save-failed");
       };
       return sendNextLocalComment();
