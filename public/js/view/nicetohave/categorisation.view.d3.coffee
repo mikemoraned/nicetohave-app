@@ -2,7 +2,7 @@ window.nicetohave ?= {}
 
 class D3CategorisationView
 
-  constructor: (@rootSelector, @width, @height, @cardWidth = 30, @cardHeight = 15) ->
+  constructor: (@rootSelector, @width, @height, @cardWidth = 40, @cardHeight = 20) ->
     @maxRadius = Math.max(@cardWidth, @cardHeight) / 2.0
     @_setup()
     @_existingMappingForCategorisation = {}
@@ -128,6 +128,9 @@ class D3CategorisationView
       .duration(200)
       .attr("transform", (d) => "translate(#{d.x},#{d.y})" )
 
+    existing.selectAll("text")
+    .text((d) -> d.cat.card.idShort())
+
     theNew = existing.enter()
     .append("g")
     .classed("mini-card", true)
@@ -142,6 +145,10 @@ class D3CategorisationView
     .attr("height", @cardHeight)
     .attr("rx", 5)
     .attr("ry", 5)
+
+    theNew.append("text")
+    .attr("transform", "translate(5,15)")
+    .text((d) -> d.cat.card.idShort())
 
     existing.exit()
     .transition()

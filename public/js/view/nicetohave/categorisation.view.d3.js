@@ -14,8 +14,8 @@
       this.rootSelector = rootSelector;
       this.width = width;
       this.height = height;
-      this.cardWidth = cardWidth != null ? cardWidth : 30;
-      this.cardHeight = cardHeight != null ? cardHeight : 15;
+      this.cardWidth = cardWidth != null ? cardWidth : 40;
+      this.cardHeight = cardHeight != null ? cardHeight : 20;
       this._updateTitleArea = function(inspected) {
         return D3CategorisationView.prototype._updateTitleArea.apply(_this, arguments);
       };
@@ -185,6 +185,9 @@
       }).transition().duration(200).attr("transform", function(d) {
         return "translate(" + d.x + "," + d.y + ")";
       });
+      existing.selectAll("text").text(function(d) {
+        return d.cat.card.idShort();
+      });
       theNew = existing.enter().append("g").classed("mini-card", true).classed("editable", function(d) {
         return d.cat.card.editable();
       }).attr("transform", function(d) {
@@ -195,6 +198,9 @@
         return _this._inspected(null);
       });
       theNew.append("rect").attr("width", this.cardWidth).attr("height", this.cardHeight).attr("rx", 5).attr("ry", 5);
+      theNew.append("text").attr("transform", "translate(5,15)").text(function(d) {
+        return d.cat.card.idShort();
+      });
       return existing.exit().transition().duration(200).style("opacity", 0).remove();
     };
 
