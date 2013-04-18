@@ -58,7 +58,8 @@
         return spyOn(trello.cards, 'get').andCallFake(function(path, params, successFn, errorFn) {
           if (path === '4eea503d91e31d174600008f') {
             return successFn({
-              name: "A dummy name"
+              name: "A dummy name",
+              idShort: 34
             });
           } else {
             return successFn(commentsResponse);
@@ -73,6 +74,15 @@
         card.load();
         expect(trello.cards.get).toHaveBeenCalled();
         return expect(card.name()).toEqual("A dummy name");
+      });
+      it('when asked to load, loads idShort', function() {
+        var card, privilege;
+        privilege = new nicetohave.Privilege(trello);
+        privilege.level(nicetohave.PrivilegeLevel.READ_ONLY);
+        card = new nicetohave.Card("4eea503d91e31d174600008f", privilege, outstanding);
+        card.load();
+        expect(trello.cards.get).toHaveBeenCalled();
+        return expect(card.idShort()).toEqual(34);
       });
       it('when asked to load, loads comments', function() {
         var card, privilege;

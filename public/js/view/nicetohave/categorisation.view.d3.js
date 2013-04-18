@@ -206,11 +206,11 @@
         return d.id;
       });
       existingTitles.text(function(d) {
-        return d.name();
+        return d.idShort() + ": " + d.name();
       });
       newTitles = existingTitles.enter();
       newTitles.append("text").attr("x", this._titleAreaX).attr("y", this._titleAreaY).attr("transform", "translate(0," + (0.85 * this._titleAreaHeight) + ")").classed("title", true).text(function(d) {
-        return d.name();
+        return d.idShort() + ": " + d.name();
       });
       return existingTitles.exit().remove();
     };

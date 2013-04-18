@@ -8,6 +8,7 @@ class Card
     @id = ko.observable(id)
     @privilege = privilege
     @name = ko.observable("")
+    @idShort = ko.observable()
     @localComments = ko.observableArray()
     @remoteComments = ko.observableArray()
     @comments = ko.computed(() =>
@@ -32,7 +33,7 @@ class Card
       @outstanding.completed()
     onFailure = => @loadStatus("load-failed")
     @privilege.using(nicetohave.PrivilegeLevel.READ_ONLY, (trello) =>
-      trello.cards.get(@id(), { fields: "name" }, onSuccess, onFailure)
+      trello.cards.get(@id(), { fields: "name,idShort" }, onSuccess, onFailure)
     )
 
   addComment: (comment) =>
@@ -84,6 +85,7 @@ class Card
       console.log("Something wierd happening, ignoring for now")
     else
       @name(data.name)
+      @idShort(data.idShort)
 
   _parseComments: (data) =>
     @remoteComments(data.map((d)->

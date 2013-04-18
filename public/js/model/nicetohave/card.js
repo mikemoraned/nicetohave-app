@@ -41,6 +41,7 @@
       this.id = ko.observable(id);
       this.privilege = privilege;
       this.name = ko.observable("");
+      this.idShort = ko.observable();
       this.localComments = ko.observableArray();
       this.remoteComments = ko.observableArray();
       this.comments = ko.computed(function() {
@@ -70,7 +71,7 @@
       };
       return this.privilege.using(nicetohave.PrivilegeLevel.READ_ONLY, function(trello) {
         return trello.cards.get(_this.id(), {
-          fields: "name"
+          fields: "name,idShort"
         }, onSuccess, onFailure);
       });
     };
@@ -141,7 +142,8 @@
       if (data === null || typeof data === "undefined") {
         return console.log("Something wierd happening, ignoring for now");
       } else {
-        return this.name(data.name);
+        this.name(data.name);
+        return this.idShort(data.idShort);
       }
     };
 

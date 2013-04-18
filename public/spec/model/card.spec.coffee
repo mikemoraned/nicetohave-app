@@ -41,7 +41,7 @@ describe 'Card', ->
       }
       spyOn(trello.cards, 'get').andCallFake((path, params, successFn, errorFn) ->
         if (path == '4eea503d91e31d174600008f')
-          successFn({ name: "A dummy name"})
+          successFn({ name: "A dummy name", idShort: 34 })
         else
           successFn(commentsResponse)
       )
@@ -56,6 +56,17 @@ describe 'Card', ->
 
       expect(trello.cards.get).toHaveBeenCalled()
       expect(card.name()).toEqual("A dummy name")
+
+    it 'when asked to load, loads idShort', ->
+      privilege = new nicetohave.Privilege(trello)
+      privilege.level(nicetohave.PrivilegeLevel.READ_ONLY)
+
+      card = new nicetohave.Card("4eea503d91e31d174600008f", privilege, outstanding)
+
+      card.load()
+
+      expect(trello.cards.get).toHaveBeenCalled()
+      expect(card.idShort()).toEqual(34)
 
     it 'when asked to load, loads comments', ->
       privilege = new nicetohave.Privilege(trello)

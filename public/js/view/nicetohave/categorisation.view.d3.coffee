@@ -153,7 +153,7 @@ class D3CategorisationView
     data = if inspected? then [inspected] else []
     existingTitles = @root.selectAll("text.title")
                           .data(data, (d) => d.id)
-    existingTitles.text((d) -> d.name())
+    existingTitles.text((d) -> d.idShort() + ": " + d.name())
 
     newTitles = existingTitles.enter()
 
@@ -162,7 +162,7 @@ class D3CategorisationView
     .attr("y", @_titleAreaY)
     .attr("transform", "translate(0,#{0.85 * @_titleAreaHeight})")
     .classed("title", true)
-    .text((d) -> d.name())
+    .text((d) -> d.idShort() + ": " + d.name())
 
     existingTitles.exit()
     .remove()
