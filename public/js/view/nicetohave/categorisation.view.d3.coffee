@@ -2,7 +2,7 @@ window.nicetohave ?= {}
 
 class D3CategorisationView
 
-  constructor: (@rootSelector, @width, @height, @cardWidth = 40, @cardHeight = 20) ->
+  constructor: (@outstanding, @rootSelector, @width, @height, @cardWidth = 40, @cardHeight = 20) ->
     @maxRadius = Math.max(@cardWidth, @cardHeight) / 2.0
     @_setup()
     @_existingMappingForCategorisation = {}
@@ -14,6 +14,7 @@ class D3CategorisationView
     @_setupDragBehaviour()
     @_setupTitleArea()
     @_resetUncategorisedArea()
+    @_setupProgressNotification()
 
   _setupScales: () =>
     @valueScale = d3.scale.linear()
@@ -67,6 +68,17 @@ class D3CategorisationView
 
     freeX = (@width - (@_nextFreeSlotXOffset * 2))
     @_cardsPerX = freeX / @_nextFreeSlotXSpacing
+
+  _setupProgressNotification: () =>
+    @blockUI = ko.computed(() =>
+      @outstanding.count() > 0
+    )
+    @blockUI.subscribe( (shouldBlock) =>
+      if shouldBlock
+        $(@rootSelector).block()
+      else
+        $(@rootSelector).unblock()
+    )
 
   subscribeTo: (categorisations) =>
     @mapped = ko.computed(() =>

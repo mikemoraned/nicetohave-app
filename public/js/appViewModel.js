@@ -25,7 +25,7 @@
       this.notifications = new nicetohave.Notifications(this.privilege);
       this.outstanding = new nicetohave.Outstanding();
       this.workingArea = ko.observable();
-      this.categoriseView = new nicetohave.D3CategorisationView("svg", 1200, 600);
+      this.categoriseView = new nicetohave.D3CategorisationView(this.outstanding, "svg", 1200, 600);
       this.navigator = new nicetohave.Navigator();
       this.chooser = new nicetohave.Chooser(this.navigator);
     }

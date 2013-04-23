@@ -8,7 +8,7 @@ class AppViewModel
     @notifications = new nicetohave.Notifications(@privilege)
     @outstanding = new nicetohave.Outstanding()
     @workingArea = ko.observable()
-    @categoriseView = new nicetohave.D3CategorisationView("svg", 1200, 600)
+    @categoriseView = new nicetohave.D3CategorisationView(@outstanding, "svg", 1200, 600)
     @navigator = new nicetohave.Navigator()
     @chooser = new nicetohave.Chooser(@navigator)
 

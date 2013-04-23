@@ -9,8 +9,9 @@
 
   D3CategorisationView = (function() {
 
-    function D3CategorisationView(rootSelector, width, height, cardWidth, cardHeight) {
+    function D3CategorisationView(outstanding, rootSelector, width, height, cardWidth, cardHeight) {
       var _this = this;
+      this.outstanding = outstanding;
       this.rootSelector = rootSelector;
       this.width = width;
       this.height = height;
@@ -40,6 +41,9 @@
       this.subscribeTo = function(categorisations) {
         return D3CategorisationView.prototype.subscribeTo.apply(_this, arguments);
       };
+      this._setupProgressNotification = function() {
+        return D3CategorisationView.prototype._setupProgressNotification.apply(_this, arguments);
+      };
       this._resetUncategorisedArea = function() {
         return D3CategorisationView.prototype._resetUncategorisedArea.apply(_this, arguments);
       };
@@ -65,7 +69,8 @@
       this._setupScales();
       this._setupDragBehaviour();
       this._setupTitleArea();
-      return this._resetUncategorisedArea();
+      this._resetUncategorisedArea();
+      return this._setupProgressNotification();
     };
 
     D3CategorisationView.prototype._setupScales = function() {
@@ -112,6 +117,20 @@
       this._nextFreeSlotYOffset = (0.75 * this.height) + this._titleAreaHeight + this._nextFreeSlotYSpacing;
       freeX = this.width - (this._nextFreeSlotXOffset * 2);
       return this._cardsPerX = freeX / this._nextFreeSlotXSpacing;
+    };
+
+    D3CategorisationView.prototype._setupProgressNotification = function() {
+      var _this = this;
+      this.blockUI = ko.computed(function() {
+        return _this.outstanding.count() > 0;
+      });
+      return this.blockUI.subscribe(function(shouldBlock) {
+        if (shouldBlock) {
+          return $(_this.rootSelector).block();
+        } else {
+          return $(_this.rootSelector).unblock();
+        }
+      });
     };
 
     D3CategorisationView.prototype.subscribeTo = function(categorisations) {
