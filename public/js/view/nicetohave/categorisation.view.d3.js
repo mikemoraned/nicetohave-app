@@ -121,14 +121,19 @@
 
     D3CategorisationView.prototype._setupProgressNotification = function() {
       var _this = this;
-      this.blockUI = ko.computed(function() {
+      this.uiBlocked = ko.observable(false);
+      this.shouldBlockUI = ko.computed(function() {
         return _this.outstanding.count() > 0;
       });
-      return this.blockUI.subscribe(function(shouldBlock) {
-        if (shouldBlock) {
-          return $(_this.rootSelector).block();
+      return this.shouldBlockUI.subscribe(function(shouldBlockUI) {
+        if (shouldBlockUI) {
+          if (!_this.uiBlocked()) {
+            return $(_this.rootSelector).parent().block();
+          }
         } else {
-          return $(_this.rootSelector).unblock();
+          if (_this.uiBlocked()) {
+            return $(_this.rootSelector).parent().unblock();
+          }
         }
       });
     };

@@ -70,14 +70,17 @@ class D3CategorisationView
     @_cardsPerX = freeX / @_nextFreeSlotXSpacing
 
   _setupProgressNotification: () =>
-    @blockUI = ko.computed(() =>
+    @uiBlocked = ko.observable(false)
+    @shouldBlockUI = ko.computed(() =>
       @outstanding.count() > 0
     )
-    @blockUI.subscribe( (shouldBlock) =>
-      if shouldBlock
-        $(@rootSelector).block()
+    @shouldBlockUI.subscribe( (shouldBlockUI) =>
+      if shouldBlockUI
+        if not @uiBlocked()
+          $(@rootSelector).parent().block()
       else
-        $(@rootSelector).unblock()
+        if @uiBlocked()
+          $(@rootSelector).parent().unblock()
     )
 
   subscribeTo: (categorisations) =>
