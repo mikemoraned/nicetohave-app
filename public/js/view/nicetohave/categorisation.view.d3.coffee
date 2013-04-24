@@ -75,12 +75,17 @@ class D3CategorisationView
       @outstanding.count() > 0
     )
     @shouldBlockUI.subscribe( (shouldBlockUI) =>
+      console.log("shouldBlockUI: #{shouldBlockUI}")
       if shouldBlockUI
         if not @uiBlocked()
+          console.log("blocking")
           $(@rootSelector).parent().block()
+          @uiBlocked(true)
       else
         if @uiBlocked()
+          console.log("unblocking")
           $(@rootSelector).parent().unblock()
+          @uiBlocked(false)
     )
 
   subscribeTo: (categorisations) =>

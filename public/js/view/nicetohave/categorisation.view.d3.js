@@ -126,13 +126,18 @@
         return _this.outstanding.count() > 0;
       });
       return this.shouldBlockUI.subscribe(function(shouldBlockUI) {
+        console.log("shouldBlockUI: " + shouldBlockUI);
         if (shouldBlockUI) {
           if (!_this.uiBlocked()) {
-            return $(_this.rootSelector).parent().block();
+            console.log("blocking");
+            $(_this.rootSelector).parent().block();
+            return _this.uiBlocked(true);
           }
         } else {
           if (_this.uiBlocked()) {
-            return $(_this.rootSelector).parent().unblock();
+            console.log("unblocking");
+            $(_this.rootSelector).parent().unblock();
+            return _this.uiBlocked(false);
           }
         }
       });
