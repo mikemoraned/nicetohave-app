@@ -9,6 +9,7 @@ class D3CategorisationView
 
   _setup: () =>
     @root = d3.select(@rootSelector)
+    @container = @root.select("g.container")
 
     @_setupScales()
     @_setupDragBehaviour()
@@ -70,22 +71,12 @@ class D3CategorisationView
     @_cardsPerX = freeX / @_nextFreeSlotXSpacing
 
   _setupProgressNotification: () =>
-    @uiBlocked = ko.observable(false)
     @shouldBlockUI = ko.computed(() =>
       @outstanding.count() > 0
     )
     @shouldBlockUI.subscribe( (shouldBlockUI) =>
       console.log("shouldBlockUI: #{shouldBlockUI}")
-      if shouldBlockUI
-        if not @uiBlocked()
-          console.log("blocking")
-          $(@rootSelector).parent().block()
-          @uiBlocked(true)
-      else
-        if @uiBlocked()
-          console.log("unblocking")
-          $(@rootSelector).parent().unblock()
-          @uiBlocked(false)
+      @root.selectAll(".busy").classed("hide", not shouldBlockUI)
     )
 
   subscribeTo: (categorisations) =>
@@ -139,7 +130,7 @@ class D3CategorisationView
     Math.max(@maxRadius, Math.min(y, @height - @maxRadius))
 
   _updateDisplay: (mapped) =>
-    existing = @root.selectAll("g.mini-card")
+    existing = @container.selectAll("g.mini-card")
                     .data(mapped, (d) => d.id)
 
     existing
@@ -178,7 +169,7 @@ class D3CategorisationView
 
   _updateTitleArea: (inspected) =>
     data = if inspected? then [inspected] else []
-    existingTitles = @root.selectAll("text.title")
+    existingTitles = @container.selectAll("text.title")
                           .data(data, (d) => d.id)
     existingTitles.text((d) -> d.idShort() + ": " + d.name())
 

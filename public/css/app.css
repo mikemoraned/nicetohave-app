@@ -5,6 +5,16 @@
         /*height: 100%;*/
     }
 
+    rect.busy {
+        stroke: #aaa;
+        fill: #ccc;
+        stroke-width: 1px;
+    }
+
+    rect.hide {
+        display: none;
+    }
+
     text.title {
         font-size: 20px;
     }

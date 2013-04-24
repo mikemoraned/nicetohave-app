@@ -66,6 +66,7 @@
 
     D3CategorisationView.prototype._setup = function() {
       this.root = d3.select(this.rootSelector);
+      this.container = this.root.select("g.container");
       this._setupScales();
       this._setupDragBehaviour();
       this._setupTitleArea();
@@ -121,25 +122,12 @@
 
     D3CategorisationView.prototype._setupProgressNotification = function() {
       var _this = this;
-      this.uiBlocked = ko.observable(false);
       this.shouldBlockUI = ko.computed(function() {
         return _this.outstanding.count() > 0;
       });
       return this.shouldBlockUI.subscribe(function(shouldBlockUI) {
         console.log("shouldBlockUI: " + shouldBlockUI);
-        if (shouldBlockUI) {
-          if (!_this.uiBlocked()) {
-            console.log("blocking");
-            $(_this.rootSelector).parent().block();
-            return _this.uiBlocked(true);
-          }
-        } else {
-          if (_this.uiBlocked()) {
-            console.log("unblocking");
-            $(_this.rootSelector).parent().unblock();
-            return _this.uiBlocked(false);
-          }
-        }
+        return _this.root.selectAll(".busy").classed("hide", !shouldBlockUI);
       });
     };
 
@@ -206,7 +194,7 @@
     D3CategorisationView.prototype._updateDisplay = function(mapped) {
       var existing, theNew,
         _this = this;
-      existing = this.root.selectAll("g.mini-card").data(mapped, function(d) {
+      existing = this.container.selectAll("g.mini-card").data(mapped, function(d) {
         return d.id;
       });
       existing.classed("editable", function(d) {
@@ -237,7 +225,7 @@
       var data, existingTitles, newTitles,
         _this = this;
       data = inspected != null ? [inspected] : [];
-      existingTitles = this.root.selectAll("text.title").data(data, function(d) {
+      existingTitles = this.container.selectAll("text.title").data(data, function(d) {
         return d.id;
       });
       existingTitles.text(function(d) {
