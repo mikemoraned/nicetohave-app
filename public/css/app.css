@@ -5,13 +5,13 @@
         /*height: 100%;*/
     }
 
-    rect.busy {
+    g.busy rect {
         stroke: #aaa;
         fill: #ccc;
         stroke-width: 1px;
     }
 
-    rect.hide {
+    g.hide {
         display: none;
     }
 
