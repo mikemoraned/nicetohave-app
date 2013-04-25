@@ -25,6 +25,10 @@
         stroke-width: 1px;
     }
 
+    g.mini-card {
+        cursor: move;
+    }
+
     g.mini-card rect {
         stroke: #aaa;
         fill: #ccc;
