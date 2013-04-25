@@ -121,14 +121,27 @@
     };
 
     D3CategorisationView.prototype._setupProgressNotification = function() {
-      var _this = this;
-      this.shouldBlockUI = ko.computed(function() {
+      var updateUI,
+        _this = this;
+      this.shouldBlockUINow = ko.computed(function() {
         return _this.outstanding.count() > 0;
       });
-      return this.shouldBlockUI.subscribe(function(shouldBlockUI) {
-        console.log("shouldBlockUI: " + shouldBlockUI);
-        return _this.root.selectAll(".busy").classed("hide", !shouldBlockUI);
+      this.shouldBlockUIDelayed = ko.computed(function() {
+        return _this.shouldBlockUINow();
+      }).extend({
+        throttle: 2000
       });
+      updateUI = function() {
+        if (_this.shouldBlockUINow()) {
+          if (_this.shouldBlockUIDelayed()) {
+            return _this.root.selectAll(".busy").classed("hide", false);
+          }
+        } else {
+          return _this.root.selectAll(".busy").classed("hide", true);
+        }
+      };
+      this.shouldBlockUINow.subscribe(updateUI);
+      return this.shouldBlockUIDelayed.subscribe(updateUI);
     };
 
     D3CategorisationView.prototype.subscribeTo = function(categorisations) {

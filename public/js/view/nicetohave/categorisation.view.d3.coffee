@@ -71,13 +71,22 @@ class D3CategorisationView
     @_cardsPerX = freeX / @_nextFreeSlotXSpacing
 
   _setupProgressNotification: () =>
-    @shouldBlockUI = ko.computed(() =>
+    @shouldBlockUINow = ko.computed(() =>
       @outstanding.count() > 0
     )
-    @shouldBlockUI.subscribe( (shouldBlockUI) =>
-      console.log("shouldBlockUI: #{shouldBlockUI}")
-      @root.selectAll(".busy").classed("hide", not shouldBlockUI)
-    )
+    @shouldBlockUIDelayed = ko.computed(() =>
+      @shouldBlockUINow()
+    ).extend({ throttle: 2000 })
+    updateUI = () =>
+#      console.log("shouldBlockUINow: #{@shouldBlockUINow()}")
+#      console.log("shouldBlockUIDelayed: #{@shouldBlockUIDelayed()}")
+      if @shouldBlockUINow()
+        if @shouldBlockUIDelayed()
+          @root.selectAll(".busy").classed("hide", false)
+      else
+        @root.selectAll(".busy").classed("hide", true)
+    @shouldBlockUINow.subscribe( updateUI )
+    @shouldBlockUIDelayed.subscribe( updateUI )
 
   subscribeTo: (categorisations) =>
     @mapped = ko.computed(() =>
