@@ -46,31 +46,42 @@
                     <a href="http://trello.com/">Trello</a>, why can't we do it all online? So, "Nice to have" was born.
                 </p>
 
-                <h3>v0.0.1</h3>
+                <h3>v0.0.1: xmas 2012</h3>
 
                 <p>
-                <a href="http://www.houseofmoran.com/">I</a> wrote a first version over <a href="http://blog.houseofmoran.com/post/39084311065/nice-to-have-v0-0000001">xmas 2012</a> and started using it myself. Works, mostly, but very basic.
-                For instance, it doesn't remember the categorisations!
+                <a href="http://www.houseofmoran.com/">I</a> wrote a first version over <a href="http://blog.houseofmoran.com/post/39084311065/nice-to-have-v0-0000001">xmas 2012</a> and started using it myself. Worked, mostly, but very basic.
+                For instance, it didn't remember the categorisations!
                 </p>
 
-                <h3>v0.0.2</h3>
+                <h3>v0.0.2: January / February 2012</h3>
 
-                <ul>
-                    <li>Added saving of categorisations within the page (will clear on full page refresh). Practically, this means
-                        it will remember where you put things when you switch between lists, or save to trello.</li>
+                <ul class="unstyled">
+                    <li>Added saving of categorisations within the page (but which cleared on full page refresh). Practically, this meant
+                        it would remember where you put things when you switch between lists, or save to trello.</li>
                     <li><a href="https://trello.com/card/show-the-name-of-the-trello-board-as-well-as-it-s-id/50d4b39f3d7039c91b001237/18">
-                        Show the 'name' of the Trello board, as well as it's ID...
+                        Showed the 'name' of the Trello board, as well as it's ID...
                     </a></li>
-                    <li>Added ability to print out the board. It shows the cards as numbers positioned on the board, and a numbered list of cards below (number is card shortId from trello)</li>
-                    <li>Card area now scales with browser on resize</li>
-                    <li>Refactorathon in progress to support <a href="https://trello.com/card/persist-categorisations-as-comments-e-g-nice-to-have-and-low-risk-load-and-use-to-choose-initial-position-on-area/50d4b39f3d7039c91b001237/11">persisting of categorisations</a></li>
-                </ul>
+                    <li>As a stop-gap because re-arrangements were not persistent, added ability to print out the board.
+                        It showed the cards as numbers positioned on the board, and a numbered list of cards below (number was card shortId from trello)</li>
+                    <li>Card area scaled with browser on resize</li>
+                    </ul>
 
-                <h3>v0.1.0</h3>
+                <h3>v0.1.x: March 2012 to now</h3>
 
-                <ul>
-                    <li><a href="https://trello.com/card/persist-categorisations-as-comments-e-g-nice-to-have-and-low-risk-load-and-use-to-choose-initial-position-on-area/50d4b39f3d7039c91b001237/11">Save card positions as comments</a></li>
-                    <li>Removed ability to print out the board. This was previously added to support sharing, which is now supported by simply sharing a url of the board.</li>
+                <ul class="unstyled">
+                    <li>Split out <a href="http://nicetohave.houseofmoran.com/">production</a> and <a href="http://nicetohave-staging.houseofmoran.com/">staging ('beta')</a> versions of the app.</li>
+                    <li>Major refactor to support
+                        <a href="https://trello.com/card/persist-categorisations-as-comments-e-g-nice-to-have-and-low-risk-load-and-use-to-choose-initial-position-on-area/50d4b39f3d7039c91b001237/11">
+                            persisting of the positions on the board</a>. This was done by saving them as comments, like "risk:0.6 value:0.1".</li>
+                    <li>Removed saving of positions in list of Trello. This needs to be re-added, but in a way which is not confusing.</li>
+                    <li>Removed ability to print out the board. This was previously added to support sharing of positions, which could instead be supported by simply
+                        sharing the url of the nice to have page for the board.</li>
+                    <li>Many small UI changes and tweaks e.g.
+                        <ul>
+                            <li>allow the board to be made larger and to scale automatically when browser is resized.</li>
+                            <li>Inline help</li>
+                        </ul>
+                    </li>
                 </ul>
 
                 <!--<h3>v<%= settings.version %></h3>-->
