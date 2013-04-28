@@ -6,16 +6,12 @@
     <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
             <div class="container">
-                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </a>
                 <a class="brand" href="/">Nice to have</a>
                 <div class="nav-collapse">
                     <ul class="nav">
                         <li class="active"><a href="/">Home</a></li>
                         <li><a href="/app">The App</a></li>
+                        <li><a href="/history">History</a></li>
                     </ul>
 
                     <ul class="nav pull-right">
@@ -78,55 +74,6 @@
 
                         <p>Go the <a href="/app">app</a> page and follow the inline help which looks like this.</p>
                     </div>
-
-                    <article>
-                        <header>
-                            <hgroup>
-                                <h2>History</h2>
-                            </hgroup>
-                        </header>
-
-                        <h3>In the beginning...</h3>
-
-                        <p><a href="http://www.houseofmoran.com/">I</a> started using <a href="http://trello.com/">Trello</a> a lot at work and at home. Backlogs were created, and started to grow. I'd seen
-                            <a href="http://en.wikipedia.org/wiki/Extreme_programming_practices#Commitment_phase">The Planning Game</a> work well in the past, so <a href="http://www.houseofmoran.com/">I</a> suggested to a colleague that
-                            we try it out. <a href="http://www.houseofmoran.com/">I</a> was irked that we needed to write out the cards so that we could play it. I'm open to physical representations, but given we have the backlog in
-                            <a href="http://trello.com/">Trello</a>, why can't we do it all online? So, "Nice to have" was born.
-                        </p>
-
-                        <h3>v0.0.1</h3>
-
-                        <p>
-                        <a href="http://www.houseofmoran.com/">I</a> wrote a first version over <a href="http://blog.houseofmoran.com/post/39084311065/nice-to-have-v0-0000001">xmas 2012</a> and started using it myself. Works, mostly, but very basic.
-                        For instance, it doesn't remember the categorisations!
-                        </p>
-
-                        <h3>v0.0.2</h3>
-
-                        <ul>
-                            <li>Added saving of categorisations within the page (will clear on full page refresh). Practically, this means
-                                it will remember where you put things when you switch between lists, or save to trello.</li>
-                            <li><a href="https://trello.com/card/show-the-name-of-the-trello-board-as-well-as-it-s-id/50d4b39f3d7039c91b001237/18">
-                                Show the 'name' of the Trello board, as well as it's ID...
-                            </a></li>
-                            <li>Added ability to print out the board. It shows the cards as numbers positioned on the board, and a numbered list of cards below (number is card shortId from trello)</li>
-                            <li>Card area now scales with browser on resize</li>
-                            <li>Refactorathon in progress to support <a href="https://trello.com/card/persist-categorisations-as-comments-e-g-nice-to-have-and-low-risk-load-and-use-to-choose-initial-position-on-area/50d4b39f3d7039c91b001237/11">persisting of categorisations</a></li>
-                        </ul>
-
-                        <h3>v0.1.0</h3>
-
-                        <ul>
-                            <li><a href="https://trello.com/card/persist-categorisations-as-comments-e-g-nice-to-have-and-low-risk-load-and-use-to-choose-initial-position-on-area/50d4b39f3d7039c91b001237/11">Save card positions as comments</a></li>
-                            <li>Removed ability to print out the board. This was previously added to support sharing, which is now supported by simply sharing a url of the board.</li>
-                        </ul>
-
-                        <!--<h3>v<%= settings.version %></h3>-->
-                        <!--<p>-->
-                            <!--You're looking at it!-->
-                        <!--</p>-->
-
-                    </article>
 
                 </div>
 
