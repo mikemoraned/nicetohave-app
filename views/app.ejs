@@ -113,16 +113,18 @@
             </div>
 
             <div class="row">
-                <form class="span12 well well-small form-actions form-inline">
-                    <fieldset>
-                        <select style="width: 30em" multiple="true" data-bind="options: board().lists, selectedOptions: selectedLists, optionsText: 'name', enable: board().lists().length > 0"></select>
-                        <div class="pull-right">
-                            <img src="img/ajax-loader.gif" data-bind="visible: $root.outstanding.count() > 0" />
-                            <button type="submit" class="btn btn-primary" data-bind="click: saveEdits, enable: hasEdits">Save changes</button>
-                            <button type="button" class="btn" data-bind="click: discardEdits, enable: hasEdits">Cancel</button>
-                        </div>
-                    </fieldset>
-                </form>
+                <div class="span12">
+                    <form class="well well-small form-actions form-inline">
+                        <fieldset>
+                            <select style="width: 30em" multiple="true" data-bind="options: board().lists, selectedOptions: selectedLists, optionsText: 'name', enable: board().lists().length > 0"></select>
+                            <div class="pull-right">
+                                <img src="img/ajax-loader.gif" data-bind="visible: $root.outstanding.count() > 0" />
+                                <button type="submit" class="btn btn-primary" data-bind="click: saveEdits, enable: hasEdits">Save changes</button>
+                                <button type="button" class="btn" data-bind="click: discardEdits, enable: hasEdits">Cancel</button>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
             </div>
         </div>
 
