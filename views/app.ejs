@@ -49,9 +49,9 @@
 
         <div class="chooser row" data-bind="with: chooser, visible: !navigator.atBoardId()">
             <div class="span12">
-                <div id="help" class="collapse in">
+                <div id="chooser-help" class="collapse in">
                     <div class="alert alert-info">
-                        <button type="button" class="close" data-toggle="collapse" data-target="#help">&times;</button>
+                        <button type="button" class="close" data-toggle="collapse" data-target="#chooser-help">&times;</button>
 
                         <h3><i class="icon-question-sign"></i> Getting started: choosing a board</h3>
 
@@ -73,7 +73,7 @@
 
             <form class="span12 form-inline">
                <input class="input-xxlarge" data-bind="value: boardUrl, valueUpdate:'afterkeydown'" placeholder="Paste your the URL of your board here">
-               <span class="help-inline"><a data-toggle="collapse" href="#help" style="font-size: larger;"><i class="icon-question-sign"></i></a></span>
+               <span class="help-inline"><a data-toggle="collapse" href="#chooser-help" style="font-size: larger;"><i class="icon-question-sign"></i></a></span>
                <button type="button" class="btn btn-primary" data-bind="click: navigateTo, enable: navigable">Load board</button>
             </form>
         </div>
@@ -81,27 +81,29 @@
         <div data-bind="with: workingArea">
             <div class="row">
                 <div class="span12">
-                    <div id="workingArea-help" class="alert alert-info">
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <div id="working-area-help" class="collapse in">
+                        <div class="alert alert-info">
+                            <button type="button" class="close" data-toggle="collapse" data-target="#working-area-help">&times;</button>
 
-                        <h3><i class="icon-question-sign"></i> Getting started: arranging cards</h3>
+                            <h3><i class="icon-question-sign"></i> Getting started: arranging cards</h3>
 
-                        <ol>
-                            <li>
-                                <p>You'll be prompted to provide authentication so that this app can read your board.
-                                </p>
-                                <p>
-                                    If you didn't see a pop-up then you will need to allow this application to raise pop-ups.
-                                    You should see an icon in the address bar which looks something like one of these:
-                                    <span>
-                                        <img src="/img/chrome_popup.png" />,
-                                        <img src="/img/firefox_popup.png" />
-                                    </span>. Please click on the icon and allow popups from this website.
-                                </p>
-                            </li>
-                            <li><p>Your lists will be loaded and you can arrange your cards.</p>
-                            </li>
-                        </ol>
+                            <ol>
+                                <li>
+                                    <p>You'll be prompted to provide authentication so that this app can read your board.
+                                    </p>
+                                    <p>
+                                        If you didn't see a pop-up then you will need to allow this application to raise pop-ups.
+                                        You should see an icon in the address bar which looks something like one of these:
+                                        <span>
+                                            <img src="/img/chrome_popup.png" />,
+                                            <img src="/img/firefox_popup.png" />
+                                        </span>. Please click on the icon and allow popups from this website.
+                                    </p>
+                                </li>
+                                <li><p>Your lists will be loaded and you can arrange your cards.</p>
+                                </li>
+                            </ol>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -121,6 +123,7 @@
                                 <img src="img/ajax-loader.gif" data-bind="visible: $root.outstanding.count() > 0" />
                                 <button type="submit" class="btn btn-primary" data-bind="click: saveEdits, enable: hasEdits">Save changes</button>
                                 <button type="button" class="btn" data-bind="click: discardEdits, enable: hasEdits">Cancel</button>
+                                <span class="help-inline"><a data-toggle="collapse" href="#working-area-help" style="font-size: larger;"><i class="icon-question-sign"></i></a></span>
                             </div>
                         </fieldset>
                     </form>
