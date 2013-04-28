@@ -51,45 +51,24 @@
 
     <div class="container">
 
-        <script type="text/html" id="popupWarningTemplate">
-            <div class="alert alert-warn">
-                <h4 data-bind="text: title"></h4>
-                <p>
-                    If you're not seeing a pop-up right now, you will need to allow this application to raise pop-ups.
-                    You should see an icon in the address bar which looks something like one of these:
-                <span>
-                    <img src="/img/chrome_popup.png" />,
-                    <img src="/img/firefox_popup.png" />
-                </span>. Please click on the icon and allow popups from this website. Thanks!
-                </p>
-
-            </div>
-        </script>
-
-        <div class="notifications" data-bind="with: notifications">
-            <div data-bind="template: { name: templateName, foreach: alerts }">
-
-            </div>
-        </div>
-
         <div class="chooser row" data-bind="with: chooser, visible: !navigator.atBoardId()">
             <div class="span12">
                 <div id="chooser-help" class="alert alert-info">
                     <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    <h3>Getting started</h3>
+                    <h3>Getting started: choosing a board</h3>
 
                     There are two ways:
 
-                    <ol>
+                    <ul>
                         <li>Choose a board from your <a class="trello" href="http://trello.com/">Trello list</a> then paste the URL below.</li>
                         <li><em>or</em>:
                             <ol>
                                 <li>Drag the<%-partial('partials/bookmarklet')%>bookmarklet to your browsers bookmarks bar.</li>
-                                <li>Visit a board on <a class="trello" href="http://trello.com/">Trello</a></li>
+                                <li>Visit a board on <a class="trello" href="http://trello.com/">Trello</a>.</li>
                                 <li>Click on the bookmark, and you'll be brought back to this app.</li>
                             </ol>
                         </li>
-                    </ol>
+                    </ul>
 
                 </div>
             </div>
@@ -106,22 +85,22 @@
                     <div id="workingArea-help" class="alert alert-info">
                         <button type="button" class="close" data-dismiss="alert">&times;</button>
 
-                        <h3>Getting started</h3>
+                        <h3>Getting started: arranging cards</h3>
 
                         <ol>
-                            <li>If it's a private board, you'll be prompted to provide authentication.</li>
-                            <li><p>Your lists will be loaded and you can then play with your lists and cards.</p>
-                                <p>For example:
-                                <ol>
-                                    <li>Move some cards to where you want them to be in terms of importance and risk</li>
-                                    <li>Select them</li>
-                                    <li>Move them to the top</li>
-                                </ol>
+                            <li>
+                                <p>You'll be prompted to provide authentication so that this app can read your board.
+                                </p>
+                                <p>
+                                    If you didn't see a pop-up then you will need to allow this application to raise pop-ups.
+                                    You should see an icon in the address bar which looks something like one of these:
+                                    <span>
+                                        <img src="/img/chrome_popup.png" />,
+                                        <img src="/img/firefox_popup.png" />
+                                    </span>. Please click on the icon and allow popups from this website.
                                 </p>
                             </li>
-                            <li>No changes will be made until you hit Save.
-                                <em>Note:</em> the app only currently saves the order in the list, not the categorisations,
-                                but I'm <a href="https://trello.com/card/persist-categorisations-as-comments-e-g-nice-to-have-and-low-risk-load-and-use-to-choose-initial-position-on-area/50d4b39f3d7039c91b001237/11">working on it</a>.
+                            <li><p>Your lists will be loaded and you can arrange your cards.</p>
                             </li>
                         </ol>
                     </div>
