@@ -66,7 +66,7 @@
 
     D3CategorisationView.prototype._setup = function() {
       this.root = d3.select(this.rootSelector);
-      this.container = this.root.select("g.container");
+      this.container = this.root.select("g.card-container");
       this._setupScales();
       this._setupDragBehaviour();
       this._setupTitleArea();

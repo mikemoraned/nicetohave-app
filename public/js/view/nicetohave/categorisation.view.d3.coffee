@@ -9,7 +9,7 @@ class D3CategorisationView
 
   _setup: () =>
     @root = d3.select(@rootSelector)
-    @container = @root.select("g.container")
+    @container = @root.select("g.card-container")
 
     @_setupScales()
     @_setupDragBehaviour()

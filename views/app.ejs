@@ -74,12 +74,38 @@
             <form class="span12 form-inline">
                <input class="input-xxlarge" data-bind="value: boardUrl, valueUpdate:'afterkeydown'" placeholder="Paste your the URL of your board here">
                <button type="button" class="btn btn-primary" data-bind="click: navigateTo, enable: navigable">Load board</button>
+
+                <button type="button" class="btn btn-info pull-right" data-toggle="collapse" data-target="#chooser-help">
+                    <i class="icon-question-sign"></i> Help
+                </button>
+
+               <div id="chooser-help" class="collapse in">
+
+                   <h2>Chooser help</h2>
+
+               </div>
+
             </form>
         </div>
 
         <div data-bind="with: workingArea">
             <div class="row">
-                <h2 class="span9" data-bind="text: board().name">  </h2>
+                <h2 class="span12" data-bind="text: board().name">  </h2>
+            </div>
+            <div class="row">
+                <button type="button" class="btn btn-info pull-right" data-toggle="collapse" data-target="#workingArea-help">
+                    <i class="icon-question-sign"></i> Help
+                </button>
+            </div>
+            <div id="workingArea-help" class="row collapse in">
+
+                <div class="span12">
+
+                    <h2>WorkingArea help</h2>
+
+                </div>
+            </div>
+            <div class="row">
                 <form class="span12 well well-small form-actions form-inline">
                     <fieldset>
                         <select style="width: 30em" multiple="true" data-bind="options: board().lists, selectedOptions: selectedLists, optionsText: 'name', enable: board().lists().length > 0"></select>
@@ -133,7 +159,7 @@
                         Uncategorized
                     </text>
 
-                    <g class="container" />
+                    <g class="card-container" />
                     <g class="busy hide">
                         <rect x="0" y="0" width="1200" height="600" />
                         <image x="490" y="290" width="220" height="19"
@@ -143,7 +169,10 @@
                 </svg>
             </div>
         </div>
+
+
     </div>
+
 
 <script type="application/javascript">
 
