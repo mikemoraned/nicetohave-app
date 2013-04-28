@@ -29,11 +29,6 @@
     <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
             <div class="container">
-                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </a>
                 <a class="brand" href="/">Nice to have</a>
                 <div class="nav-collapse">
                     <ul class="nav">
@@ -54,28 +49,31 @@
 
         <div class="chooser row" data-bind="with: chooser, visible: !navigator.atBoardId()">
             <div class="span12">
-                <div id="chooser-help" class="alert alert-info">
-                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    <h3><i class="icon-question-sign"></i> Getting started: choosing a board</h3>
+                <div id="help" class="collapse in">
+                    <div class="alert alert-info">
+                        <button type="button" class="close" data-toggle="collapse" data-target="#help">&times;</button>
 
-                    There are two ways:
+                        <h3><i class="icon-question-sign"></i> Getting started: choosing a board</h3>
 
-                    <ul>
-                        <li>Choose a board from your <a class="trello" href="http://trello.com/">Trello list</a> then paste the URL below.</li>
-                        <li><em>or</em>:
-                            <ol>
-                                <li>Drag the<%-partial('partials/bookmarklet')%>bookmarklet to your browsers bookmarks bar.</li>
-                                <li>Visit a board on <a class="trello" href="http://trello.com/">Trello</a>.</li>
-                                <li>Click on the bookmark, and you'll be brought back to this app.</li>
-                            </ol>
-                        </li>
-                    </ul>
+                        There are two ways:
 
+                        <ul>
+                            <li>Choose a board from your <a class="trello" href="http://trello.com/">Trello list</a> then paste the URL below.</li>
+                            <li><em>or</em>:
+                                <ol>
+                                    <li>Drag the<%-partial('partials/bookmarklet')%>bookmarklet to your browsers bookmarks bar.</li>
+                                    <li>Visit a board on <a class="trello" href="http://trello.com/">Trello</a>.</li>
+                                    <li>Click on the bookmark, and you'll be brought back to this app.</li>
+                                </ol>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 
             <form class="span12 form-inline">
                <input class="input-xxlarge" data-bind="value: boardUrl, valueUpdate:'afterkeydown'" placeholder="Paste your the URL of your board here">
+               <span class="help-inline"><a data-toggle="collapse" href="#help" style="font-size: larger;"><i class="icon-question-sign"></i></a></span>
                <button type="button" class="btn btn-primary" data-bind="click: navigateTo, enable: navigable">Load board</button>
             </form>
         </div>
