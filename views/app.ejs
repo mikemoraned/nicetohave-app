@@ -73,52 +73,40 @@
         </div>
 
         <div class="chooser row" data-bind="with: chooser, visible: !navigator.atBoardId()">
+            <div class="span12">
+                <div id="chooser-help" class="alert alert-info">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <h3>Getting started</h3>
+
+                    There are two ways:
+
+                    <ol>
+                        <li>Choose a board from your <a class="trello" href="http://trello.com/">Trello list</a> then paste the URL below.</li>
+                        <li><em>or</em>:
+                            <ol>
+                                <li>Drag the<%-partial('partials/bookmarklet')%>bookmarklet to your browsers bookmarks bar.</li>
+                                <li>Visit a board on <a class="trello" href="http://trello.com/">Trello</a></li>
+                                <li>Click on the bookmark, and you'll be brought back to this app.</li>
+                            </ol>
+                        </li>
+                    </ol>
+
+                </div>
+            </div>
+
             <form class="span12 form-inline">
                <input class="input-xxlarge" data-bind="value: boardUrl, valueUpdate:'afterkeydown'" placeholder="Paste your the URL of your board here">
                <button type="button" class="btn btn-primary" data-bind="click: navigateTo, enable: navigable">Load board</button>
-
-                <button type="button" class="btn btn-info pull-right" data-toggle="collapse" data-target="#chooser-help">
-                    <i class="icon-question-sign"></i> Toggle help
-                </button>
-
-               <div id="chooser-help" class="collapse in">
-                   <div>
-
-                       <h3><i class="icon-question-sign"></i> Getting started</h3>
-
-                       Either:
-
-                       <ul>
-                           <li>Choose a board from your <a class="trello" href="http://trello.com/">Trello list</a> then come back and paste the URL above.</li>
-                           <li><em>or</em>:
-                               <ol>
-                                   <li>Drag the<%-partial('partials/bookmarklet')%>bookmarklet to your browsers bookmarks bar.</li>
-                                   <li>Visit a board on <a class="trello" href="http://trello.com/">Trello</a></li>
-                                   <li>Click on the bookmark, and you'll be brought back to this app.</li>
-                               </ol>
-                           </li>
-                       </ul>
-                   </div>
-               </div>
-
             </form>
         </div>
 
         <div data-bind="with: workingArea">
             <div class="row">
-                <div class="span9">
-                    <h2 class="span12" data-bind="text: board().name">  </h2>
-                </div>
-                <div class="span3">
-                    <button type="button" class="btn btn-info pull-right" data-toggle="collapse" data-target="#workingArea-help">
-                        <i class="icon-question-sign"></i> Toggle help
-                    </button>
-                </div>
-            </div>
-            <div class="row">
-                <div id="workingArea-help" class="collapse in">
-                    <div class="span12">
-                        <h3><i class="icon-question-sign"></i> Getting started</h3>
+                <div class="span12">
+                    <div id="workingArea-help" class="alert alert-info">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+
+                        <h3>Getting started</h3>
 
                         <ol>
                             <li>If it's a private board, you'll be prompted to provide authentication.</li>
@@ -137,6 +125,12 @@
                             </li>
                         </ol>
                     </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span9">
+                    <h2 class="span12" data-bind="text: board().name">  </h2>
                 </div>
             </div>
 
