@@ -1,5 +1,7 @@
 <% layout('layout') -%>
+<% stylesheet('/css/site.css') -%>
 <% stylesheet('/css/app.css') -%>
+<% stylesheet('/css/bookmarklet.css') -%>
 
 <% script('/js/d3.v3.min.js') -%>
 <% script('/js/components/jquery/jquery.min.js') -%>
@@ -76,13 +78,27 @@
                <button type="button" class="btn btn-primary" data-bind="click: navigateTo, enable: navigable">Load board</button>
 
                 <button type="button" class="btn btn-info pull-right" data-toggle="collapse" data-target="#chooser-help">
-                    <i class="icon-question-sign"></i> Help
+                    <i class="icon-question-sign"></i> Toggle help
                 </button>
 
                <div id="chooser-help" class="collapse in">
+                   <div>
 
-                   <h3>Chooser help</h3>
+                       <h3><i class="icon-question-sign"></i> Getting started</h3>
 
+                       Either:
+
+                       <ul>
+                           <li>Choose a board from your <a class="trello" href="http://trello.com/">Trello list</a> then come back and paste the URL above.</li>
+                           <li><em>or</em>:
+                               <ol>
+                                   <li>Drag the<%-partial('partials/bookmarklet')%>bookmarklet to your browsers bookmarks bar.</li>
+                                   <li>Visit a board on <a class="trello" href="http://trello.com/">Trello</a></li>
+                                   <li>Click on the bookmark, and you'll be brought back to this app.</li>
+                               </ol>
+                           </li>
+                       </ul>
+                   </div>
                </div>
 
             </form>
@@ -95,18 +111,35 @@
                 </div>
                 <div class="span3">
                     <button type="button" class="btn btn-info pull-right" data-toggle="collapse" data-target="#workingArea-help">
-                        <i class="icon-question-sign"></i> Help
+                        <i class="icon-question-sign"></i> Toggle help
                     </button>
                 </div>
             </div>
-            <div id="workingArea-help" class="row collapse in">
+            <div class="row">
+                <div id="workingArea-help" class="collapse in">
+                    <div class="span12">
+                        <h3><i class="icon-question-sign"></i> Getting started</h3>
 
-                <div class="span12">
-
-                    <h3>WorkingArea help</h3>
-
+                        <ol>
+                            <li>If it's a private board, you'll be prompted to provide authentication.</li>
+                            <li><p>Your lists will be loaded and you can then play with your lists and cards.</p>
+                                <p>For example:
+                                <ol>
+                                    <li>Move some cards to where you want them to be in terms of importance and risk</li>
+                                    <li>Select them</li>
+                                    <li>Move them to the top</li>
+                                </ol>
+                                </p>
+                            </li>
+                            <li>No changes will be made until you hit Save.
+                                <em>Note:</em> the app only currently saves the order in the list, not the categorisations,
+                                but I'm <a href="https://trello.com/card/persist-categorisations-as-comments-e-g-nice-to-have-and-low-risk-load-and-use-to-choose-initial-position-on-area/50d4b39f3d7039c91b001237/11">working on it</a>.
+                            </li>
+                        </ol>
+                    </div>
                 </div>
             </div>
+
             <div class="row">
                 <form class="span12 well well-small form-actions form-inline">
                     <fieldset>

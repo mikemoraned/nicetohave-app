@@ -1,0 +1,14 @@
+.bookmarklet {
+    border-radius: 7px;
+    background-color: gray;
+    padding: 3px;
+    cursor: move;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.bookmarklet a, .bookmarklet a:hover, .bookmarklet a:visited {
+    color: white;
+    text-decoration: none;
+    cursor: move;
+}
