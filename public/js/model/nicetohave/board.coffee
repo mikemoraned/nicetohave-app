@@ -3,7 +3,7 @@ window.nicetohave ?= {}
 class Board
 
   constructor: (id, privilege, outstanding) ->
-    if not /[a-z0-9]{24}/.test(id)
+    if not (id? and (/^[a-z0-9]{24}$/.test(id) or /^[a-zA-Z0-9]{8}$/.test(id)))
       throw { message: "Not a valid board id: '#{id}'" }
     @id = ko.observable(id)
     @privilege = privilege

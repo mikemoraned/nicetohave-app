@@ -11,11 +11,18 @@ describe 'Board', ->
     it 'cannot be created without an id', ->
       expect(-> new nicetohave.Board()).toThrow({ message: "Not a valid board id: 'undefined'" })
 
-    it 'must only accept an id of the right format (alphanumeric)', ->
+    it 'must only accept a long id of the right format (lower-case alphanumeric)', ->
       expect(-> new nicetohave.Board("  csdc  scd")).toThrow({ message: "Not a valid board id: '  csdc  scd'" })
+      expect(-> new nicetohave.Board("4EEa503d91e31d174600008f")).toThrow({ message: "Not a valid board id: '4EEa503d91e31d174600008f'" })
 
-    it 'must only accept an id of the right length (24)', ->
+    it 'must not accept an id of the wrong length', ->
       expect(-> new nicetohave.Board("4eea503d91e31d174600")).toThrow({ message: "Not a valid board id: '4eea503d91e31d174600'" })
+
+    it 'must accept a long id of the right length (24)', ->
+      expect(new nicetohave.Board("4eea503d91e31d174600008f").id()).toBe "4eea503d91e31d174600008f"
+
+    it 'must accept a short id of the right length (8)', ->
+      expect(new nicetohave.Board("gCrN8kMP").id()).toBe "gCrN8kMP"
 
     it 'has an empty name', ->
       board = new nicetohave.Board("4eea503d91e31d174600008f")

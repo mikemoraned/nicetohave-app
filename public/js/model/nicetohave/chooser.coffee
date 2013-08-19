@@ -16,7 +16,8 @@ class Chooser
       @navigator.navigateTo(@boardId())
 
   _parseBoardUrl : (url) =>
-    boardPattern = /^\s*https:\/\/trello.com\/board\/.+?\/([a-z0-9]{24})\s*$/
+#    boardPattern = /^\s*https:\/\/trello.com\/board\/.+?\/([a-z0-9]{24})\s*$/
+    boardPattern = /^\s*https:\/\/trello.com\/b\/([a-zA-Z0-9]{8}).+\s*$/
     if url?
       match = url.match(boardPattern)
       if match?

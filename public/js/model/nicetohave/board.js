@@ -26,7 +26,7 @@
       this.load = function(onSuccessFn) {
         return Board.prototype.load.apply(_this, arguments);
       };
-      if (!/[a-z0-9]{24}/.test(id)) {
+      if (!((id != null) && (/^[a-z0-9]{24}$/.test(id) || /^[a-zA-Z0-9]{8}$/.test(id)))) {
         throw {
           message: "Not a valid board id: '" + id + "'"
         };
